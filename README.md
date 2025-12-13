@@ -1,4 +1,4 @@
-# Hi, I'm Juan
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/1a01d79b-0bd0-4388-941c-9d827fc78ca5" /># Hi, I'm Juan
 
 I am a tireless seeker of knowledge and a dream hunter.  
 A passionate engineer who seeks quality in the smallest details.
@@ -59,7 +59,7 @@ A passionate engineer who seeks quality in the smallest details.
     <img src="https://avatars.githubusercontent.com/u/139895814?s=200&v=4" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://www.heroui.com" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="40" />
+    <img src="https://pbs.twimg.com/profile_images/1987160782765707265/xb07FQe5_400x400.jpg" width="40" />
   </a>
 </p>
 
