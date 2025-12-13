@@ -24,7 +24,6 @@ A passionate engineer who seeks quality in the smallest details.
   </a>
 </p>
 
----
 
 ## Frontend Technologies
 <p align="left">
@@ -63,7 +62,6 @@ A passionate engineer who seeks quality in the smallest details.
   </a>
 </p>
 
----
 
 ## Backend & APIs
 <p align="left">
@@ -93,7 +91,6 @@ A passionate engineer who seeks quality in the smallest details.
   </a>
 </p>
 
----
 
 ## Databases & ORM
 <p align="left">
@@ -117,7 +114,6 @@ A passionate engineer who seeks quality in the smallest details.
   </a>
 </p>
 
----
 
 ## Cloud & Infrastructure
 <p align="left">
@@ -135,7 +131,6 @@ A passionate engineer who seeks quality in the smallest details.
   </a>
 </p>
 
----
 
 ## Tools
 <p align="left">
