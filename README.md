@@ -31,14 +31,14 @@ A passionate engineer who seeks quality in the smallest details.
   <a href="https://react.dev" target="_blank">
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="40" style="margin-right:12px;" />
   </a>
+    <a href="https://reactnative.dev" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="40" style="margin-right:12px;" />
+  </a>
   <a href="https://nextjs.org" target="_blank">
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" width="40" style="margin-right:12px;" />
   </a>
-  <a href="https://reactnative.dev" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="40" style="margin-right:12px;" />
-  </a>
   <a href="https://tailwindcss.com" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg" width="40" style="margin-right:12px;" />
+    <img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.d52e9897.svg" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://mui.com" target="_blank">
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg" width="40" style="margin-right:12px;" />
@@ -128,7 +128,7 @@ A passionate engineer who seeks quality in the smallest details.
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://aws.amazon.com/s3" target="_blank">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg" width="40" style="margin-right:12px;" />
+    <img src="[https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Amazon-S3-Logo.svg/1712px-Amazon-S3-Logo.svg.png)" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://www.cloudflare.com" target="_blank">
     <img src="https://www.cloudflare.com/favicon.ico" width="40" />
