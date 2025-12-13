@@ -1,4 +1,4 @@
-<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/1a01d79b-0bd0-4388-941c-9d827fc78ca5" /># Hi, I'm Juan
+# Hi, I'm Juan
 
 I am a tireless seeker of knowledge and a dream hunter.  
 A passionate engineer who seeks quality in the smallest details.
