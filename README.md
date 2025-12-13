@@ -85,7 +85,7 @@ A passionate engineer who seeks quality in the smallest details.
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextcloud/nextcloud-original.svg" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://n8n.io" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/n8n/n8n-original.svg" width="40" style="margin-right:12px;" />
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8b13FupbJiqRDcYQbK4BfEcAJ6S7eA8I5oQ&s" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://payloadcms.com" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
     <img src="https://payloadcms.com/favicon.ico" width="40" />
