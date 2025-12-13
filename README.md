@@ -38,6 +38,10 @@ A passionate engineer who seeks quality in the smallest details.
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="40" style="margin-right:12px;" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" width="40" style="margin-right:12px;" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" width="40" style="margin-right:12px;" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swagger/swagger-original.svg" width="40" style="margin-right:12px;" title="Swagger / OpenAPI" />
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/openapi/openapi-original.svg" width="40" style="margin-right:12px;" title="REST APIs" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextcloud/nextcloud-original.svg" width="40" style="margin-right:12px;" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/n8n/n8n-original.svg" width="40" style="margin-right:12px;" />
   <img src="https://payloadcms.com/favicon.ico" width="40" />
 </p>
 
