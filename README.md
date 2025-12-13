@@ -128,7 +128,7 @@ A passionate engineer who seeks quality in the smallest details.
     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://aws.amazon.com/s3" target="_blank">
-    <img src="[https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Amazon-S3-Logo.svg/1712px-Amazon-S3-Logo.svg.png)" width="40" style="margin-right:12px;" />
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Amazon-S3-Logo.svg/1712px-Amazon-S3-Logo.svg.png" width="40" style="margin-right:12px;" />
   </a>
   <a href="https://www.cloudflare.com" target="_blank">
     <img src="https://www.cloudflare.com/favicon.ico" width="40" />
