@@ -47,24 +47,24 @@ A passionate engineer who seeks **quality in the smallest details**.
 ## 💻 Programming Languages
 
 <p align="center">
-  <a href="https://isocpp.org" title="C++ - High-performance systems programming">
-    <img src="https://skillicons.dev/icons?i=cpp" alt="C++" width="48" height="48" />
+  <a href="https://isocpp.org" title="C++ - High-performance systems programming" style="text-decoration: none; border: none;">
+    <img src="https://skillicons.dev/icons?i=cpp" alt="C++" width="48" height="48" style="vertical-align: middle;" />
   </a>
   &nbsp;&nbsp;
-  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" title="JavaScript - Dynamic web development">
-    <img src="https://skillicons.dev/icons?i=js" alt="JavaScript" width="48" height="48" />
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" title="JavaScript - Dynamic web development" style="text-decoration: none; border: none;">
+    <img src="https://skillicons.dev/icons?i=js" alt="JavaScript" width="48" height="48" style="vertical-align: middle;" />
   </a>
   &nbsp;&nbsp;
-  <a href="https://www.typescriptlang.org" title="TypeScript - Type-safe JavaScript">
-    <img src="https://skillicons.dev/icons?i=ts" alt="TypeScript" width="48" height="48" />
+  <a href="https://www.typescriptlang.org" title="TypeScript - Type-safe JavaScript" style="text-decoration: none; border: none;">
+    <img src="https://skillicons.dev/icons?i=ts" alt="TypeScript" width="48" height="48" style="vertical-align: middle;" />
   </a>
   &nbsp;&nbsp;
-  <a href="https://www.python.org" title="Python - Automation & data science">
-    <img src="https://skillicons.dev/icons?i=python" alt="Python" width="48" height="48" />
+  <a href="https://www.python.org" title="Python - Automation & data science" style="text-decoration: none; border: none;">
+    <img src="https://skillicons.dev/icons?i=python" alt="Python" width="48" height="48" style="vertical-align: middle;" />
   </a>
   &nbsp;&nbsp;
-  <a href="https://www.php.net" title="PHP - Server-side scripting">
-    <img src="https://skillicons.dev/icons?i=php" alt="PHP" width="48" height="48" />
+  <a href="https://www.php.net" title="PHP - Server-side scripting" style="text-decoration: none; border: none;">
+    <img src="https://skillicons.dev/icons?i=php" alt="PHP" width="48" height="48" style="vertical-align: middle;" />
   </a>
 </p>
 
