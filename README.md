@@ -204,7 +204,7 @@ A passionate engineer who seeks **quality in the smallest details**.
   </a>
   &nbsp;&nbsp;
   <a href="https://www.portainer.io" title="Portainer - Container management">
-    <img src="https://avatars.githubusercontent.com/u/22225832?s=200&v=4" alt="Portainer" width="48" height="48" style="border-radius: 8px;" />
+    <img src="https://repository-images.githubusercontent.com/725794693/3b812728-09ec-4db5-b03b-b9f48cc439e3" alt="Portainer" width="48" height="48" style="border-radius: 8px;" />
   </a>
   &nbsp;&nbsp;
   <a href="https://cloud.google.com" title="Google Cloud Platform - Cloud services">
