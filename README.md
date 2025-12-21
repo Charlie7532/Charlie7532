@@ -309,8 +309,6 @@ Other        1 hr 30 mins    █░░░░░░░░░░░░░░░░
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=100&section=footer" width="100%" />
-
 **Always learning. Always building.** ✨
 
 <img src="https://komarev.com/ghpvc/?username=Charlie7532&color=6C63FF&style=flat-square&label=Profile+Views" alt="Profile Views" />
