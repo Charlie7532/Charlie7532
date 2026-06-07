@@ -5,6 +5,8 @@ import type { Page } from '@/payload-types'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { CTACardBlock } from '@/blocks/CTACard/Component'
+import { CtaSectionBlock } from '@/blocks/CtaSection/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { SignupCTA } from '@/blocks/SignupCTA/Component'
@@ -14,12 +16,26 @@ import { VideoEmbedWithHeadingBlock } from '@/blocks/VideoEmbedWithHeading/Compo
 import { PricingPlanGridBlock } from '@/blocks/PricingPlansGrid/Component'
 import { SectionHeroWithBadgeBlock } from '@/blocks/SectionHeroWithBadge/Component'
 import { ServiceCardGridBlock } from '@/blocks/ServiceCardGridBlock/Component'
+import { EmbedCodeBlock } from '@/blocks/EmbedCode/Component'
+import { FeatureCards } from '@/blocks/FeatureCards/Component'
+import { FeatureHighlightsBlock } from '@/blocks/FeatureHighlights/Component'
+import { TextSectionBlock } from '@/blocks/TextSection/Component'
+import { ImageContentBlock } from '@/blocks/ImageContent/Component'
+import { FAQBlock } from '@/blocks/FAQ/Component'
+import { FAQGridBlock } from '@/blocks/FAQGrid/Component'
+import { Testimonial1Block } from '@/blocks/Testimonial1/Component'
+import { Testimonial3Block } from '@/blocks/Testimonial3/Component'
+import { Testimonial4Block } from '@/blocks/Testimonial4/Component'
+import { TestimonialGridBlock } from '@/blocks/TestimonialGrid/Component'
+import { Pricing1Block } from '@/blocks/Pricing1/Component'
 
 
 const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  ctaCard: CTACardBlock,
+  ctaSection: CtaSectionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   signupCTA: SignupCTA,
@@ -29,6 +45,18 @@ const blockComponents = {
   pricingPlanGrid: PricingPlanGridBlock,
   sectionHeroWithBadge: SectionHeroWithBadgeBlock,
   serviceCardGrid: ServiceCardGridBlock,
+  embedCode: EmbedCodeBlock,
+  featureCards: FeatureCards,
+  featureHighlights: FeatureHighlightsBlock,
+  textSection: TextSectionBlock,
+  imageContent: ImageContentBlock,
+  faq: FAQBlock,
+  faqGrid: FAQGridBlock,
+  testimonial1: Testimonial1Block,
+  testimonial3: Testimonial3Block,
+  testimonial4: Testimonial4Block,
+  testimonialGrid: TestimonialGridBlock,
+  pricing1: Pricing1Block,
 }
 
 export const RenderBlocks: React.FC<{
@@ -50,7 +78,6 @@ export const RenderBlocks: React.FC<{
             if (Block) {
               return (
                 <div className="my-16" key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} />
                 </div>
               )

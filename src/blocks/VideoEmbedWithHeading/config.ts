@@ -3,7 +3,7 @@ import { Block } from "payload";
 export const VideoEmbedWithHeading: Block = {
     slug: "videoEmbedWithHeading",
     interfaceName: "VideoEmbedWithHeading",
-    imageURL: '/assets/blocks/video-with-heading-block.png',
+    imageURL: '/assets/blocks/video-with-heading-block.svg',
     fields: [
         {
             name: "heading",

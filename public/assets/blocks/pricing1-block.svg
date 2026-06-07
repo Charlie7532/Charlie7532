@@ -1,0 +1,109 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="260" fill="#fafafa"/>
+
+  <!-- Section Header -->
+  <text x="200" y="22" text-anchor="middle" fill="#1d1d1f" font-size="13" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">Lorem Ipsum Dolor Sit</text>
+  <text x="200" y="38" text-anchor="middle" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">Consectetur adipiscing elit, sed do eiusmod tempor.</text>
+
+  <!-- Card 1 (standard) -->
+  <rect x="10" y="52" width="114" height="202" rx="10" fill="#ffffff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="67" y="72" text-anchor="middle" fill="#1d1d1f" font-size="9" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem</text>
+  <text x="67" y="97" text-anchor="middle" fill="#1d1d1f" font-size="22" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">$9</text>
+  <text x="67" y="110" text-anchor="middle" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">/ month</text>
+  <line x1="20" y1="120" x2="114" y2="120" stroke="#e5e5e7" stroke-width="0.75"/>
+  <text x="22" y="136" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Lorem ipsum dolor</text>
+  <text x="22" y="151" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Sit amet consectetur</text>
+  <text x="22" y="166" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Adipiscing elit sed</text>
+  <!-- Outline CTA -->
+  <rect x="20" y="228" width="94" height="18" rx="9" fill="none" stroke="#e5e5e7" stroke-width="1.5"/>
+  <text x="67" y="241" text-anchor="middle" fill="#1d1d1f" font-size="7.5" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Get started</text>
+
+  <!-- Card 2 (highlighted / Popular) -->
+  <!-- Elevation shadow -->
+  <rect x="145" y="49" width="112" height="208" rx="10" fill="#1d1d1f" opacity="0.06"/>
+  <!-- Outer ring -->
+  <rect x="141" y="44" width="118" height="212" rx="12" fill="none" stroke="#1d1d1f" stroke-width="1.5" opacity="0.14"/>
+  <!-- Card body -->
+  <rect x="143" y="46" width="114" height="210" rx="10" fill="#ffffff" stroke="#1d1d1f" stroke-width="2"/>
+  <!-- Popular badge -->
+  <rect x="170" y="37" width="60" height="16" rx="8" fill="#1d1d1f"/>
+  <text x="200" y="49" text-anchor="middle" fill="#ffffff" font-size="7" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Popular</text>
+  <text x="200" y="68" text-anchor="middle" fill="#1d1d1f" font-size="9" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Ipsum</text>
+  <text x="200" y="93" text-anchor="middle" fill="#1d1d1f" font-size="22" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">$29</text>
+  <text x="200" y="106" text-anchor="middle" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">/ month</text>
+  <line x1="153" y1="116" x2="247" y2="116" stroke="#e5e5e7" stroke-width="0.75"/>
+  <text x="155" y="132" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Lorem ipsum dolor</text>
+  <text x="155" y="147" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Sit amet consectetur</text>
+  <text x="155" y="162" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Adipiscing elit sed</text>
+  <text x="155" y="177" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Eiusmod tempor</text>
+  <!-- Solid CTA -->
+  <rect x="153" y="233" width="94" height="18" rx="9" fill="#1d1d1f"/>
+  <text x="200" y="246" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Get started</text>
+
+  <!-- Card 3 (standard) -->
+  <rect x="276" y="52" width="114" height="202" rx="10" fill="#ffffff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="333" y="72" text-anchor="middle" fill="#1d1d1f" font-size="9" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Dolor</text>
+  <text x="333" y="97" text-anchor="middle" fill="#1d1d1f" font-size="22" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">$59</text>
+  <text x="333" y="110" text-anchor="middle" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">/ month</text>
+  <line x1="286" y1="120" x2="380" y2="120" stroke="#e5e5e7" stroke-width="0.75"/>
+  <text x="288" y="136" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Lorem ipsum dolor</text>
+  <text x="288" y="151" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Sit amet consectetur</text>
+  <text x="288" y="166" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Adipiscing elit sed</text>
+  <text x="288" y="181" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">&#x2713;  Eiusmod ut labore</text>
+  <!-- Outline CTA -->
+  <rect x="286" y="228" width="94" height="18" rx="9" fill="none" stroke="#e5e5e7" stroke-width="1.5"/>
+  <text x="333" y="241" text-anchor="middle" fill="#1d1d1f" font-size="7.5" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Get started</text>
+</svg>
+
+
+  <!-- Card 1 (standard) -->
+  <rect x="12" y="56" width="116" height="185" rx="12" fill="#ffffff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="70" y="78" text-anchor="middle" fill="#1d1d1f" font-size="9.5" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem</text>
+  <text x="70" y="104" text-anchor="middle" fill="#1d1d1f" font-size="22" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">$9</text>
+  <text x="70" y="117" text-anchor="middle" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">/ipsum</text>
+  <line x1="22" y1="128" x2="118" y2="128" stroke="#e5e5e7" stroke-width="0.5"/>
+  <circle cx="26" cy="141" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="32" y="145" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor</text>
+  <circle cx="26" cy="156" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="32" y="159" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Sit amet consectetur</text>
+  <circle cx="26" cy="170" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="32" y="174" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Adipiscing elit sed</text>
+  <rect x="22" y="214" width="88" height="20" rx="10" fill="#f5f5f7" stroke="#e5e5e7" stroke-width="0.5"/>
+  <text x="66" y="228" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum</text>
+
+  <!-- Card 2 (highlighted / Popular) -->
+  <rect x="142" y="48" width="116" height="196" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="175" y="40" width="50" height="16" rx="8" fill="#3b82f6"/>
+  <text x="200" y="52" text-anchor="middle" fill="#ffffff" font-size="7" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Popular</text>
+  <text x="200" y="72" text-anchor="middle" fill="#1d1d1f" font-size="9.5" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Ipsum</text>
+  <text x="200" y="99" text-anchor="middle" fill="#1d1d1f" font-size="22" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">$29</text>
+  <text x="200" y="112" text-anchor="middle" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">/ipsum</text>
+  <line x1="152" y1="123" x2="248" y2="123" stroke="#e5e5e7" stroke-width="0.5"/>
+  <circle cx="156" cy="136" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="162" y="140" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor</text>
+  <circle cx="156" cy="151" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="162" y="155" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Sit amet consectetur</text>
+  <circle cx="156" cy="166" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="162" y="170" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Adipiscing elit sed</text>
+  <circle cx="156" cy="181" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="162" y="185" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Eiusmod tempor</text>
+  <rect x="152" y="214" width="88" height="20" rx="10" fill="#3b82f6"/>
+  <text x="196" y="228" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum</text>
+
+  <!-- Card 3 (standard) -->
+  <rect x="272" y="56" width="116" height="185" rx="12" fill="#ffffff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="330" y="78" text-anchor="middle" fill="#1d1d1f" font-size="9.5" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Dolor</text>
+  <text x="330" y="104" text-anchor="middle" fill="#1d1d1f" font-size="22" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">$59</text>
+  <text x="330" y="117" text-anchor="middle" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">/ipsum</text>
+  <line x1="282" y1="128" x2="378" y2="128" stroke="#e5e5e7" stroke-width="0.5"/>
+  <circle cx="286" cy="141" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="292" y="145" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor</text>
+  <circle cx="286" cy="156" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="292" y="159" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Sit amet consectetur</text>
+  <circle cx="286" cy="170" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="292" y="174" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Adipiscing elit sed</text>
+  <circle cx="286" cy="185" r="3" fill="#3b82f6" opacity="0.9"/>
+  <text x="292" y="189" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">Eiusmod ut labore</text>
+  <rect x="282" y="214" width="88" height="20" rx="10" fill="#f5f5f7" stroke="#e5e5e7" stroke-width="0.5"/>
+  <text x="326" y="228" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum</text>
+</svg>

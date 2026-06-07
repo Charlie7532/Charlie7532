@@ -5,7 +5,7 @@ import * as lucideIcons from "lucide-react";
 export const SectionHeroWithBadge: Block = {
     slug: "sectionHeroWithBadge",
     interfaceName: "SectionHeroWithBadge",
-    imageURL: "/assets/blocks/section-hero-with-badge-block.png",
+    imageURL: "/assets/blocks/section-hero-with-badge-block.svg",
     fields: [
         {
             name: "heading",

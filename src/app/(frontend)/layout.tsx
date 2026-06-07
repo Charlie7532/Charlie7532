@@ -6,8 +6,8 @@ import { GeistSans } from 'geist/font/sans'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
-import { Footer } from '@/Footer/Component'
-import { Header } from '@/Header/Component'
+import { Footer } from '@/modules/layout/interface/components/Footer/Component'
+import { Header } from '@/modules/layout/interface/components/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { DynamicColors } from '@/components/DynamicColors'
@@ -21,9 +21,14 @@ import { getServerSideURL } from '@/utilities/getURL'
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
-  // Get site settings for favicon
+  // Get site settings for favicon and theme
   const siteSettings = await getCachedSiteSettings(1)()
   const customFavicon = siteSettings?.branding?.favicon?.url
+
+  // Extract theme settings
+  const themeSettings = siteSettings?.themeSettings
+  const themeMode = themeSettings?.themeMode || 'both'
+  const defaultTheme = themeSettings?.defaultTheme || 'system'
 
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
@@ -42,7 +47,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
       </head>
       <body>
-        <Providers>
+        <Providers
+          themeMode={themeMode as 'light-only' | 'dark-only' | 'both'}
+          defaultTheme={defaultTheme as 'light' | 'dark' | 'system'}
+        >
           <AdminBar
             adminBarProps={{
               preview: isEnabled,

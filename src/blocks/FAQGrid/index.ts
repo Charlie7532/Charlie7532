@@ -1,0 +1,1 @@
+export { FAQGridBlock } from './Component';

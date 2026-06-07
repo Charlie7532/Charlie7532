@@ -38,21 +38,43 @@ const MoonIcon = () => (
 )
 
 export const IconThemeSwitch: React.FC = () => {
-    const { theme, setTheme } = useTheme()
+    const { theme, setTheme, resolvedTheme } = useTheme()
+    const [mounted, setMounted] = React.useState(false)
+
+    // Avoid hydration mismatch
+    React.useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const toggleTheme = () => {
-        setTheme(theme === 'dark' ? 'light' : 'dark')
+        setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
     }
+
+    // Show placeholder during SSR to avoid hydration mismatch
+    if (!mounted) {
+        return (
+            <button
+                className="group w-9 h-9 rounded-full border border-gray-300 flex justify-center items-center dark:border-gray-600"
+                aria-label="Toggle theme"
+                data-theme-switch
+                disabled
+            >
+                <div className="w-5 h-5" />
+            </button>
+        )
+    }
+
+    const isDark = resolvedTheme === 'dark'
 
     return (
         <button
             onClick={toggleTheme}
             className="group w-9 h-9 rounded-full border border-gray-300 flex justify-center items-center transition-all duration-500 hover:text-secondary-500 hover:border-secondary-500 dark:border-gray-600 dark:hover:border-secondary-400"
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
             data-theme-switch
         >
             <div className="text-gray-700 transition-all duration-500 group-hover:text-secondary-500 dark:text-gray-300 dark:group-hover:text-secondary-400">
-                {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+                {isDark ? <SunIcon /> : <MoonIcon />}
             </div>
         </button>
     )

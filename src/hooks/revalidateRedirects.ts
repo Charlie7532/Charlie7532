@@ -1,11 +1,17 @@
-import type { CollectionAfterChangeHook } from 'payload'
+import { handleAfterChangeHook } from '@/shared/handlers'
+import { NextCacheRevalidator } from '@/shared/infrastructure/next/NextCacheRevalidator'
+import { revalidateRedirectsState } from '@/shared/application/useCases/revalidateRedirectsState'
 
-import { revalidateTag } from 'next/cache'
+export const revalidateRedirects = handleAfterChangeHook({
+  name: 'Redirects',
+  handler: async ({ doc, req: { payload } }) => {
+    payload.logger.info(`Revalidating redirects`)
 
-export const revalidateRedirects: CollectionAfterChangeHook = ({ doc, req: { payload } }) => {
-  payload.logger.info(`Revalidating redirects`)
+    const cacheRevalidator = new NextCacheRevalidator()
+    revalidateRedirectsState(cacheRevalidator)
 
-  revalidateTag('redirects')
+    return doc
+  },
+})
 
-  return doc
-}
+

@@ -1,0 +1,30 @@
+<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#fafafa"/>
+  <!-- Section header -->
+  <text x="200" y="18" text-anchor="middle" fill="#86868b" font-size="8" font-weight="500" letter-spacing="1.5" font-family="-apple-system, Helvetica, sans-serif">FEATURES</text>
+  <text x="200" y="36" text-anchor="middle" fill="#1d1d1f" font-size="15" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Featured Solutions</text>
+  <!-- Card 1 - Top Left -->
+  <rect x="20" y="50" width="175" height="92" rx="10" fill="#fff" stroke="#e8e8ed" stroke-width="1"/>
+  <rect x="28" y="56" width="159" height="45" rx="6" fill="#e8e8ed"/>
+  <text x="32" y="114" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem Ipsum</text>
+  <text x="32" y="125" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">Dolor sit amet consectetur</text>
+  <text x="32" y="134" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">adipiscing elit sed do.</text>
+  <!-- Card 2 - Top Right -->
+  <rect x="205" y="50" width="175" height="92" rx="10" fill="#fff" stroke="#e8e8ed" stroke-width="1"/>
+  <rect x="213" y="56" width="159" height="45" rx="6" fill="#e8e8ed"/>
+  <text x="217" y="114" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Dolor Amet</text>
+  <text x="217" y="125" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">Ut enim ad minim veniam</text>
+  <text x="217" y="134" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">quis nostrud exercitation.</text>
+  <!-- Card 3 - Bottom Left -->
+  <rect x="20" y="150" width="175" height="92" rx="10" fill="#fff" stroke="#e8e8ed" stroke-width="1"/>
+  <rect x="28" y="156" width="159" height="45" rx="6" fill="#e8e8ed"/>
+  <text x="32" y="214" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Sit Consectetur</text>
+  <text x="32" y="225" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">Ullamco laboris nisi ut</text>
+  <text x="32" y="234" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">aliquip ex ea commodo.</text>
+  <!-- Card 4 - Bottom Right -->
+  <rect x="205" y="150" width="175" height="92" rx="10" fill="#fff" stroke="#e8e8ed" stroke-width="1"/>
+  <rect x="213" y="156" width="159" height="45" rx="6" fill="#e8e8ed"/>
+  <text x="217" y="214" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Veniam Quis</text>
+  <text x="217" y="225" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">Duis aute irure dolor in</text>
+  <text x="217" y="234" fill="#86868b" font-size="7" font-family="-apple-system, Helvetica, sans-serif">reprehenderit voluptate.</text>
+</svg>

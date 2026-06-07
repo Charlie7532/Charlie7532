@@ -1,10 +1,15 @@
+'use client'
+
+import { Button as HeroButton, Link as HeroLink } from '@heroui/react'
+import { buttonVariants as heroButtonVariants } from '@heroui/styles'
 import { cn } from '@/utilities/ui'
-import { Slot } from '@radix-ui/react-slot'
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
+// Keep buttonVariants for backward compatibility with components like pagination
+// These are Tailwind classes that style native elements (not HeroUI)
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     defaultVariants: {
       size: 'default',
@@ -15,28 +20,57 @@ const buttonVariants = cva(
         clear: '',
         default: 'h-10 px-4 py-2',
         icon: 'h-10 w-10',
-        lg: 'h-11 rounded px-8',
-        sm: 'h-9 rounded px-3',
+        lg: 'h-11 rounded-md px-8',
+        sm: 'h-9 rounded-md px-3',
       },
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        ghost: 'hover:bg-card hover:text-accent-foreground',
-        link: 'text-primary items-start justify-start underline-offset-4 hover:underline',
-        outline: 'border border-border bg-background hover:bg-card hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        default: 'bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90',
+        primary: 'bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90',
+        destructive: 'bg-[var(--danger)] text-[var(--danger-foreground)] hover:opacity-90',
+        ghost: 'hover:bg-[var(--surface-secondary)] hover:text-[var(--foreground)]',
+        link: 'text-[var(--accent)] underline-offset-4 hover:underline',
+        outline: 'border border-[var(--border)] bg-transparent hover:bg-[var(--surface-secondary)]',
+        secondary: 'bg-[var(--surface-secondary)] text-[var(--foreground)] hover:opacity-90',
       },
     },
   },
 )
 
+// Map our variant names to HeroUI v3 variants
+type OurVariant = 'default' | 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'
+type HeroVariant = 'primary' | 'secondary' | 'tertiary' | 'outline' | 'ghost' | 'danger' | 'danger-soft'
+
+const variantMap: Record<OurVariant, HeroVariant> = {
+  default: 'primary', // Primary/accent solid (default in HeroUI)
+  primary: 'primary', // Primary/accent solid
+  secondary: 'secondary',
+  destructive: 'danger',
+  outline: 'outline',
+  ghost: 'ghost',
+  link: 'ghost',
+}
+
+// Map our size names to HeroUI sizes
+type OurSize = 'default' | 'sm' | 'lg' | 'icon' | 'clear'
+type HeroSize = 'sm' | 'md' | 'lg'
+
+const sizeMap: Record<OurSize, HeroSize> = {
+  default: 'md',
+  sm: 'sm',
+  lg: 'lg',
+  icon: 'md',
+  clear: 'md',
+}
+
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'> {
+  variant?: OurVariant | null
+  size?: OurSize | null
   asChild?: boolean
   ref?: React.Ref<HTMLButtonElement>
   startContent?: React.ReactNode
   endContent?: React.ReactNode
+  href?: string
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -48,44 +82,53 @@ const Button: React.FC<ButtonProps> = ({
   startContent,
   endContent,
   children,
+  href,
+  disabled,
+  onClick,
+  type,
   ...props
 }) => {
-  const Comp = asChild ? Slot : 'button'
+  const heroVariant = variantMap[(variant as OurVariant) || 'default']
+  const heroSize = sizeMap[(size as OurSize) || 'default']
 
-  // Create the button content
-  const buttonContent = (
-    <>
-      {startContent && <span className="mr-2 flex items-center">{startContent}</span>}
-      {children}
-      {endContent && <span className="ml-2 flex items-center">{endContent}</span>}
-    </>
-  )
+  // Extra classes for link variant to look like a link
+  const linkClasses = variant === 'link' ? 'underline-offset-4 hover:underline' : ''
 
-  // If using asChild, we need to ensure we have only one child
-  if (asChild) {
-    // If we have start/end content or multiple children, wrap in a single element
-    if (startContent || endContent) {
-      return (
-        <Comp className={cn(buttonVariants({ className, size, variant }))} ref={ref} {...props}>
-          <span className="flex items-center">
-            {buttonContent}
-          </span>
-        </Comp>
-      )
-    }
-    // If only children and it's a single element, pass it directly
+  // For links, use HeroUI Link styled with buttonVariants
+  if (href) {
     return (
-      <Comp className={cn(buttonVariants({ className, size, variant }))} ref={ref} {...props}>
+      <HeroLink
+        href={href}
+        className={cn(
+          heroButtonVariants({ variant: heroVariant, size: heroSize }),
+          size === 'icon' && 'button--icon-only',
+          linkClasses,
+          className
+        )}
+      >
+        {startContent}
         {children}
-      </Comp>
+        {endContent}
+      </HeroLink>
     )
   }
 
-  // Regular button (not asChild)
+  // For regular buttons, use HeroUI Button
   return (
-    <Comp className={cn(buttonVariants({ className, size, variant }))} ref={ref} {...props}>
-      {buttonContent}
-    </Comp>
+    <HeroButton
+      ref={ref}
+      className={cn(linkClasses, className)}
+      variant={heroVariant}
+      size={heroSize}
+      isIconOnly={size === 'icon'}
+      isDisabled={disabled}
+      onPress={onClick as () => void}
+      type={type}
+    >
+      {startContent}
+      {children}
+      {endContent}
+    </HeroButton>
   )
 }
 

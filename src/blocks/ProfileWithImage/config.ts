@@ -4,7 +4,7 @@ import type { Block } from "payload";
 export const ProfileWithImage: Block = {
     slug: "profileWithImage",
     interfaceName: "ProfileWithImageBlock",
-    imageURL: '/assets/blocks/profile-with-image-block.png',
+    imageURL: '/assets/blocks/profile-with-image-block.svg',
     imageAltText: "A profile section with image, heading, subheading and content.",
     fields: [
         {

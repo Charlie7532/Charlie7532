@@ -1,4 +1,6 @@
-import { Button, type ButtonProps } from '@/components/ui/button'
+'use client'
+
+import { Button } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
 import React from 'react'
@@ -6,7 +8,7 @@ import React from 'react'
 import type { Page, Post } from '@/payload-types'
 
 type CMSLinkType = {
-  appearance?: 'inline' | ButtonProps['variant']
+  appearance?: 'inline' | 'default' | 'primary' | 'secondary' | 'outline' | 'link' | 'destructive' | 'ghost' | null
   children?: React.ReactNode
   className?: string
   label?: string | null
@@ -15,15 +17,22 @@ type CMSLinkType = {
     relationTo: 'pages' | 'posts'
     value: Page | Post | string | number
   } | null
-  size?: ButtonProps['size'] | null
+  size?: 'sm' | 'md' | 'lg' | null
   type?: 'custom' | 'reference' | null
   url?: string | null
+}
+
+// Map CMS size to our button size
+const sizeMap: Record<string, 'sm' | 'default' | 'lg'> = {
+  sm: 'sm',
+  md: 'default',
+  lg: 'lg',
 }
 
 export const CMSLink: React.FC<CMSLinkType> = (props) => {
   const {
     type,
-    appearance = 'inline',
+    appearance: appearanceFromProps,
     children,
     className,
     label,
@@ -33,6 +42,9 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     url,
   } = props
 
+  // Default to 'inline' if appearance is null or undefined
+  const appearance = appearanceFromProps || 'inline'
+
   const href =
     type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
       ? `${reference?.relationTo !== 'pages' ? `/${reference?.relationTo}` : ''}/${reference.value.slug
@@ -41,7 +53,6 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   if (!href) return null
 
-  const size = appearance === 'link' ? 'clear' : sizeFromProps
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
 
   /* Ensure we don't break any styles set by richText */
@@ -54,12 +65,21 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     )
   }
 
+  // Map appearance to button variant (they match except 'default' maps to 'primary')
+  const variant = appearance === 'default' ? 'primary' : appearance
+  const size = sizeMap[sizeFromProps || 'md'] || 'default'
+
   return (
-    <Button asChild className={className} size={size} variant={appearance}>
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
-        {label && label}
-        {children && children}
-      </Link>
+    <Button
+      as={Link}
+      href={href || url || ''}
+      className={className}
+      size={size}
+      variant={variant}
+      {...(newTabProps as any)}
+    >
+      {label && label}
+      {children && children}
     </Button>
   )
 }

@@ -43,10 +43,11 @@ export const SectionHeroWithBadgeClient: React.FC<SectionHeroWithBadgeProps> = (
             <div className="max-w-4xl mx-auto">
                 {badge?.text && <motion.div variants={itemVariants} className="mb-6">
                     <Chip
-                        startContent={Icon ? <Icon className="w-4 h-4" /> : <LucideIcons.Sparkles className="w-4 h-4" />}
+                        variant="secondary"
                         size="lg"
                         className="mb-4 border border-[#C4A78A] text-[#C4A78A]"
                     >
+                        {Icon ? <Icon className="w-4 h-4" /> : <LucideIcons.Sparkles className="w-4 h-4" />}
                         {badge.text}
                     </Chip>
                 </motion.div>}

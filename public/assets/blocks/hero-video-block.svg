@@ -1,0 +1,25 @@
+<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#1d1d1f"/>
+  
+  <!-- Video Background -->
+  <rect x="0" y="0" width="400" height="250" fill="url(#gradient)"/>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Play Icon Circle -->
+  <circle cx="200" cy="125" r="35" fill="rgba(255,255,255,0.95)" opacity="0.9"/>
+  <polygon points="190,110 220,125 190,140" fill="#1d1d1f"/>
+  
+  <!-- Text Content Overlay -->
+  <text x="200" y="60" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="500" font-family="-apple-system, Helvetica, sans-serif" opacity="0.9">EYEBROW TEXT</text>
+  <text x="200" y="200" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">Hero Video Block</text>
+  <text x="200" y="218" text-anchor="middle" fill="#ffffff" font-size="10" font-family="-apple-system, Helvetica, sans-serif" opacity="0.9">Full-screen video background with overlay</text>
+  
+  <!-- CTA Buttons -->
+  <rect x="130" y="228" width="60" height="16" rx="8" fill="#ffffff"/>
+  <rect x="210" y="228" width="60" height="16" rx="8" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1"/>
+</svg>

@@ -1,0 +1,24 @@
+/*
+ * Tailwind CSS for the Payload Admin Panel (utilities only)
+ *
+ * This file provides Tailwind utility classes and HeroUI component styles
+ * inside custom Payload admin components WITHOUT importing Tailwind's
+ * preflight/reset, which would conflict with Payload's built-in styles.
+ *
+ * NOTE: If Payload regenerates layout.tsx, re-add this import line:
+ *   import './tailwind-admin.css'
+ */
+
+/* Only import Tailwind utilities — skip preflight to avoid breaking Payload styles */
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities";
+
+/* HeroUI v3 styles */
+@import "@heroui/styles";
+
+/* Scan custom admin components for Tailwind class usage */
+@source '../../components/**/*.{ts,tsx}';
+@source '../../collections/**/*.{ts,tsx}';
+
+/* Dark mode variant matching Payload's theme class */
+@custom-variant dark (&:is(.dark *));

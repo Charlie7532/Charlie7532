@@ -1,0 +1,58 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#fafafa"/>
+  
+  <!-- Title and description -->
+  <text x="200" y="30" text-anchor="middle" fill="#1d1d1f" font-size="16" font-weight="700" font-family="-apple-system, Helvetica, sans-serif">Lorem Ipsum</text>
+  <text x="200" y="50" text-anchor="middle" fill="#86868b" font-size="10" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor sit amet consectetur</text>
+  
+  <!-- Card 1 -->
+  <rect x="20" y="70" width="110" height="200" rx="8" fill="#fff" stroke="#e5e5e7" stroke-width="2"/>
+  <!-- Quote icon -->
+  <text x="35" y="100" fill="#1d1d1f" font-size="20" font-weight="600" font-family="Georgia, serif" opacity="0.2">"</text>
+  <!-- Quote text -->
+  <text x="75" y="100" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor</text>
+  <text x="75" y="112" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">sit amet</text>
+  <text x="75" y="124" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">consectetur</text>
+  <!-- Divider -->
+  <line x1="30" y1="225" x2="120" y2="225" stroke="#e5e5e7" stroke-width="1"/>
+  <!-- Avatar -->
+  <circle cx="42" cy="245" r="12" fill="#e8e8ed"/>
+  <text x="42" y="250" text-anchor="middle" fill="#86868b" font-size="8" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">JD</text>
+  <!-- Author info -->
+  <text x="60" y="244" fill="#1d1d1f" font-size="7" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">John Doe</text>
+  <text x="60" y="253" fill="#86868b" font-size="6" font-family="-apple-system, Helvetica, sans-serif">CEO • Company</text>
+  
+  <!-- Card 2 -->
+  <rect x="145" y="70" width="110" height="200" rx="8" fill="#fff" stroke="#e5e5e7" stroke-width="2"/>
+  <!-- Quote icon -->
+  <text x="160" y="100" fill="#1d1d1f" font-size="20" font-weight="600" font-family="Georgia, serif" opacity="0.2">"</text>
+  <!-- Quote text -->
+  <text x="200" y="100" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor</text>
+  <text x="200" y="112" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">sit amet</text>
+  <text x="200" y="124" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">consectetur</text>
+  <!-- Divider -->
+  <line x1="155" y1="225" x2="245" y2="225" stroke="#e5e5e7" stroke-width="1"/>
+  <!-- Avatar -->
+  <circle cx="167" cy="245" r="12" fill="#e8e8ed"/>
+  <text x="167" y="250" text-anchor="middle" fill="#86868b" font-size="8" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">SM</text>
+  <!-- Author info -->
+  <text x="185" y="244" fill="#1d1d1f" font-size="7" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Sarah Miller</text>
+  <text x="185" y="253" fill="#86868b" font-size="6" font-family="-apple-system, Helvetica, sans-serif">CTO • Tech Co</text>
+  
+  <!-- Card 3 -->
+  <rect x="270" y="70" width="110" height="200" rx="8" fill="#fff" stroke="#e5e5e7" stroke-width="2"/>
+  <!-- Quote icon -->
+  <text x="285" y="100" fill="#1d1d1f" font-size="20" font-weight="600" font-family="Georgia, serif" opacity="0.2">"</text>
+  <!-- Quote text -->
+  <text x="325" y="100" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor</text>
+  <text x="325" y="112" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">sit amet</text>
+  <text x="325" y="124" text-anchor="middle" fill="#1d1d1f" font-size="8" font-weight="400" font-family="-apple-system, Helvetica, sans-serif">consectetur</text>
+  <!-- Divider -->
+  <line x1="280" y1="225" x2="370" y2="225" stroke="#e5e5e7" stroke-width="1"/>
+  <!-- Avatar -->
+  <circle cx="292" cy="245" r="12" fill="#e8e8ed"/>
+  <text x="292" y="250" text-anchor="middle" fill="#86868b" font-size="8" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">AP</text>
+  <!-- Author info -->
+  <text x="310" y="244" fill="#1d1d1f" font-size="7" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Alex Park</text>
+  <text x="310" y="253" fill="#86868b" font-size="6" font-family="-apple-system, Helvetica, sans-serif">Designer</text>
+</svg>

@@ -41,6 +41,10 @@ export const hero: Field = {
     {
       name: 'richText',
       type: 'richText',
+      localized: true,
+      admin: {
+        condition: (_, { type } = {}) => !['enntraHero1', 'none'].includes(type),
+      },
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
           return [
@@ -56,6 +60,9 @@ export const hero: Field = {
     linkGroup({
       overrides: {
         maxRows: 2,
+        admin: {
+          condition: (_, { type } = {}) => !['enntraHero1', 'none'].includes(type),
+        },
       },
     }),
     {

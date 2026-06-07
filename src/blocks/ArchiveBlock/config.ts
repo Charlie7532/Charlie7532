@@ -9,8 +9,8 @@ import {
 
 export const Archive: Block = {
   slug: 'archive',
-  imageURL: '/assets/blocks/archive-block.png',
-  imageAltText: 'An archive block',
+  imageURL: '/assets/blocks/archive-block.svg',
+  imageAltText: 'An archive block with post grid',
   interfaceName: 'ArchiveBlock',
   fields: [
     {

@@ -4,7 +4,7 @@ import { ServiceCardBlock } from "../ServiceCardBlock/config";
 export const ServiceCardGridBlock: Block = {
     slug: "serviceCardGrid",
     interfaceName: "ServiceCardGridBlock",
-    imageURL: '/assets/blocks/service-card-grid-block.png',
+    imageURL: '/assets/blocks/service-card-grid-block.svg',
     fields: [
         {
             name: "sectionHeader",

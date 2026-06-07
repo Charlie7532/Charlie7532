@@ -1,0 +1,145 @@
+'use client'
+
+import type React from 'react'
+import type { Page } from '@/payload-types'
+import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { useEffect } from 'react'
+import { cn } from '@/utilities/ui'
+import { CMSLink } from '@/components/Link'
+import { Media } from '@/components/Media'
+
+export const ImageTextHero: React.FC<Page['hero']> = (props) => {
+    const { setHeaderTheme } = useHeaderTheme()
+    const {
+        eyebrow,
+        title,
+        subtitle,
+        description,
+        ctaPrimary,
+        ctaSecondary,
+        image,
+        textPlacement = 'top',
+        spacingPreset = 'medium',
+        backgroundTheme = 'default',
+        textAlignment = 'center',
+    } = props as any
+
+    useEffect(() => {
+        // Set header theme based on background
+        const headerTheme = backgroundTheme === 'dark' || backgroundTheme === 'primary' ? 'dark' : 'light'
+        setHeaderTheme(headerTheme)
+    }, [backgroundTheme, setHeaderTheme])
+
+    // Determine layout order
+    const contentFirst = textPlacement === 'top'
+    const contentOrder = contentFirst ? 'order-1' : 'order-2'
+    const imageOrder = contentFirst ? 'order-2' : 'order-1'
+
+    // Spacing classes
+    const spacingClasses = {
+        none: 'py-0',
+        small: 'py-8 md:py-12',
+        medium: 'py-12 md:py-16 lg:py-20',
+        large: 'py-16 md:py-24 lg:py-32',
+    }
+
+    // Background theme classes
+    const themeClasses = {
+        default: 'bg-background text-foreground',
+        light: 'bg-muted text-foreground',
+        dark: 'bg-secondary text-secondary-foreground',
+        primary: 'bg-primary text-primary-foreground',
+    }
+
+    // Alignment classes
+    const alignClasses = {
+        start: 'text-left items-start',
+        center: 'text-center items-center',
+        end: 'text-right items-end',
+    }
+
+    const justifyClasses = {
+        start: 'justify-start',
+        center: 'justify-center',
+        end: 'justify-end',
+    }
+
+    return (
+        <section
+            className={cn(
+                spacingClasses[spacingPreset as keyof typeof spacingClasses] || spacingClasses.medium,
+                themeClasses[backgroundTheme as keyof typeof themeClasses] || themeClasses.default,
+            )}
+        >
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl">
+                    <div className="grid grid-cols-1 gap-8 md:gap-12">
+                        {/* Text Content */}
+                        <div
+                            className={cn(
+                                'flex flex-col gap-4',
+                                contentOrder,
+                                alignClasses[textAlignment as keyof typeof alignClasses] || alignClasses.center,
+                            )}
+                        >
+                            {eyebrow && (
+                                <span className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                                    {eyebrow}
+                                </span>
+                            )}
+
+                            {title && (
+                                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                                    {title}
+                                </h1>
+                            )}
+
+                            {subtitle && (
+                                <p className="text-xl font-medium text-muted-foreground sm:text-2xl">{subtitle}</p>
+                            )}
+
+                            {description && (
+                                <p className="max-w-3xl text-lg text-muted-foreground">{description}</p>
+                            )}
+
+                            {/* CTA Buttons */}
+                            {(ctaPrimary?.label || ctaSecondary?.label) && (
+                                <div
+                                    className={cn(
+                                        'mt-4 flex flex-wrap gap-4',
+                                        justifyClasses[textAlignment as keyof typeof justifyClasses] ||
+                                        justifyClasses.center,
+                                    )}
+                                >
+                                    {ctaPrimary?.label && (
+                                        <CMSLink
+                                            {...ctaPrimary}
+                                            appearance={ctaPrimary.appearance || 'primary'}
+                                            size="lg"
+                                        />
+                                    )}
+                                    {ctaSecondary?.label && (
+                                        <CMSLink
+                                            {...ctaSecondary}
+                                            appearance={ctaSecondary.appearance || 'outline'}
+                                            size="lg"
+                                        />
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Hero Image */}
+                        {image && (
+                            <div className={cn('relative', imageOrder)}>
+                                <div className="relative mx-auto aspect-16/10 max-w-5xl overflow-hidden rounded-lg shadow-2xl ring-1 ring-foreground/5">
+                                    <Media resource={image} className="h-full w-full" imgClassName="object-cover" />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </section>
+    )
+}

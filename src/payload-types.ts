@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'user-avatar': UserAvatar;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -89,6 +90,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'user-avatar': UserAvatarSelect<false> | UserAvatarSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -102,6 +104,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
+  fallbackLocale: null;
   globals: {
     header: Header;
     footer: Footer;
@@ -113,9 +116,10 @@ export interface Config {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
+  widgets: {
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: {
       schedulePublish: TaskSchedulePublish;
@@ -198,6 +202,8 @@ export interface Page {
   layout: (
     | CallToActionBlock
     | ContentBlock
+    | CtaCardBlock
+    | CtaSectionBlock
     | MediaBlock
     | ArchiveBlock
     | FormBlock
@@ -278,6 +284,18 @@ export interface Page {
     | PricingPlanGrid
     | SectionHeroWithBadge
     | ServiceCardGridBlock
+    | EmbedCodeBlock
+    | FeatureCardsBlock
+    | FeatureHighlightsBlock
+    | TextSectionBlock
+    | ImageContentType
+    | FAQBlock
+    | FAQGridBlock
+    | Testimonial1Block
+    | Testimonial3Type
+    | Testimonial4Type
+    | TestimonialGridBlock
+    | Pricing1Block
   )[];
   meta?: {
     title?: string | null;
@@ -288,8 +306,11 @@ export interface Page {
     description?: string | null;
   };
   publishedAt?: string | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -335,8 +356,11 @@ export interface Post {
         name?: string | null;
       }[]
     | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -441,8 +465,11 @@ export interface Media {
 export interface Category {
   id: number;
   title: string;
-  slug?: string | null;
-  slugLock?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   parent?: (number | null) | Category;
   breadcrumbs?:
     | {
@@ -462,6 +489,8 @@ export interface Category {
 export interface User {
   id: number;
   name?: string | null;
+  avatar?: (number | null) | UserAvatar;
+  role?: ('superadmin' | 'admin' | 'user') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -479,6 +508,56 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
+}
+/**
+ * User profile avatars and profile pictures
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-avatar".
+ */
+export interface UserAvatar {
+  id: number;
+  alt?: string | null;
+  user: number | User;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    small?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    medium?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -577,6 +656,134 @@ export interface ContentBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'content';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaCardBlock".
+ */
+export interface CtaCardBlock {
+  title: string;
+  description?: string | null;
+  ctaPrimary: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  ctaSecondary: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  /**
+   * Background style for the card container
+   */
+  variant?: ('default' | 'muted' | 'card') | null;
+  textAlignment?: ('start' | 'center' | 'end') | null;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ctaCard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaSectionBlock".
+ */
+export interface CtaSectionBlock {
+  title: string;
+  description?: string | null;
+  ctaPrimary: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  ctaSecondary: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  textAlignment?: ('start' | 'center' | 'end') | null;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ctaSection';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1045,6 +1252,8 @@ export interface PricingCard {
     | 'AmpersandIcon'
     | 'Ampersands'
     | 'AmpersandsIcon'
+    | 'Amphora'
+    | 'AmphoraIcon'
     | 'Anchor'
     | 'AnchorIcon'
     | 'Angry'
@@ -1259,20 +1468,34 @@ export interface PricingCard {
     | 'BadgePlusIcon'
     | 'BadgePoundSterling'
     | 'BadgePoundSterlingIcon'
+    | 'BadgeQuestionMark'
+    | 'BadgeQuestionMarkIcon'
     | 'BadgeRussianRuble'
     | 'BadgeRussianRubleIcon'
     | 'BadgeSwissFranc'
     | 'BadgeSwissFrancIcon'
+    | 'BadgeTurkishLira'
+    | 'BadgeTurkishLiraIcon'
     | 'BadgeX'
     | 'BadgeXIcon'
     | 'BaggageClaim'
     | 'BaggageClaimIcon'
+    | 'Balloon'
+    | 'BalloonIcon'
     | 'Ban'
     | 'BanIcon'
     | 'Banana'
     | 'BananaIcon'
+    | 'Bandage'
+    | 'BandageIcon'
     | 'Banknote'
+    | 'BanknoteArrowDown'
+    | 'BanknoteArrowDownIcon'
+    | 'BanknoteArrowUp'
+    | 'BanknoteArrowUpIcon'
     | 'BanknoteIcon'
+    | 'BanknoteX'
+    | 'BanknoteXIcon'
     | 'BarChart'
     | 'BarChart2'
     | 'BarChart2Icon'
@@ -1289,6 +1512,8 @@ export interface PricingCard {
     | 'BarChartIcon'
     | 'Barcode'
     | 'BarcodeIcon'
+    | 'Barrel'
+    | 'BarrelIcon'
     | 'Baseline'
     | 'BaselineIcon'
     | 'Bath'
@@ -1303,6 +1528,8 @@ export interface PricingCard {
     | 'BatteryLowIcon'
     | 'BatteryMedium'
     | 'BatteryMediumIcon'
+    | 'BatteryPlus'
+    | 'BatteryPlusIcon'
     | 'BatteryWarning'
     | 'BatteryWarningIcon'
     | 'Beaker'
@@ -1349,14 +1576,20 @@ export interface PricingCard {
     | 'BetweenVerticalEndIcon'
     | 'BetweenVerticalStart'
     | 'BetweenVerticalStartIcon'
+    | 'BicepsFlexed'
+    | 'BicepsFlexedIcon'
     | 'Bike'
     | 'BikeIcon'
     | 'Binary'
     | 'BinaryIcon'
+    | 'Binoculars'
+    | 'BinocularsIcon'
     | 'Biohazard'
     | 'BiohazardIcon'
     | 'Bird'
     | 'BirdIcon'
+    | 'Birdhouse'
+    | 'BirdhouseIcon'
     | 'Bitcoin'
     | 'BitcoinIcon'
     | 'Blend'
@@ -1384,6 +1617,8 @@ export interface PricingCard {
     | 'Book'
     | 'BookA'
     | 'BookAIcon'
+    | 'BookAlert'
+    | 'BookAlertIcon'
     | 'BookAudio'
     | 'BookAudioIcon'
     | 'BookCheck'
@@ -1417,6 +1652,8 @@ export interface PricingCard {
     | 'BookOpenTextIcon'
     | 'BookPlus'
     | 'BookPlusIcon'
+    | 'BookSearch'
+    | 'BookSearchIcon'
     | 'BookTemplate'
     | 'BookTemplateIcon'
     | 'BookText'
@@ -1449,6 +1686,10 @@ export interface PricingCard {
     | 'BotMessageSquareIcon'
     | 'BotOff'
     | 'BotOffIcon'
+    | 'BottleWine'
+    | 'BottleWineIcon'
+    | 'BowArrow'
+    | 'BowArrowIcon'
     | 'Box'
     | 'BoxIcon'
     | 'BoxSelect'
@@ -1466,17 +1707,27 @@ export interface PricingCard {
     | 'BrainCogIcon'
     | 'BrainIcon'
     | 'BrickWall'
+    | 'BrickWallFire'
+    | 'BrickWallFireIcon'
     | 'BrickWallIcon'
+    | 'BrickWallShield'
+    | 'BrickWallShieldIcon'
     | 'Briefcase'
     | 'BriefcaseBusiness'
     | 'BriefcaseBusinessIcon'
+    | 'BriefcaseConveyorBelt'
+    | 'BriefcaseConveyorBeltIcon'
     | 'BriefcaseIcon'
     | 'BriefcaseMedical'
     | 'BriefcaseMedicalIcon'
     | 'BringToFront'
     | 'BringToFrontIcon'
     | 'Brush'
+    | 'BrushCleaning'
+    | 'BrushCleaningIcon'
     | 'BrushIcon'
+    | 'Bubbles'
+    | 'BubblesIcon'
     | 'Bug'
     | 'BugIcon'
     | 'BugOff'
@@ -1502,12 +1753,20 @@ export interface PricingCard {
     | 'Calculator'
     | 'CalculatorIcon'
     | 'Calendar'
+    | 'Calendar1'
+    | 'Calendar1Icon'
+    | 'CalendarArrowDown'
+    | 'CalendarArrowDownIcon'
+    | 'CalendarArrowUp'
+    | 'CalendarArrowUpIcon'
     | 'CalendarCheck'
     | 'CalendarCheck2'
     | 'CalendarCheck2Icon'
     | 'CalendarCheckIcon'
     | 'CalendarClock'
     | 'CalendarClockIcon'
+    | 'CalendarCog'
+    | 'CalendarCogIcon'
     | 'CalendarDays'
     | 'CalendarDaysIcon'
     | 'CalendarFold'
@@ -1529,10 +1788,14 @@ export interface PricingCard {
     | 'CalendarRangeIcon'
     | 'CalendarSearch'
     | 'CalendarSearchIcon'
+    | 'CalendarSync'
+    | 'CalendarSyncIcon'
     | 'CalendarX'
     | 'CalendarX2'
     | 'CalendarX2Icon'
     | 'CalendarXIcon'
+    | 'Calendars'
+    | 'CalendarsIcon'
     | 'Camera'
     | 'CameraIcon'
     | 'CameraOff'
@@ -1547,6 +1810,8 @@ export interface PricingCard {
     | 'CandyOffIcon'
     | 'Cannabis'
     | 'CannabisIcon'
+    | 'CannabisOff'
+    | 'CannabisOffIcon'
     | 'Captions'
     | 'CaptionsIcon'
     | 'CaptionsOff'
@@ -1559,6 +1824,8 @@ export interface PricingCard {
     | 'CarTaxiFrontIcon'
     | 'Caravan'
     | 'CaravanIcon'
+    | 'CardSim'
+    | 'CardSimIcon'
     | 'Carrot'
     | 'CarrotIcon'
     | 'CaseLower'
@@ -1577,6 +1844,52 @@ export interface PricingCard {
     | 'CatIcon'
     | 'Cctv'
     | 'CctvIcon'
+    | 'ChartArea'
+    | 'ChartAreaIcon'
+    | 'ChartBar'
+    | 'ChartBarBig'
+    | 'ChartBarBigIcon'
+    | 'ChartBarDecreasing'
+    | 'ChartBarDecreasingIcon'
+    | 'ChartBarIcon'
+    | 'ChartBarIncreasing'
+    | 'ChartBarIncreasingIcon'
+    | 'ChartBarStacked'
+    | 'ChartBarStackedIcon'
+    | 'ChartCandlestick'
+    | 'ChartCandlestickIcon'
+    | 'ChartColumn'
+    | 'ChartColumnBig'
+    | 'ChartColumnBigIcon'
+    | 'ChartColumnDecreasing'
+    | 'ChartColumnDecreasingIcon'
+    | 'ChartColumnIcon'
+    | 'ChartColumnIncreasing'
+    | 'ChartColumnIncreasingIcon'
+    | 'ChartColumnStacked'
+    | 'ChartColumnStackedIcon'
+    | 'ChartGantt'
+    | 'ChartGanttIcon'
+    | 'ChartLine'
+    | 'ChartLineIcon'
+    | 'ChartNetwork'
+    | 'ChartNetworkIcon'
+    | 'ChartNoAxesColumn'
+    | 'ChartNoAxesColumnDecreasing'
+    | 'ChartNoAxesColumnDecreasingIcon'
+    | 'ChartNoAxesColumnIcon'
+    | 'ChartNoAxesColumnIncreasing'
+    | 'ChartNoAxesColumnIncreasingIcon'
+    | 'ChartNoAxesCombined'
+    | 'ChartNoAxesCombinedIcon'
+    | 'ChartNoAxesGantt'
+    | 'ChartNoAxesGanttIcon'
+    | 'ChartPie'
+    | 'ChartPieIcon'
+    | 'ChartScatter'
+    | 'ChartScatterIcon'
+    | 'ChartSpline'
+    | 'ChartSplineIcon'
     | 'Check'
     | 'CheckCheck'
     | 'CheckCheckIcon'
@@ -1585,6 +1898,8 @@ export interface PricingCard {
     | 'CheckCircle2Icon'
     | 'CheckCircleIcon'
     | 'CheckIcon'
+    | 'CheckLine'
+    | 'CheckLineIcon'
     | 'CheckSquare'
     | 'CheckSquare2'
     | 'CheckSquare2Icon'
@@ -1593,6 +1908,18 @@ export interface PricingCard {
     | 'ChefHatIcon'
     | 'Cherry'
     | 'CherryIcon'
+    | 'ChessBishop'
+    | 'ChessBishopIcon'
+    | 'ChessKing'
+    | 'ChessKingIcon'
+    | 'ChessKnight'
+    | 'ChessKnightIcon'
+    | 'ChessPawn'
+    | 'ChessPawnIcon'
+    | 'ChessQueen'
+    | 'ChessQueenIcon'
+    | 'ChessRook'
+    | 'ChessRookIcon'
     | 'ChevronDown'
     | 'ChevronDownCircle'
     | 'ChevronDownCircleIcon'
@@ -1628,6 +1955,8 @@ export interface PricingCard {
     | 'ChevronsLeft'
     | 'ChevronsLeftIcon'
     | 'ChevronsLeftRight'
+    | 'ChevronsLeftRightEllipsis'
+    | 'ChevronsLeftRightEllipsisIcon'
     | 'ChevronsLeftRightIcon'
     | 'ChevronsRight'
     | 'ChevronsRightIcon'
@@ -1639,6 +1968,8 @@ export interface PricingCard {
     | 'ChevronsUpIcon'
     | 'Chrome'
     | 'ChromeIcon'
+    | 'Chromium'
+    | 'ChromiumIcon'
     | 'Church'
     | 'ChurchIcon'
     | 'Cigarette'
@@ -1690,6 +2021,8 @@ export interface PricingCard {
     | 'CircleEllipsisIcon'
     | 'CircleEqual'
     | 'CircleEqualIcon'
+    | 'CircleFadingArrowUp'
+    | 'CircleFadingArrowUpIcon'
     | 'CircleFadingPlus'
     | 'CircleFadingPlusIcon'
     | 'CircleGauge'
@@ -1709,18 +2042,28 @@ export interface PricingCard {
     | 'CirclePauseIcon'
     | 'CirclePercent'
     | 'CirclePercentIcon'
+    | 'CirclePile'
+    | 'CirclePileIcon'
     | 'CirclePlay'
     | 'CirclePlayIcon'
     | 'CirclePlus'
     | 'CirclePlusIcon'
+    | 'CirclePoundSterling'
+    | 'CirclePoundSterlingIcon'
     | 'CirclePower'
     | 'CirclePowerIcon'
+    | 'CircleQuestionMark'
+    | 'CircleQuestionMarkIcon'
     | 'CircleSlash'
     | 'CircleSlash2'
     | 'CircleSlash2Icon'
     | 'CircleSlashIcon'
     | 'CircleSlashed'
     | 'CircleSlashedIcon'
+    | 'CircleSmall'
+    | 'CircleSmallIcon'
+    | 'CircleStar'
+    | 'CircleStarIcon'
     | 'CircleStop'
     | 'CircleStopIcon'
     | 'CircleUser'
@@ -1738,6 +2081,8 @@ export interface PricingCard {
     | 'Clipboard'
     | 'ClipboardCheck'
     | 'ClipboardCheckIcon'
+    | 'ClipboardClock'
+    | 'ClipboardClockIcon'
     | 'ClipboardCopy'
     | 'ClipboardCopyIcon'
     | 'ClipboardEdit'
@@ -1786,8 +2131,28 @@ export interface PricingCard {
     | 'Clock8Icon'
     | 'Clock9'
     | 'Clock9Icon'
+    | 'ClockAlert'
+    | 'ClockAlertIcon'
+    | 'ClockArrowDown'
+    | 'ClockArrowDownIcon'
+    | 'ClockArrowUp'
+    | 'ClockArrowUpIcon'
+    | 'ClockCheck'
+    | 'ClockCheckIcon'
+    | 'ClockFading'
+    | 'ClockFadingIcon'
     | 'ClockIcon'
+    | 'ClockPlus'
+    | 'ClockPlusIcon'
+    | 'ClosedCaption'
+    | 'ClosedCaptionIcon'
     | 'Cloud'
+    | 'CloudAlert'
+    | 'CloudAlertIcon'
+    | 'CloudBackup'
+    | 'CloudBackupIcon'
+    | 'CloudCheck'
+    | 'CloudCheckIcon'
     | 'CloudCog'
     | 'CloudCogIcon'
     | 'CloudDownload'
@@ -1817,6 +2182,8 @@ export interface PricingCard {
     | 'CloudSunIcon'
     | 'CloudSunRain'
     | 'CloudSunRainIcon'
+    | 'CloudSync'
+    | 'CloudSyncIcon'
     | 'CloudUpload'
     | 'CloudUploadIcon'
     | 'Cloudy'
@@ -1847,10 +2214,14 @@ export interface PricingCard {
     | 'Columns2'
     | 'Columns2Icon'
     | 'Columns3'
+    | 'Columns3Cog'
+    | 'Columns3CogIcon'
     | 'Columns3Icon'
     | 'Columns4'
     | 'Columns4Icon'
     | 'ColumnsIcon'
+    | 'ColumnsSettings'
+    | 'ColumnsSettingsIcon'
     | 'Combine'
     | 'CombineIcon'
     | 'Command'
@@ -1939,12 +2310,18 @@ export interface PricingCard {
     | 'CurrencyIcon'
     | 'Cylinder'
     | 'CylinderIcon'
+    | 'Dam'
+    | 'DamIcon'
     | 'Database'
     | 'DatabaseBackup'
     | 'DatabaseBackupIcon'
     | 'DatabaseIcon'
     | 'DatabaseZap'
     | 'DatabaseZapIcon'
+    | 'DecimalsArrowLeft'
+    | 'DecimalsArrowLeftIcon'
+    | 'DecimalsArrowRight'
+    | 'DecimalsArrowRightIcon'
     | 'Delete'
     | 'DeleteIcon'
     | 'Dessert'
@@ -2003,6 +2380,8 @@ export interface PricingCard {
     | 'DonutIcon'
     | 'DoorClosed'
     | 'DoorClosedIcon'
+    | 'DoorClosedLocked'
+    | 'DoorClosedLockedIcon'
     | 'DoorOpen'
     | 'DoorOpenIcon'
     | 'Dot'
@@ -2021,8 +2400,12 @@ export interface PricingCard {
     | 'DribbbleIcon'
     | 'Drill'
     | 'DrillIcon'
+    | 'Drone'
+    | 'DroneIcon'
     | 'Droplet'
     | 'DropletIcon'
+    | 'DropletOff'
+    | 'DropletOffIcon'
     | 'Droplets'
     | 'DropletsIcon'
     | 'Drum'
@@ -2058,6 +2441,8 @@ export interface PricingCard {
     | 'EllipsisVertical'
     | 'EllipsisVerticalIcon'
     | 'Equal'
+    | 'EqualApproximately'
+    | 'EqualApproximatelyIcon'
     | 'EqualIcon'
     | 'EqualNot'
     | 'EqualNotIcon'
@@ -2065,13 +2450,19 @@ export interface PricingCard {
     | 'EqualSquareIcon'
     | 'Eraser'
     | 'EraserIcon'
+    | 'EthernetPort'
+    | 'EthernetPortIcon'
     | 'Euro'
     | 'EuroIcon'
+    | 'EvCharger'
+    | 'EvChargerIcon'
     | 'Expand'
     | 'ExpandIcon'
     | 'ExternalLink'
     | 'ExternalLinkIcon'
     | 'Eye'
+    | 'EyeClosed'
+    | 'EyeClosedIcon'
     | 'EyeIcon'
     | 'EyeOff'
     | 'EyeOffIcon'
@@ -2112,15 +2503,31 @@ export interface PricingCard {
     | 'FileBarChartIcon'
     | 'FileBox'
     | 'FileBoxIcon'
+    | 'FileBraces'
+    | 'FileBracesCorner'
+    | 'FileBracesCornerIcon'
+    | 'FileBracesIcon'
+    | 'FileChartColumn'
+    | 'FileChartColumnIcon'
+    | 'FileChartColumnIncreasing'
+    | 'FileChartColumnIncreasingIcon'
+    | 'FileChartLine'
+    | 'FileChartLineIcon'
+    | 'FileChartPie'
+    | 'FileChartPieIcon'
     | 'FileCheck'
     | 'FileCheck2'
     | 'FileCheck2Icon'
+    | 'FileCheckCorner'
+    | 'FileCheckCornerIcon'
     | 'FileCheckIcon'
     | 'FileClock'
     | 'FileClockIcon'
     | 'FileCode'
     | 'FileCode2'
     | 'FileCode2Icon'
+    | 'FileCodeCorner'
+    | 'FileCodeCornerIcon'
     | 'FileCodeIcon'
     | 'FileCog'
     | 'FileCog2'
@@ -2134,6 +2541,10 @@ export interface PricingCard {
     | 'FileDownIcon'
     | 'FileEdit'
     | 'FileEditIcon'
+    | 'FileExclamationPoint'
+    | 'FileExclamationPointIcon'
+    | 'FileHeadphone'
+    | 'FileHeadphoneIcon'
     | 'FileHeart'
     | 'FileHeartIcon'
     | 'FileIcon'
@@ -2158,6 +2569,8 @@ export interface PricingCard {
     | 'FileMinus'
     | 'FileMinus2'
     | 'FileMinus2Icon'
+    | 'FileMinusCorner'
+    | 'FileMinusCornerIcon'
     | 'FileMinusIcon'
     | 'FileMusic'
     | 'FileMusicIcon'
@@ -2169,18 +2582,28 @@ export interface PricingCard {
     | 'FilePenLineIcon'
     | 'FilePieChart'
     | 'FilePieChartIcon'
+    | 'FilePlay'
+    | 'FilePlayIcon'
     | 'FilePlus'
     | 'FilePlus2'
     | 'FilePlus2Icon'
+    | 'FilePlusCorner'
+    | 'FilePlusCornerIcon'
     | 'FilePlusIcon'
     | 'FileQuestion'
     | 'FileQuestionIcon'
+    | 'FileQuestionMark'
+    | 'FileQuestionMarkIcon'
     | 'FileScan'
     | 'FileScanIcon'
     | 'FileSearch'
     | 'FileSearch2'
     | 'FileSearch2Icon'
+    | 'FileSearchCorner'
+    | 'FileSearchCornerIcon'
     | 'FileSearchIcon'
+    | 'FileSignal'
+    | 'FileSignalIcon'
     | 'FileSignature'
     | 'FileSignatureIcon'
     | 'FileSliders'
@@ -2198,12 +2621,18 @@ export interface PricingCard {
     | 'FileType'
     | 'FileType2'
     | 'FileType2Icon'
+    | 'FileTypeCorner'
+    | 'FileTypeCornerIcon'
     | 'FileTypeIcon'
     | 'FileUp'
     | 'FileUpIcon'
+    | 'FileUser'
+    | 'FileUserIcon'
     | 'FileVideo'
     | 'FileVideo2'
     | 'FileVideo2Icon'
+    | 'FileVideoCamera'
+    | 'FileVideoCameraIcon'
     | 'FileVideoIcon'
     | 'FileVolume'
     | 'FileVolume2'
@@ -2214,6 +2643,8 @@ export interface PricingCard {
     | 'FileX'
     | 'FileX2'
     | 'FileX2Icon'
+    | 'FileXCorner'
+    | 'FileXCornerIcon'
     | 'FileXIcon'
     | 'Files'
     | 'FilesIcon'
@@ -2225,6 +2656,8 @@ export interface PricingCard {
     | 'FilterXIcon'
     | 'Fingerprint'
     | 'FingerprintIcon'
+    | 'FingerprintPattern'
+    | 'FingerprintPatternIcon'
     | 'FireExtinguisher'
     | 'FireExtinguisherIcon'
     | 'Fish'
@@ -2233,6 +2666,8 @@ export interface PricingCard {
     | 'FishOffIcon'
     | 'FishSymbol'
     | 'FishSymbolIcon'
+    | 'FishingHook'
+    | 'FishingHookIcon'
     | 'Flag'
     | 'FlagIcon'
     | 'FlagOff'
@@ -2282,6 +2717,8 @@ export interface PricingCard {
     | 'FolderClockIcon'
     | 'FolderClosed'
     | 'FolderClosedIcon'
+    | 'FolderCode'
+    | 'FolderCodeIcon'
     | 'FolderCog'
     | 'FolderCog2'
     | 'FolderCog2Icon'
@@ -2339,8 +2776,14 @@ export interface PricingCard {
     | 'FoldersIcon'
     | 'Footprints'
     | 'FootprintsIcon'
+    | 'ForkKnife'
+    | 'ForkKnifeCrossed'
+    | 'ForkKnifeCrossedIcon'
+    | 'ForkKnifeIcon'
     | 'Forklift'
     | 'ForkliftIcon'
+    | 'Form'
+    | 'FormIcon'
     | 'FormInput'
     | 'FormInputIcon'
     | 'Forward'
@@ -2357,6 +2800,12 @@ export interface PricingCard {
     | 'FullscreenIcon'
     | 'FunctionSquare'
     | 'FunctionSquareIcon'
+    | 'Funnel'
+    | 'FunnelIcon'
+    | 'FunnelPlus'
+    | 'FunnelPlusIcon'
+    | 'FunnelX'
+    | 'FunnelXIcon'
     | 'GalleryHorizontal'
     | 'GalleryHorizontalEnd'
     | 'GalleryHorizontalEndIcon'
@@ -2370,6 +2819,8 @@ export interface PricingCard {
     | 'Gamepad'
     | 'Gamepad2'
     | 'Gamepad2Icon'
+    | 'GamepadDirectional'
+    | 'GamepadDirectionalIcon'
     | 'GamepadIcon'
     | 'GanttChart'
     | 'GanttChartIcon'
@@ -2383,12 +2834,16 @@ export interface PricingCard {
     | 'GavelIcon'
     | 'Gem'
     | 'GemIcon'
+    | 'GeorgianLari'
+    | 'GeorgianLariIcon'
     | 'Ghost'
     | 'GhostIcon'
     | 'Gift'
     | 'GiftIcon'
     | 'GitBranch'
     | 'GitBranchIcon'
+    | 'GitBranchMinus'
+    | 'GitBranchMinusIcon'
     | 'GitBranchPlus'
     | 'GitBranchPlusIcon'
     | 'GitCommit'
@@ -2433,8 +2888,12 @@ export interface PricingCard {
     | 'GlobeIcon'
     | 'GlobeLock'
     | 'GlobeLockIcon'
+    | 'GlobeX'
+    | 'GlobeXIcon'
     | 'Goal'
     | 'GoalIcon'
+    | 'Gpu'
+    | 'GpuIcon'
     | 'Grab'
     | 'GrabIcon'
     | 'GraduationCap'
@@ -2443,15 +2902,25 @@ export interface PricingCard {
     | 'GrapeIcon'
     | 'Grid'
     | 'Grid2X2'
+    | 'Grid2X2Check'
+    | 'Grid2X2CheckIcon'
     | 'Grid2X2Icon'
+    | 'Grid2X2Plus'
+    | 'Grid2X2PlusIcon'
+    | 'Grid2X2X'
+    | 'Grid2X2XIcon'
     | 'Grid2x2'
     | 'Grid2x2Check'
     | 'Grid2x2CheckIcon'
     | 'Grid2x2Icon'
+    | 'Grid2x2Plus'
+    | 'Grid2x2PlusIcon'
     | 'Grid2x2X'
     | 'Grid2x2XIcon'
     | 'Grid3X3'
     | 'Grid3X3Icon'
+    | 'Grid3x2'
+    | 'Grid3x2Icon'
     | 'Grid3x3'
     | 'Grid3x3Icon'
     | 'GridIcon'
@@ -2467,11 +2936,17 @@ export interface PricingCard {
     | 'GuitarIcon'
     | 'Ham'
     | 'HamIcon'
+    | 'Hamburger'
+    | 'HamburgerIcon'
     | 'Hammer'
     | 'HammerIcon'
     | 'Hand'
     | 'HandCoins'
     | 'HandCoinsIcon'
+    | 'HandFist'
+    | 'HandFistIcon'
+    | 'HandGrab'
+    | 'HandGrabIcon'
     | 'HandHeart'
     | 'HandHeartIcon'
     | 'HandHelping'
@@ -2481,6 +2956,8 @@ export interface PricingCard {
     | 'HandMetalIcon'
     | 'HandPlatter'
     | 'HandPlatterIcon'
+    | 'Handbag'
+    | 'HandbagIcon'
     | 'Handshake'
     | 'HandshakeIcon'
     | 'HardDrive'
@@ -2493,8 +2970,12 @@ export interface PricingCard {
     | 'HardHatIcon'
     | 'Hash'
     | 'HashIcon'
+    | 'HatGlasses'
+    | 'HatGlassesIcon'
     | 'Haze'
     | 'HazeIcon'
+    | 'Hd'
+    | 'HdIcon'
     | 'HdmiPort'
     | 'HdmiPortIcon'
     | 'Heading'
@@ -2511,6 +2992,8 @@ export interface PricingCard {
     | 'Heading6'
     | 'Heading6Icon'
     | 'HeadingIcon'
+    | 'HeadphoneOff'
+    | 'HeadphoneOffIcon'
     | 'Headphones'
     | 'HeadphonesIcon'
     | 'Headset'
@@ -2521,12 +3004,18 @@ export interface PricingCard {
     | 'HeartHandshake'
     | 'HeartHandshakeIcon'
     | 'HeartIcon'
+    | 'HeartMinus'
+    | 'HeartMinusIcon'
     | 'HeartOff'
     | 'HeartOffIcon'
+    | 'HeartPlus'
+    | 'HeartPlusIcon'
     | 'HeartPulse'
     | 'HeartPulseIcon'
     | 'Heater'
     | 'HeaterIcon'
+    | 'Helicopter'
+    | 'HelicopterIcon'
     | 'HelpCircle'
     | 'HelpCircleIcon'
     | 'HelpingHand'
@@ -2549,6 +3038,16 @@ export interface PricingCard {
     | 'HotelIcon'
     | 'Hourglass'
     | 'HourglassIcon'
+    | 'House'
+    | 'HouseHeart'
+    | 'HouseHeartIcon'
+    | 'HouseIcon'
+    | 'HousePlug'
+    | 'HousePlugIcon'
+    | 'HousePlus'
+    | 'HousePlusIcon'
+    | 'HouseWifi'
+    | 'HouseWifiIcon'
     | 'IceCream'
     | 'IceCream2'
     | 'IceCream2Icon'
@@ -2558,6 +3057,10 @@ export interface PricingCard {
     | 'IceCreamConeIcon'
     | 'IceCreamIcon'
     | 'Icon'
+    | 'IdCard'
+    | 'IdCardIcon'
+    | 'IdCardLanyard'
+    | 'IdCardLanyardIcon'
     | 'Image'
     | 'ImageDown'
     | 'ImageDownIcon'
@@ -2572,6 +3075,8 @@ export interface PricingCard {
     | 'ImagePlusIcon'
     | 'ImageUp'
     | 'ImageUpIcon'
+    | 'ImageUpscale'
+    | 'ImageUpscaleIcon'
     | 'Images'
     | 'ImagesIcon'
     | 'Import'
@@ -2612,6 +3117,8 @@ export interface PricingCard {
     | 'KanbanSquareDashed'
     | 'KanbanSquareDashedIcon'
     | 'KanbanSquareIcon'
+    | 'Kayak'
+    | 'KayakIcon'
     | 'Key'
     | 'KeyIcon'
     | 'KeyRound'
@@ -2647,6 +3154,8 @@ export interface PricingCard {
     | 'Laptop2Icon'
     | 'LaptopIcon'
     | 'LaptopMinimal'
+    | 'LaptopMinimalCheck'
+    | 'LaptopMinimalCheckIcon'
     | 'LaptopMinimalIcon'
     | 'Lasso'
     | 'LassoIcon'
@@ -2660,6 +3169,8 @@ export interface PricingCard {
     | 'Layers3'
     | 'Layers3Icon'
     | 'LayersIcon'
+    | 'LayersPlus'
+    | 'LayersPlusIcon'
     | 'Layout'
     | 'LayoutDashboard'
     | 'LayoutDashboardIcon'
@@ -2678,6 +3189,10 @@ export interface PricingCard {
     | 'LeafIcon'
     | 'LeafyGreen'
     | 'LeafyGreenIcon'
+    | 'Lectern'
+    | 'LecternIcon'
+    | 'LetterText'
+    | 'LetterTextIcon'
     | 'Library'
     | 'LibraryBig'
     | 'LibraryBigIcon'
@@ -2694,6 +3209,8 @@ export interface PricingCard {
     | 'LightbulbOffIcon'
     | 'LineChart'
     | 'LineChartIcon'
+    | 'LineSquiggle'
+    | 'LineSquiggleIcon'
     | 'Link'
     | 'Link2'
     | 'Link2Icon'
@@ -2703,15 +3220,27 @@ export interface PricingCard {
     | 'Linkedin'
     | 'LinkedinIcon'
     | 'List'
+    | 'ListCheck'
+    | 'ListCheckIcon'
     | 'ListChecks'
     | 'ListChecksIcon'
+    | 'ListChevronsDownUp'
+    | 'ListChevronsDownUpIcon'
+    | 'ListChevronsUpDown'
+    | 'ListChevronsUpDownIcon'
     | 'ListCollapse'
     | 'ListCollapseIcon'
     | 'ListEnd'
     | 'ListEndIcon'
     | 'ListFilter'
     | 'ListFilterIcon'
+    | 'ListFilterPlus'
+    | 'ListFilterPlusIcon'
     | 'ListIcon'
+    | 'ListIndentDecrease'
+    | 'ListIndentDecreaseIcon'
+    | 'ListIndentIncrease'
+    | 'ListIndentIncreaseIcon'
     | 'ListMinus'
     | 'ListMinusIcon'
     | 'ListMusic'
@@ -2746,6 +3275,8 @@ export interface PricingCard {
     | 'LocateIcon'
     | 'LocateOff'
     | 'LocateOffIcon'
+    | 'LocationEdit'
+    | 'LocationEditIcon'
     | 'Lock'
     | 'LockIcon'
     | 'LockKeyhole'
@@ -2758,6 +3289,8 @@ export interface PricingCard {
     | 'LogInIcon'
     | 'LogOut'
     | 'LogOutIcon'
+    | 'Logs'
+    | 'LogsIcon'
     | 'Lollipop'
     | 'LollipopIcon'
     | 'LucideAArrowDown'
@@ -2810,6 +3343,7 @@ export interface PricingCard {
     | 'LucideAmbulance'
     | 'LucideAmpersand'
     | 'LucideAmpersands'
+    | 'LucideAmphora'
     | 'LucideAnchor'
     | 'LucideAngry'
     | 'LucideAnnoyed'
@@ -2917,13 +3451,20 @@ export interface PricingCard {
     | 'LucideBadgePercent'
     | 'LucideBadgePlus'
     | 'LucideBadgePoundSterling'
+    | 'LucideBadgeQuestionMark'
     | 'LucideBadgeRussianRuble'
     | 'LucideBadgeSwissFranc'
+    | 'LucideBadgeTurkishLira'
     | 'LucideBadgeX'
     | 'LucideBaggageClaim'
+    | 'LucideBalloon'
     | 'LucideBan'
     | 'LucideBanana'
+    | 'LucideBandage'
     | 'LucideBanknote'
+    | 'LucideBanknoteArrowDown'
+    | 'LucideBanknoteArrowUp'
+    | 'LucideBanknoteX'
     | 'LucideBarChart'
     | 'LucideBarChart2'
     | 'LucideBarChart3'
@@ -2932,6 +3473,7 @@ export interface PricingCard {
     | 'LucideBarChartHorizontal'
     | 'LucideBarChartHorizontalBig'
     | 'LucideBarcode'
+    | 'LucideBarrel'
     | 'LucideBaseline'
     | 'LucideBath'
     | 'LucideBattery'
@@ -2939,6 +3481,7 @@ export interface PricingCard {
     | 'LucideBatteryFull'
     | 'LucideBatteryLow'
     | 'LucideBatteryMedium'
+    | 'LucideBatteryPlus'
     | 'LucideBatteryWarning'
     | 'LucideBeaker'
     | 'LucideBean'
@@ -2962,10 +3505,13 @@ export interface PricingCard {
     | 'LucideBetweenHorizontalStart'
     | 'LucideBetweenVerticalEnd'
     | 'LucideBetweenVerticalStart'
+    | 'LucideBicepsFlexed'
     | 'LucideBike'
     | 'LucideBinary'
+    | 'LucideBinoculars'
     | 'LucideBiohazard'
     | 'LucideBird'
+    | 'LucideBirdhouse'
     | 'LucideBitcoin'
     | 'LucideBlend'
     | 'LucideBlinds'
@@ -2980,6 +3526,7 @@ export interface PricingCard {
     | 'LucideBone'
     | 'LucideBook'
     | 'LucideBookA'
+    | 'LucideBookAlert'
     | 'LucideBookAudio'
     | 'LucideBookCheck'
     | 'LucideBookCopy'
@@ -2996,6 +3543,7 @@ export interface PricingCard {
     | 'LucideBookOpenCheck'
     | 'LucideBookOpenText'
     | 'LucideBookPlus'
+    | 'LucideBookSearch'
     | 'LucideBookTemplate'
     | 'LucideBookText'
     | 'LucideBookType'
@@ -3012,6 +3560,8 @@ export interface PricingCard {
     | 'LucideBot'
     | 'LucideBotMessageSquare'
     | 'LucideBotOff'
+    | 'LucideBottleWine'
+    | 'LucideBowArrow'
     | 'LucideBox'
     | 'LucideBoxSelect'
     | 'LucideBoxes'
@@ -3021,11 +3571,16 @@ export interface PricingCard {
     | 'LucideBrainCircuit'
     | 'LucideBrainCog'
     | 'LucideBrickWall'
+    | 'LucideBrickWallFire'
+    | 'LucideBrickWallShield'
     | 'LucideBriefcase'
     | 'LucideBriefcaseBusiness'
+    | 'LucideBriefcaseConveyorBelt'
     | 'LucideBriefcaseMedical'
     | 'LucideBringToFront'
     | 'LucideBrush'
+    | 'LucideBrushCleaning'
+    | 'LucideBubbles'
     | 'LucideBug'
     | 'LucideBugOff'
     | 'LucideBugPlay'
@@ -3039,9 +3594,13 @@ export interface PricingCard {
     | 'LucideCakeSlice'
     | 'LucideCalculator'
     | 'LucideCalendar'
+    | 'LucideCalendar1'
+    | 'LucideCalendarArrowDown'
+    | 'LucideCalendarArrowUp'
     | 'LucideCalendarCheck'
     | 'LucideCalendarCheck2'
     | 'LucideCalendarClock'
+    | 'LucideCalendarCog'
     | 'LucideCalendarDays'
     | 'LucideCalendarFold'
     | 'LucideCalendarHeart'
@@ -3052,8 +3611,10 @@ export interface PricingCard {
     | 'LucideCalendarPlus2'
     | 'LucideCalendarRange'
     | 'LucideCalendarSearch'
+    | 'LucideCalendarSync'
     | 'LucideCalendarX'
     | 'LucideCalendarX2'
+    | 'LucideCalendars'
     | 'LucideCamera'
     | 'LucideCameraOff'
     | 'LucideCandlestickChart'
@@ -3061,12 +3622,14 @@ export interface PricingCard {
     | 'LucideCandyCane'
     | 'LucideCandyOff'
     | 'LucideCannabis'
+    | 'LucideCannabisOff'
     | 'LucideCaptions'
     | 'LucideCaptionsOff'
     | 'LucideCar'
     | 'LucideCarFront'
     | 'LucideCarTaxiFront'
     | 'LucideCaravan'
+    | 'LucideCardSim'
     | 'LucideCarrot'
     | 'LucideCaseLower'
     | 'LucideCaseSensitive'
@@ -3076,14 +3639,44 @@ export interface PricingCard {
     | 'LucideCastle'
     | 'LucideCat'
     | 'LucideCctv'
+    | 'LucideChartArea'
+    | 'LucideChartBar'
+    | 'LucideChartBarBig'
+    | 'LucideChartBarDecreasing'
+    | 'LucideChartBarIncreasing'
+    | 'LucideChartBarStacked'
+    | 'LucideChartCandlestick'
+    | 'LucideChartColumn'
+    | 'LucideChartColumnBig'
+    | 'LucideChartColumnDecreasing'
+    | 'LucideChartColumnIncreasing'
+    | 'LucideChartColumnStacked'
+    | 'LucideChartGantt'
+    | 'LucideChartLine'
+    | 'LucideChartNetwork'
+    | 'LucideChartNoAxesColumn'
+    | 'LucideChartNoAxesColumnDecreasing'
+    | 'LucideChartNoAxesColumnIncreasing'
+    | 'LucideChartNoAxesCombined'
+    | 'LucideChartNoAxesGantt'
+    | 'LucideChartPie'
+    | 'LucideChartScatter'
+    | 'LucideChartSpline'
     | 'LucideCheck'
     | 'LucideCheckCheck'
     | 'LucideCheckCircle'
     | 'LucideCheckCircle2'
+    | 'LucideCheckLine'
     | 'LucideCheckSquare'
     | 'LucideCheckSquare2'
     | 'LucideChefHat'
     | 'LucideCherry'
+    | 'LucideChessBishop'
+    | 'LucideChessKing'
+    | 'LucideChessKnight'
+    | 'LucideChessPawn'
+    | 'LucideChessQueen'
+    | 'LucideChessRook'
     | 'LucideChevronDown'
     | 'LucideChevronDownCircle'
     | 'LucideChevronDownSquare'
@@ -3102,11 +3695,13 @@ export interface PricingCard {
     | 'LucideChevronsDownUp'
     | 'LucideChevronsLeft'
     | 'LucideChevronsLeftRight'
+    | 'LucideChevronsLeftRightEllipsis'
     | 'LucideChevronsRight'
     | 'LucideChevronsRightLeft'
     | 'LucideChevronsUp'
     | 'LucideChevronsUpDown'
     | 'LucideChrome'
+    | 'LucideChromium'
     | 'LucideChurch'
     | 'LucideCigarette'
     | 'LucideCigaretteOff'
@@ -3133,6 +3728,7 @@ export interface PricingCard {
     | 'LucideCircleDotDashed'
     | 'LucideCircleEllipsis'
     | 'LucideCircleEqual'
+    | 'LucideCircleFadingArrowUp'
     | 'LucideCircleFadingPlus'
     | 'LucideCircleGauge'
     | 'LucideCircleHelp'
@@ -3142,12 +3738,17 @@ export interface PricingCard {
     | 'LucideCircleParkingOff'
     | 'LucideCirclePause'
     | 'LucideCirclePercent'
+    | 'LucideCirclePile'
     | 'LucideCirclePlay'
     | 'LucideCirclePlus'
+    | 'LucideCirclePoundSterling'
     | 'LucideCirclePower'
+    | 'LucideCircleQuestionMark'
     | 'LucideCircleSlash'
     | 'LucideCircleSlash2'
     | 'LucideCircleSlashed'
+    | 'LucideCircleSmall'
+    | 'LucideCircleStar'
     | 'LucideCircleStop'
     | 'LucideCircleUser'
     | 'LucideCircleUserRound'
@@ -3157,6 +3758,7 @@ export interface PricingCard {
     | 'LucideClapperboard'
     | 'LucideClipboard'
     | 'LucideClipboardCheck'
+    | 'LucideClipboardClock'
     | 'LucideClipboardCopy'
     | 'LucideClipboardEdit'
     | 'LucideClipboardList'
@@ -3181,7 +3783,17 @@ export interface PricingCard {
     | 'LucideClock7'
     | 'LucideClock8'
     | 'LucideClock9'
+    | 'LucideClockAlert'
+    | 'LucideClockArrowDown'
+    | 'LucideClockArrowUp'
+    | 'LucideClockCheck'
+    | 'LucideClockFading'
+    | 'LucideClockPlus'
+    | 'LucideClosedCaption'
     | 'LucideCloud'
+    | 'LucideCloudAlert'
+    | 'LucideCloudBackup'
+    | 'LucideCloudCheck'
     | 'LucideCloudCog'
     | 'LucideCloudDownload'
     | 'LucideCloudDrizzle'
@@ -3196,6 +3808,7 @@ export interface PricingCard {
     | 'LucideCloudSnow'
     | 'LucideCloudSun'
     | 'LucideCloudSunRain'
+    | 'LucideCloudSync'
     | 'LucideCloudUpload'
     | 'LucideCloudy'
     | 'LucideClover'
@@ -3212,7 +3825,9 @@ export interface PricingCard {
     | 'LucideColumns'
     | 'LucideColumns2'
     | 'LucideColumns3'
+    | 'LucideColumns3Cog'
     | 'LucideColumns4'
+    | 'LucideColumnsSettings'
     | 'LucideCombine'
     | 'LucideCommand'
     | 'LucideCompass'
@@ -3257,9 +3872,12 @@ export interface PricingCard {
     | 'LucideCurlyBraces'
     | 'LucideCurrency'
     | 'LucideCylinder'
+    | 'LucideDam'
     | 'LucideDatabase'
     | 'LucideDatabaseBackup'
     | 'LucideDatabaseZap'
+    | 'LucideDecimalsArrowLeft'
+    | 'LucideDecimalsArrowRight'
     | 'LucideDelete'
     | 'LucideDessert'
     | 'LucideDiameter'
@@ -3289,6 +3907,7 @@ export interface PricingCard {
     | 'LucideDollarSign'
     | 'LucideDonut'
     | 'LucideDoorClosed'
+    | 'LucideDoorClosedLocked'
     | 'LucideDoorOpen'
     | 'LucideDot'
     | 'LucideDotSquare'
@@ -3298,7 +3917,9 @@ export interface PricingCard {
     | 'LucideDrama'
     | 'LucideDribbble'
     | 'LucideDrill'
+    | 'LucideDrone'
     | 'LucideDroplet'
+    | 'LucideDropletOff'
     | 'LucideDroplets'
     | 'LucideDrum'
     | 'LucideDrumstick'
@@ -3317,13 +3938,17 @@ export interface PricingCard {
     | 'LucideEllipsis'
     | 'LucideEllipsisVertical'
     | 'LucideEqual'
+    | 'LucideEqualApproximately'
     | 'LucideEqualNot'
     | 'LucideEqualSquare'
     | 'LucideEraser'
+    | 'LucideEthernetPort'
     | 'LucideEuro'
+    | 'LucideEvCharger'
     | 'LucideExpand'
     | 'LucideExternalLink'
     | 'LucideEye'
+    | 'LucideEyeClosed'
     | 'LucideEyeOff'
     | 'LucideFacebook'
     | 'LucideFactory'
@@ -3344,17 +3969,27 @@ export interface PricingCard {
     | 'LucideFileBarChart'
     | 'LucideFileBarChart2'
     | 'LucideFileBox'
+    | 'LucideFileBraces'
+    | 'LucideFileBracesCorner'
+    | 'LucideFileChartColumn'
+    | 'LucideFileChartColumnIncreasing'
+    | 'LucideFileChartLine'
+    | 'LucideFileChartPie'
     | 'LucideFileCheck'
     | 'LucideFileCheck2'
+    | 'LucideFileCheckCorner'
     | 'LucideFileClock'
     | 'LucideFileCode'
     | 'LucideFileCode2'
+    | 'LucideFileCodeCorner'
     | 'LucideFileCog'
     | 'LucideFileCog2'
     | 'LucideFileDiff'
     | 'LucideFileDigit'
     | 'LucideFileDown'
     | 'LucideFileEdit'
+    | 'LucideFileExclamationPoint'
+    | 'LucideFileHeadphone'
     | 'LucideFileHeart'
     | 'LucideFileImage'
     | 'LucideFileInput'
@@ -3367,17 +4002,23 @@ export interface PricingCard {
     | 'LucideFileLock2'
     | 'LucideFileMinus'
     | 'LucideFileMinus2'
+    | 'LucideFileMinusCorner'
     | 'LucideFileMusic'
     | 'LucideFileOutput'
     | 'LucideFilePen'
     | 'LucideFilePenLine'
     | 'LucideFilePieChart'
+    | 'LucideFilePlay'
     | 'LucideFilePlus'
     | 'LucideFilePlus2'
+    | 'LucideFilePlusCorner'
     | 'LucideFileQuestion'
+    | 'LucideFileQuestionMark'
     | 'LucideFileScan'
     | 'LucideFileSearch'
     | 'LucideFileSearch2'
+    | 'LucideFileSearchCorner'
+    | 'LucideFileSignal'
     | 'LucideFileSignature'
     | 'LucideFileSliders'
     | 'LucideFileSpreadsheet'
@@ -3387,23 +4028,29 @@ export interface PricingCard {
     | 'LucideFileText'
     | 'LucideFileType'
     | 'LucideFileType2'
+    | 'LucideFileTypeCorner'
     | 'LucideFileUp'
+    | 'LucideFileUser'
     | 'LucideFileVideo'
     | 'LucideFileVideo2'
+    | 'LucideFileVideoCamera'
     | 'LucideFileVolume'
     | 'LucideFileVolume2'
     | 'LucideFileWarning'
     | 'LucideFileX'
     | 'LucideFileX2'
+    | 'LucideFileXCorner'
     | 'LucideFiles'
     | 'LucideFilm'
     | 'LucideFilter'
     | 'LucideFilterX'
     | 'LucideFingerprint'
+    | 'LucideFingerprintPattern'
     | 'LucideFireExtinguisher'
     | 'LucideFish'
     | 'LucideFishOff'
     | 'LucideFishSymbol'
+    | 'LucideFishingHook'
     | 'LucideFlag'
     | 'LucideFlagOff'
     | 'LucideFlagTriangleLeft'
@@ -3429,6 +4076,7 @@ export interface PricingCard {
     | 'LucideFolderCheck'
     | 'LucideFolderClock'
     | 'LucideFolderClosed'
+    | 'LucideFolderCode'
     | 'LucideFolderCog'
     | 'LucideFolderCog2'
     | 'LucideFolderDot'
@@ -3457,7 +4105,10 @@ export interface PricingCard {
     | 'LucideFolderX'
     | 'LucideFolders'
     | 'LucideFootprints'
+    | 'LucideForkKnife'
+    | 'LucideForkKnifeCrossed'
     | 'LucideForklift'
+    | 'LucideForm'
     | 'LucideFormInput'
     | 'LucideForward'
     | 'LucideFrame'
@@ -3466,6 +4117,9 @@ export interface PricingCard {
     | 'LucideFuel'
     | 'LucideFullscreen'
     | 'LucideFunctionSquare'
+    | 'LucideFunnel'
+    | 'LucideFunnelPlus'
+    | 'LucideFunnelX'
     | 'LucideGalleryHorizontal'
     | 'LucideGalleryHorizontalEnd'
     | 'LucideGalleryThumbnails'
@@ -3473,15 +4127,18 @@ export interface PricingCard {
     | 'LucideGalleryVerticalEnd'
     | 'LucideGamepad'
     | 'LucideGamepad2'
+    | 'LucideGamepadDirectional'
     | 'LucideGanttChart'
     | 'LucideGanttChartSquare'
     | 'LucideGauge'
     | 'LucideGaugeCircle'
     | 'LucideGavel'
     | 'LucideGem'
+    | 'LucideGeorgianLari'
     | 'LucideGhost'
     | 'LucideGift'
     | 'LucideGitBranch'
+    | 'LucideGitBranchMinus'
     | 'LucideGitBranchPlus'
     | 'LucideGitCommit'
     | 'LucideGitCommitHorizontal'
@@ -3504,16 +4161,23 @@ export interface PricingCard {
     | 'LucideGlobe'
     | 'LucideGlobe2'
     | 'LucideGlobeLock'
+    | 'LucideGlobeX'
     | 'LucideGoal'
+    | 'LucideGpu'
     | 'LucideGrab'
     | 'LucideGraduationCap'
     | 'LucideGrape'
     | 'LucideGrid'
     | 'LucideGrid2X2'
+    | 'LucideGrid2X2Check'
+    | 'LucideGrid2X2Plus'
+    | 'LucideGrid2X2X'
     | 'LucideGrid2x2'
     | 'LucideGrid2x2Check'
+    | 'LucideGrid2x2Plus'
     | 'LucideGrid2x2X'
     | 'LucideGrid3X3'
+    | 'LucideGrid3x2'
     | 'LucideGrid3x3'
     | 'LucideGrip'
     | 'LucideGripHorizontal'
@@ -3521,20 +4185,26 @@ export interface PricingCard {
     | 'LucideGroup'
     | 'LucideGuitar'
     | 'LucideHam'
+    | 'LucideHamburger'
     | 'LucideHammer'
     | 'LucideHand'
     | 'LucideHandCoins'
+    | 'LucideHandFist'
+    | 'LucideHandGrab'
     | 'LucideHandHeart'
     | 'LucideHandHelping'
     | 'LucideHandMetal'
     | 'LucideHandPlatter'
+    | 'LucideHandbag'
     | 'LucideHandshake'
     | 'LucideHardDrive'
     | 'LucideHardDriveDownload'
     | 'LucideHardDriveUpload'
     | 'LucideHardHat'
     | 'LucideHash'
+    | 'LucideHatGlasses'
     | 'LucideHaze'
+    | 'LucideHd'
     | 'LucideHdmiPort'
     | 'LucideHeading'
     | 'LucideHeading1'
@@ -3543,14 +4213,18 @@ export interface PricingCard {
     | 'LucideHeading4'
     | 'LucideHeading5'
     | 'LucideHeading6'
+    | 'LucideHeadphoneOff'
     | 'LucideHeadphones'
     | 'LucideHeadset'
     | 'LucideHeart'
     | 'LucideHeartCrack'
     | 'LucideHeartHandshake'
+    | 'LucideHeartMinus'
     | 'LucideHeartOff'
+    | 'LucideHeartPlus'
     | 'LucideHeartPulse'
     | 'LucideHeater'
+    | 'LucideHelicopter'
     | 'LucideHelpCircle'
     | 'LucideHelpingHand'
     | 'LucideHexagon'
@@ -3562,10 +4236,17 @@ export interface PricingCard {
     | 'LucideHospital'
     | 'LucideHotel'
     | 'LucideHourglass'
+    | 'LucideHouse'
+    | 'LucideHouseHeart'
+    | 'LucideHousePlug'
+    | 'LucideHousePlus'
+    | 'LucideHouseWifi'
     | 'LucideIceCream'
     | 'LucideIceCream2'
     | 'LucideIceCreamBowl'
     | 'LucideIceCreamCone'
+    | 'LucideIdCard'
+    | 'LucideIdCardLanyard'
     | 'LucideImage'
     | 'LucideImageDown'
     | 'LucideImageMinus'
@@ -3573,6 +4254,7 @@ export interface PricingCard {
     | 'LucideImagePlay'
     | 'LucideImagePlus'
     | 'LucideImageUp'
+    | 'LucideImageUpscale'
     | 'LucideImages'
     | 'LucideImport'
     | 'LucideInbox'
@@ -3593,6 +4275,7 @@ export interface PricingCard {
     | 'LucideKanban'
     | 'LucideKanbanSquare'
     | 'LucideKanbanSquareDashed'
+    | 'LucideKayak'
     | 'LucideKey'
     | 'LucideKeyRound'
     | 'LucideKeySquare'
@@ -3611,12 +4294,14 @@ export interface PricingCard {
     | 'LucideLaptop'
     | 'LucideLaptop2'
     | 'LucideLaptopMinimal'
+    | 'LucideLaptopMinimalCheck'
     | 'LucideLasso'
     | 'LucideLassoSelect'
     | 'LucideLaugh'
     | 'LucideLayers'
     | 'LucideLayers2'
     | 'LucideLayers3'
+    | 'LucideLayersPlus'
     | 'LucideLayout'
     | 'LucideLayoutDashboard'
     | 'LucideLayoutGrid'
@@ -3626,6 +4311,8 @@ export interface PricingCard {
     | 'LucideLayoutTemplate'
     | 'LucideLeaf'
     | 'LucideLeafyGreen'
+    | 'LucideLectern'
+    | 'LucideLetterText'
     | 'LucideLibrary'
     | 'LucideLibraryBig'
     | 'LucideLibrarySquare'
@@ -3634,15 +4321,22 @@ export interface PricingCard {
     | 'LucideLightbulb'
     | 'LucideLightbulbOff'
     | 'LucideLineChart'
+    | 'LucideLineSquiggle'
     | 'LucideLink'
     | 'LucideLink2'
     | 'LucideLink2Off'
     | 'LucideLinkedin'
     | 'LucideList'
+    | 'LucideListCheck'
     | 'LucideListChecks'
+    | 'LucideListChevronsDownUp'
+    | 'LucideListChevronsUpDown'
     | 'LucideListCollapse'
     | 'LucideListEnd'
     | 'LucideListFilter'
+    | 'LucideListFilterPlus'
+    | 'LucideListIndentDecrease'
+    | 'LucideListIndentIncrease'
     | 'LucideListMinus'
     | 'LucideListMusic'
     | 'LucideListOrdered'
@@ -3660,12 +4354,14 @@ export interface PricingCard {
     | 'LucideLocate'
     | 'LucideLocateFixed'
     | 'LucideLocateOff'
+    | 'LucideLocationEdit'
     | 'LucideLock'
     | 'LucideLockKeyhole'
     | 'LucideLockKeyholeOpen'
     | 'LucideLockOpen'
     | 'LucideLogIn'
     | 'LucideLogOut'
+    | 'LucideLogs'
     | 'LucideLollipop'
     | 'LucideLuggage'
     | 'LucideMSquare'
@@ -3676,15 +4372,30 @@ export interface PricingCard {
     | 'LucideMailOpen'
     | 'LucideMailPlus'
     | 'LucideMailQuestion'
+    | 'LucideMailQuestionMark'
     | 'LucideMailSearch'
     | 'LucideMailWarning'
     | 'LucideMailX'
     | 'LucideMailbox'
     | 'LucideMails'
     | 'LucideMap'
+    | 'LucideMapMinus'
     | 'LucideMapPin'
+    | 'LucideMapPinCheck'
+    | 'LucideMapPinCheckInside'
+    | 'LucideMapPinHouse'
+    | 'LucideMapPinMinus'
+    | 'LucideMapPinMinusInside'
     | 'LucideMapPinOff'
+    | 'LucideMapPinPen'
+    | 'LucideMapPinPlus'
+    | 'LucideMapPinPlusInside'
+    | 'LucideMapPinX'
+    | 'LucideMapPinXInside'
     | 'LucideMapPinned'
+    | 'LucideMapPlus'
+    | 'LucideMars'
+    | 'LucideMarsStroke'
     | 'LucideMartini'
     | 'LucideMaximize'
     | 'LucideMaximize2'
@@ -3704,6 +4415,7 @@ export interface PricingCard {
     | 'LucideMessageCircleOff'
     | 'LucideMessageCirclePlus'
     | 'LucideMessageCircleQuestion'
+    | 'LucideMessageCircleQuestionMark'
     | 'LucideMessageCircleReply'
     | 'LucideMessageCircleWarning'
     | 'LucideMessageCircleX'
@@ -3713,6 +4425,7 @@ export interface PricingCard {
     | 'LucideMessageSquareDiff'
     | 'LucideMessageSquareDot'
     | 'LucideMessageSquareHeart'
+    | 'LucideMessageSquareLock'
     | 'LucideMessageSquareMore'
     | 'LucideMessageSquareOff'
     | 'LucideMessageSquarePlus'
@@ -3727,6 +4440,7 @@ export interface PricingCard {
     | 'LucideMic2'
     | 'LucideMicOff'
     | 'LucideMicVocal'
+    | 'LucideMicrochip'
     | 'LucideMicroscope'
     | 'LucideMicrowave'
     | 'LucideMilestone'
@@ -3739,6 +4453,8 @@ export interface PricingCard {
     | 'LucideMinusSquare'
     | 'LucideMonitor'
     | 'LucideMonitorCheck'
+    | 'LucideMonitorCloud'
+    | 'LucideMonitorCog'
     | 'LucideMonitorDot'
     | 'LucideMonitorDown'
     | 'LucideMonitorOff'
@@ -3753,12 +4469,14 @@ export interface PricingCard {
     | 'LucideMoonStar'
     | 'LucideMoreHorizontal'
     | 'LucideMoreVertical'
+    | 'LucideMotorbike'
     | 'LucideMountain'
     | 'LucideMountainSnow'
     | 'LucideMouse'
     | 'LucideMouseOff'
     | 'LucideMousePointer'
     | 'LucideMousePointer2'
+    | 'LucideMousePointer2Off'
     | 'LucideMousePointerBan'
     | 'LucideMousePointerClick'
     | 'LucideMousePointerSquareDashed'
@@ -3788,6 +4506,7 @@ export interface PricingCard {
     | 'LucideNetwork'
     | 'LucideNewspaper'
     | 'LucideNfc'
+    | 'LucideNonBinary'
     | 'LucideNotebook'
     | 'LucideNotebookPen'
     | 'LucideNotebookTabs'
@@ -3798,8 +4517,10 @@ export interface PricingCard {
     | 'LucideNutOff'
     | 'LucideOctagon'
     | 'LucideOctagonAlert'
+    | 'LucideOctagonMinus'
     | 'LucideOctagonPause'
     | 'LucideOctagonX'
+    | 'LucideOmega'
     | 'LucideOption'
     | 'LucideOrbit'
     | 'LucideOrigami'
@@ -3816,8 +4537,10 @@ export interface PricingCard {
     | 'LucidePaintRoller'
     | 'LucidePaintbrush'
     | 'LucidePaintbrush2'
+    | 'LucidePaintbrushVertical'
     | 'LucidePalette'
     | 'LucidePalmtree'
+    | 'LucidePanda'
     | 'LucidePanelBottom'
     | 'LucidePanelBottomClose'
     | 'LucidePanelBottomDashed'
@@ -3828,12 +4551,14 @@ export interface PricingCard {
     | 'LucidePanelLeftDashed'
     | 'LucidePanelLeftInactive'
     | 'LucidePanelLeftOpen'
+    | 'LucidePanelLeftRightDashed'
     | 'LucidePanelRight'
     | 'LucidePanelRightClose'
     | 'LucidePanelRightDashed'
     | 'LucidePanelRightInactive'
     | 'LucidePanelRightOpen'
     | 'LucidePanelTop'
+    | 'LucidePanelTopBottomDashed'
     | 'LucidePanelTopClose'
     | 'LucidePanelTopDashed'
     | 'LucidePanelTopInactive'
@@ -3859,10 +4584,12 @@ export interface PricingCard {
     | 'LucidePen'
     | 'LucidePenBox'
     | 'LucidePenLine'
+    | 'LucidePenOff'
     | 'LucidePenSquare'
     | 'LucidePenTool'
     | 'LucidePencil'
     | 'LucidePencilLine'
+    | 'LucidePencilOff'
     | 'LucidePencilRuler'
     | 'LucidePentagon'
     | 'LucidePercent'
@@ -3870,6 +4597,7 @@ export interface PricingCard {
     | 'LucidePercentDiamond'
     | 'LucidePercentSquare'
     | 'LucidePersonStanding'
+    | 'LucidePhilippinePeso'
     | 'LucidePhone'
     | 'LucidePhoneCall'
     | 'LucidePhoneForwarded'
@@ -3890,6 +4618,7 @@ export interface PricingCard {
     | 'LucidePilcrowRight'
     | 'LucidePilcrowSquare'
     | 'LucidePill'
+    | 'LucidePillBottle'
     | 'LucidePin'
     | 'LucidePinOff'
     | 'LucidePipette'
@@ -3921,6 +4650,8 @@ export interface PricingCard {
     | 'LucidePowerSquare'
     | 'LucidePresentation'
     | 'LucidePrinter'
+    | 'LucidePrinterCheck'
+    | 'LucidePrinterX'
     | 'LucideProjector'
     | 'LucideProportions'
     | 'LucidePuzzle'
@@ -3948,7 +4679,10 @@ export interface PricingCard {
     | 'LucideReceiptRussianRuble'
     | 'LucideReceiptSwissFranc'
     | 'LucideReceiptText'
+    | 'LucideReceiptTurkishLira'
+    | 'LucideRectangleCircle'
     | 'LucideRectangleEllipsis'
+    | 'LucideRectangleGoggles'
     | 'LucideRectangleHorizontal'
     | 'LucideRectangleVertical'
     | 'LucideRecycle'
@@ -3974,9 +4708,11 @@ export interface PricingCard {
     | 'LucideRocket'
     | 'LucideRockingChair'
     | 'LucideRollerCoaster'
+    | 'LucideRose'
     | 'LucideRotate3D'
     | 'LucideRotate3d'
     | 'LucideRotateCcw'
+    | 'LucideRotateCcwKey'
     | 'LucideRotateCcwSquare'
     | 'LucideRotateCw'
     | 'LucideRotateCwSquare'
@@ -3989,14 +4725,17 @@ export interface PricingCard {
     | 'LucideRows4'
     | 'LucideRss'
     | 'LucideRuler'
+    | 'LucideRulerDimensionLine'
     | 'LucideRussianRuble'
     | 'LucideSailboat'
     | 'LucideSalad'
     | 'LucideSandwich'
     | 'LucideSatellite'
     | 'LucideSatelliteDish'
+    | 'LucideSaudiRiyal'
     | 'LucideSave'
     | 'LucideSaveAll'
+    | 'LucideSaveOff'
     | 'LucideScale'
     | 'LucideScale3D'
     | 'LucideScale3d'
@@ -4005,7 +4744,9 @@ export interface PricingCard {
     | 'LucideScanBarcode'
     | 'LucideScanEye'
     | 'LucideScanFace'
+    | 'LucideScanHeart'
     | 'LucideScanLine'
+    | 'LucideScanQrCode'
     | 'LucideScanSearch'
     | 'LucideScanText'
     | 'LucideScatterChart'
@@ -4015,15 +4756,18 @@ export interface PricingCard {
     | 'LucideScissorsLineDashed'
     | 'LucideScissorsSquare'
     | 'LucideScissorsSquareDashedBottom'
+    | 'LucideScooter'
     | 'LucideScreenShare'
     | 'LucideScreenShareOff'
     | 'LucideScroll'
     | 'LucideScrollText'
     | 'LucideSearch'
+    | 'LucideSearchAlert'
     | 'LucideSearchCheck'
     | 'LucideSearchCode'
     | 'LucideSearchSlash'
     | 'LucideSearchX'
+    | 'LucideSection'
     | 'LucideSend'
     | 'LucideSendHorizonal'
     | 'LucideSendHorizontal'
@@ -4052,6 +4796,8 @@ export interface PricingCard {
     | 'LucideShieldOff'
     | 'LucideShieldPlus'
     | 'LucideShieldQuestion'
+    | 'LucideShieldQuestionMark'
+    | 'LucideShieldUser'
     | 'LucideShieldX'
     | 'LucideShip'
     | 'LucideShipWheel'
@@ -4061,6 +4807,8 @@ export interface PricingCard {
     | 'LucideShoppingCart'
     | 'LucideShovel'
     | 'LucideShowerHead'
+    | 'LucideShredder'
+    | 'LucideShrimp'
     | 'LucideShrink'
     | 'LucideShrub'
     | 'LucideShuffle'
@@ -4074,6 +4822,7 @@ export interface PricingCard {
     | 'LucideSignalLow'
     | 'LucideSignalMedium'
     | 'LucideSignalZero'
+    | 'LucideSignature'
     | 'LucideSignpost'
     | 'LucideSignpostBig'
     | 'LucideSiren'
@@ -4094,7 +4843,9 @@ export interface PricingCard {
     | 'LucideSmilePlus'
     | 'LucideSnail'
     | 'LucideSnowflake'
+    | 'LucideSoapDispenserDroplet'
     | 'LucideSofa'
+    | 'LucideSolarPanel'
     | 'LucideSortAsc'
     | 'LucideSortDesc'
     | 'LucideSoup'
@@ -4107,9 +4858,12 @@ export interface PricingCard {
     | 'LucideSpellCheck'
     | 'LucideSpellCheck2'
     | 'LucideSpline'
+    | 'LucideSplinePointer'
     | 'LucideSplit'
     | 'LucideSplitSquareHorizontal'
     | 'LucideSplitSquareVertical'
+    | 'LucideSpool'
+    | 'LucideSpotlight'
     | 'LucideSprayCan'
     | 'LucideSprout'
     | 'LucideSquare'
@@ -4128,6 +4882,7 @@ export interface PricingCard {
     | 'LucideSquareArrowUpRight'
     | 'LucideSquareAsterisk'
     | 'LucideSquareBottomDashedScissors'
+    | 'LucideSquareChartGantt'
     | 'LucideSquareCheck'
     | 'LucideSquareCheckBig'
     | 'LucideSquareChevronDown'
@@ -4135,10 +4890,12 @@ export interface PricingCard {
     | 'LucideSquareChevronRight'
     | 'LucideSquareChevronUp'
     | 'LucideSquareCode'
+    | 'LucideSquareDashed'
     | 'LucideSquareDashedBottom'
     | 'LucideSquareDashedBottomCode'
     | 'LucideSquareDashedKanban'
     | 'LucideSquareDashedMousePointer'
+    | 'LucideSquareDashedTopSolid'
     | 'LucideSquareDivide'
     | 'LucideSquareDot'
     | 'LucideSquareEqual'
@@ -4152,6 +4909,7 @@ export interface PricingCard {
     | 'LucideSquareMousePointer'
     | 'LucideSquareParking'
     | 'LucideSquareParkingOff'
+    | 'LucideSquarePause'
     | 'LucideSquarePen'
     | 'LucideSquarePercent'
     | 'LucideSquarePi'
@@ -4160,17 +4918,26 @@ export interface PricingCard {
     | 'LucideSquarePlus'
     | 'LucideSquarePower'
     | 'LucideSquareRadical'
+    | 'LucideSquareRoundCorner'
     | 'LucideSquareScissors'
     | 'LucideSquareSigma'
     | 'LucideSquareSlash'
     | 'LucideSquareSplitHorizontal'
     | 'LucideSquareSplitVertical'
+    | 'LucideSquareSquare'
     | 'LucideSquareStack'
+    | 'LucideSquareStar'
+    | 'LucideSquareStop'
     | 'LucideSquareTerminal'
     | 'LucideSquareUser'
     | 'LucideSquareUserRound'
     | 'LucideSquareX'
+    | 'LucideSquaresExclude'
+    | 'LucideSquaresIntersect'
+    | 'LucideSquaresSubtract'
+    | 'LucideSquaresUnite'
     | 'LucideSquircle'
+    | 'LucideSquircleDashed'
     | 'LucideSquirrel'
     | 'LucideStamp'
     | 'LucideStar'
@@ -4182,6 +4949,7 @@ export interface PricingCard {
     | 'LucideStethoscope'
     | 'LucideSticker'
     | 'LucideStickyNote'
+    | 'LucideStone'
     | 'LucideStopCircle'
     | 'LucideStore'
     | 'LucideStretchHorizontal'
@@ -4208,6 +4976,8 @@ export interface PricingCard {
     | 'LucideTableCellsMerge'
     | 'LucideTableCellsSplit'
     | 'LucideTableColumnsSplit'
+    | 'LucideTableConfig'
+    | 'LucideTableOfContents'
     | 'LucideTableProperties'
     | 'LucideTableRowsSplit'
     | 'LucideTablet'
@@ -4232,12 +5002,18 @@ export interface PricingCard {
     | 'LucideTestTubeDiagonal'
     | 'LucideTestTubes'
     | 'LucideText'
+    | 'LucideTextAlignCenter'
+    | 'LucideTextAlignEnd'
+    | 'LucideTextAlignJustify'
+    | 'LucideTextAlignStart'
     | 'LucideTextCursor'
     | 'LucideTextCursorInput'
+    | 'LucideTextInitial'
     | 'LucideTextQuote'
     | 'LucideTextSearch'
     | 'LucideTextSelect'
     | 'LucideTextSelection'
+    | 'LucideTextWrap'
     | 'LucideTheater'
     | 'LucideThermometer'
     | 'LucideThermometerSnowflake'
@@ -4251,11 +5027,16 @@ export interface PricingCard {
     | 'LucideTicketPlus'
     | 'LucideTicketSlash'
     | 'LucideTicketX'
+    | 'LucideTickets'
+    | 'LucideTicketsPlane'
     | 'LucideTimer'
     | 'LucideTimerOff'
     | 'LucideTimerReset'
     | 'LucideToggleLeft'
     | 'LucideToggleRight'
+    | 'LucideToilet'
+    | 'LucideToolCase'
+    | 'LucideToolbox'
     | 'LucideTornado'
     | 'LucideTorus'
     | 'LucideTouchpad'
@@ -4269,6 +5050,7 @@ export interface PricingCard {
     | 'LucideTrainFrontTunnel'
     | 'LucideTrainTrack'
     | 'LucideTramFront'
+    | 'LucideTransgender'
     | 'LucideTrash'
     | 'LucideTrash2'
     | 'LucideTreeDeciduous'
@@ -4278,17 +5060,25 @@ export interface PricingCard {
     | 'LucideTrello'
     | 'LucideTrendingDown'
     | 'LucideTrendingUp'
+    | 'LucideTrendingUpDown'
     | 'LucideTriangle'
     | 'LucideTriangleAlert'
+    | 'LucideTriangleDashed'
     | 'LucideTriangleRight'
     | 'LucideTrophy'
     | 'LucideTruck'
+    | 'LucideTruckElectric'
+    | 'LucideTurkishLira'
+    | 'LucideTurntable'
     | 'LucideTurtle'
     | 'LucideTv'
     | 'LucideTv2'
+    | 'LucideTvMinimal'
+    | 'LucideTvMinimalPlay'
     | 'LucideTwitch'
     | 'LucideTwitter'
     | 'LucideType'
+    | 'LucideTypeOutline'
     | 'LucideUmbrella'
     | 'LucideUmbrellaOff'
     | 'LucideUnderline'
@@ -4315,20 +5105,24 @@ export interface PricingCard {
     | 'LucideUserCircle2'
     | 'LucideUserCog'
     | 'LucideUserCog2'
+    | 'LucideUserLock'
     | 'LucideUserMinus'
     | 'LucideUserMinus2'
+    | 'LucideUserPen'
     | 'LucideUserPlus'
     | 'LucideUserPlus2'
     | 'LucideUserRound'
     | 'LucideUserRoundCheck'
     | 'LucideUserRoundCog'
     | 'LucideUserRoundMinus'
+    | 'LucideUserRoundPen'
     | 'LucideUserRoundPlus'
     | 'LucideUserRoundSearch'
     | 'LucideUserRoundX'
     | 'LucideUserSearch'
     | 'LucideUserSquare'
     | 'LucideUserSquare2'
+    | 'LucideUserStar'
     | 'LucideUserX'
     | 'LucideUserX2'
     | 'LucideUsers'
@@ -4337,10 +5131,14 @@ export interface PricingCard {
     | 'LucideUtensils'
     | 'LucideUtensilsCrossed'
     | 'LucideUtilityPole'
+    | 'LucideVan'
     | 'LucideVariable'
     | 'LucideVault'
+    | 'LucideVectorSquare'
     | 'LucideVegan'
     | 'LucideVenetianMask'
+    | 'LucideVenus'
+    | 'LucideVenusAndMars'
     | 'LucideVerified'
     | 'LucideVibrate'
     | 'LucideVibrateOff'
@@ -4349,9 +5147,11 @@ export interface PricingCard {
     | 'LucideVideotape'
     | 'LucideView'
     | 'LucideVoicemail'
+    | 'LucideVolleyball'
     | 'LucideVolume'
     | 'LucideVolume1'
     | 'LucideVolume2'
+    | 'LucideVolumeOff'
     | 'LucideVolumeX'
     | 'LucideVote'
     | 'LucideWallet'
@@ -4366,17 +5166,28 @@ export interface PricingCard {
     | 'LucideWashingMachine'
     | 'LucideWatch'
     | 'LucideWaves'
+    | 'LucideWavesArrowDown'
+    | 'LucideWavesArrowUp'
+    | 'LucideWavesLadder'
     | 'LucideWaypoints'
     | 'LucideWebcam'
     | 'LucideWebhook'
     | 'LucideWebhookOff'
     | 'LucideWeight'
+    | 'LucideWeightTilde'
     | 'LucideWheat'
     | 'LucideWheatOff'
     | 'LucideWholeWord'
     | 'LucideWifi'
+    | 'LucideWifiCog'
+    | 'LucideWifiHigh'
+    | 'LucideWifiLow'
     | 'LucideWifiOff'
+    | 'LucideWifiPen'
+    | 'LucideWifiSync'
+    | 'LucideWifiZero'
     | 'LucideWind'
+    | 'LucideWindArrowDown'
     | 'LucideWine'
     | 'LucideWineOff'
     | 'LucideWorkflow'
@@ -4410,6 +5221,8 @@ export interface PricingCard {
     | 'MailPlusIcon'
     | 'MailQuestion'
     | 'MailQuestionIcon'
+    | 'MailQuestionMark'
+    | 'MailQuestionMarkIcon'
     | 'MailSearch'
     | 'MailSearchIcon'
     | 'MailWarning'
@@ -4422,12 +5235,40 @@ export interface PricingCard {
     | 'MailsIcon'
     | 'Map'
     | 'MapIcon'
+    | 'MapMinus'
+    | 'MapMinusIcon'
     | 'MapPin'
+    | 'MapPinCheck'
+    | 'MapPinCheckIcon'
+    | 'MapPinCheckInside'
+    | 'MapPinCheckInsideIcon'
+    | 'MapPinHouse'
+    | 'MapPinHouseIcon'
     | 'MapPinIcon'
+    | 'MapPinMinus'
+    | 'MapPinMinusIcon'
+    | 'MapPinMinusInside'
+    | 'MapPinMinusInsideIcon'
     | 'MapPinOff'
     | 'MapPinOffIcon'
+    | 'MapPinPen'
+    | 'MapPinPenIcon'
+    | 'MapPinPlus'
+    | 'MapPinPlusIcon'
+    | 'MapPinPlusInside'
+    | 'MapPinPlusInsideIcon'
+    | 'MapPinX'
+    | 'MapPinXIcon'
+    | 'MapPinXInside'
+    | 'MapPinXInsideIcon'
     | 'MapPinned'
     | 'MapPinnedIcon'
+    | 'MapPlus'
+    | 'MapPlusIcon'
+    | 'Mars'
+    | 'MarsIcon'
+    | 'MarsStroke'
+    | 'MarsStrokeIcon'
     | 'Martini'
     | 'MartiniIcon'
     | 'Maximize'
@@ -4466,6 +5307,8 @@ export interface PricingCard {
     | 'MessageCirclePlusIcon'
     | 'MessageCircleQuestion'
     | 'MessageCircleQuestionIcon'
+    | 'MessageCircleQuestionMark'
+    | 'MessageCircleQuestionMarkIcon'
     | 'MessageCircleReply'
     | 'MessageCircleReplyIcon'
     | 'MessageCircleWarning'
@@ -4484,6 +5327,8 @@ export interface PricingCard {
     | 'MessageSquareHeart'
     | 'MessageSquareHeartIcon'
     | 'MessageSquareIcon'
+    | 'MessageSquareLock'
+    | 'MessageSquareLockIcon'
     | 'MessageSquareMore'
     | 'MessageSquareMoreIcon'
     | 'MessageSquareOff'
@@ -4512,6 +5357,8 @@ export interface PricingCard {
     | 'MicOffIcon'
     | 'MicVocal'
     | 'MicVocalIcon'
+    | 'Microchip'
+    | 'MicrochipIcon'
     | 'Microscope'
     | 'MicroscopeIcon'
     | 'Microwave'
@@ -4535,6 +5382,10 @@ export interface PricingCard {
     | 'Monitor'
     | 'MonitorCheck'
     | 'MonitorCheckIcon'
+    | 'MonitorCloud'
+    | 'MonitorCloudIcon'
+    | 'MonitorCog'
+    | 'MonitorCogIcon'
     | 'MonitorDot'
     | 'MonitorDotIcon'
     | 'MonitorDown'
@@ -4564,6 +5415,8 @@ export interface PricingCard {
     | 'MoreHorizontalIcon'
     | 'MoreVertical'
     | 'MoreVerticalIcon'
+    | 'Motorbike'
+    | 'MotorbikeIcon'
     | 'Mountain'
     | 'MountainIcon'
     | 'MountainSnow'
@@ -4575,6 +5428,8 @@ export interface PricingCard {
     | 'MousePointer'
     | 'MousePointer2'
     | 'MousePointer2Icon'
+    | 'MousePointer2Off'
+    | 'MousePointer2OffIcon'
     | 'MousePointerBan'
     | 'MousePointerBanIcon'
     | 'MousePointerClick'
@@ -4634,6 +5489,8 @@ export interface PricingCard {
     | 'NewspaperIcon'
     | 'Nfc'
     | 'NfcIcon'
+    | 'NonBinary'
+    | 'NonBinaryIcon'
     | 'Notebook'
     | 'NotebookIcon'
     | 'NotebookPen'
@@ -4654,10 +5511,14 @@ export interface PricingCard {
     | 'OctagonAlert'
     | 'OctagonAlertIcon'
     | 'OctagonIcon'
+    | 'OctagonMinus'
+    | 'OctagonMinusIcon'
     | 'OctagonPause'
     | 'OctagonPauseIcon'
     | 'OctagonX'
     | 'OctagonXIcon'
+    | 'Omega'
+    | 'OmegaIcon'
     | 'Option'
     | 'OptionIcon'
     | 'Orbit'
@@ -4690,10 +5551,14 @@ export interface PricingCard {
     | 'Paintbrush2'
     | 'Paintbrush2Icon'
     | 'PaintbrushIcon'
+    | 'PaintbrushVertical'
+    | 'PaintbrushVerticalIcon'
     | 'Palette'
     | 'PaletteIcon'
     | 'Palmtree'
     | 'PalmtreeIcon'
+    | 'Panda'
+    | 'PandaIcon'
     | 'PanelBottom'
     | 'PanelBottomClose'
     | 'PanelBottomCloseIcon'
@@ -4714,6 +5579,8 @@ export interface PricingCard {
     | 'PanelLeftInactiveIcon'
     | 'PanelLeftOpen'
     | 'PanelLeftOpenIcon'
+    | 'PanelLeftRightDashed'
+    | 'PanelLeftRightDashedIcon'
     | 'PanelRight'
     | 'PanelRightClose'
     | 'PanelRightCloseIcon'
@@ -4725,6 +5592,8 @@ export interface PricingCard {
     | 'PanelRightOpen'
     | 'PanelRightOpenIcon'
     | 'PanelTop'
+    | 'PanelTopBottomDashed'
+    | 'PanelTopBottomDashedIcon'
     | 'PanelTopClose'
     | 'PanelTopCloseIcon'
     | 'PanelTopDashed'
@@ -4776,6 +5645,8 @@ export interface PricingCard {
     | 'PenIcon'
     | 'PenLine'
     | 'PenLineIcon'
+    | 'PenOff'
+    | 'PenOffIcon'
     | 'PenSquare'
     | 'PenSquareIcon'
     | 'PenTool'
@@ -4784,6 +5655,8 @@ export interface PricingCard {
     | 'PencilIcon'
     | 'PencilLine'
     | 'PencilLineIcon'
+    | 'PencilOff'
+    | 'PencilOffIcon'
     | 'PencilRuler'
     | 'PencilRulerIcon'
     | 'Pentagon'
@@ -4798,6 +5671,8 @@ export interface PricingCard {
     | 'PercentSquareIcon'
     | 'PersonStanding'
     | 'PersonStandingIcon'
+    | 'PhilippinePeso'
+    | 'PhilippinePesoIcon'
     | 'Phone'
     | 'PhoneCall'
     | 'PhoneCallIcon'
@@ -4837,6 +5712,8 @@ export interface PricingCard {
     | 'PilcrowSquare'
     | 'PilcrowSquareIcon'
     | 'Pill'
+    | 'PillBottle'
+    | 'PillBottleIcon'
     | 'PillIcon'
     | 'Pin'
     | 'PinIcon'
@@ -4899,7 +5776,11 @@ export interface PricingCard {
     | 'Presentation'
     | 'PresentationIcon'
     | 'Printer'
+    | 'PrinterCheck'
+    | 'PrinterCheckIcon'
     | 'PrinterIcon'
+    | 'PrinterX'
+    | 'PrinterXIcon'
     | 'Projector'
     | 'ProjectorIcon'
     | 'Proportions'
@@ -4954,8 +5835,14 @@ export interface PricingCard {
     | 'ReceiptSwissFrancIcon'
     | 'ReceiptText'
     | 'ReceiptTextIcon'
+    | 'ReceiptTurkishLira'
+    | 'ReceiptTurkishLiraIcon'
+    | 'RectangleCircle'
+    | 'RectangleCircleIcon'
     | 'RectangleEllipsis'
     | 'RectangleEllipsisIcon'
+    | 'RectangleGoggles'
+    | 'RectangleGogglesIcon'
     | 'RectangleHorizontal'
     | 'RectangleHorizontalIcon'
     | 'RectangleVertical'
@@ -5006,12 +5893,16 @@ export interface PricingCard {
     | 'RockingChairIcon'
     | 'RollerCoaster'
     | 'RollerCoasterIcon'
+    | 'Rose'
+    | 'RoseIcon'
     | 'Rotate3D'
     | 'Rotate3DIcon'
     | 'Rotate3d'
     | 'Rotate3dIcon'
     | 'RotateCcw'
     | 'RotateCcwIcon'
+    | 'RotateCcwKey'
+    | 'RotateCcwKeyIcon'
     | 'RotateCcwSquare'
     | 'RotateCcwSquareIcon'
     | 'RotateCw'
@@ -5035,6 +5926,8 @@ export interface PricingCard {
     | 'Rss'
     | 'RssIcon'
     | 'Ruler'
+    | 'RulerDimensionLine'
+    | 'RulerDimensionLineIcon'
     | 'RulerIcon'
     | 'RussianRuble'
     | 'RussianRubleIcon'
@@ -5048,10 +5941,14 @@ export interface PricingCard {
     | 'SatelliteDish'
     | 'SatelliteDishIcon'
     | 'SatelliteIcon'
+    | 'SaudiRiyal'
+    | 'SaudiRiyalIcon'
     | 'Save'
     | 'SaveAll'
     | 'SaveAllIcon'
     | 'SaveIcon'
+    | 'SaveOff'
+    | 'SaveOffIcon'
     | 'Scale'
     | 'Scale3D'
     | 'Scale3DIcon'
@@ -5067,9 +5964,13 @@ export interface PricingCard {
     | 'ScanEyeIcon'
     | 'ScanFace'
     | 'ScanFaceIcon'
+    | 'ScanHeart'
+    | 'ScanHeartIcon'
     | 'ScanIcon'
     | 'ScanLine'
     | 'ScanLineIcon'
+    | 'ScanQrCode'
+    | 'ScanQrCodeIcon'
     | 'ScanSearch'
     | 'ScanSearchIcon'
     | 'ScanText'
@@ -5088,6 +5989,8 @@ export interface PricingCard {
     | 'ScissorsSquareDashedBottom'
     | 'ScissorsSquareDashedBottomIcon'
     | 'ScissorsSquareIcon'
+    | 'Scooter'
+    | 'ScooterIcon'
     | 'ScreenShare'
     | 'ScreenShareIcon'
     | 'ScreenShareOff'
@@ -5097,6 +6000,8 @@ export interface PricingCard {
     | 'ScrollText'
     | 'ScrollTextIcon'
     | 'Search'
+    | 'SearchAlert'
+    | 'SearchAlertIcon'
     | 'SearchCheck'
     | 'SearchCheckIcon'
     | 'SearchCode'
@@ -5106,6 +6011,8 @@ export interface PricingCard {
     | 'SearchSlashIcon'
     | 'SearchX'
     | 'SearchXIcon'
+    | 'Section'
+    | 'SectionIcon'
     | 'Send'
     | 'SendHorizonal'
     | 'SendHorizonalIcon'
@@ -5162,6 +6069,10 @@ export interface PricingCard {
     | 'ShieldPlusIcon'
     | 'ShieldQuestion'
     | 'ShieldQuestionIcon'
+    | 'ShieldQuestionMark'
+    | 'ShieldQuestionMarkIcon'
+    | 'ShieldUser'
+    | 'ShieldUserIcon'
     | 'ShieldX'
     | 'ShieldXIcon'
     | 'Ship'
@@ -5180,6 +6091,10 @@ export interface PricingCard {
     | 'ShovelIcon'
     | 'ShowerHead'
     | 'ShowerHeadIcon'
+    | 'Shredder'
+    | 'ShredderIcon'
+    | 'Shrimp'
+    | 'ShrimpIcon'
     | 'Shrink'
     | 'ShrinkIcon'
     | 'Shrub'
@@ -5206,6 +6121,8 @@ export interface PricingCard {
     | 'SignalMediumIcon'
     | 'SignalZero'
     | 'SignalZeroIcon'
+    | 'Signature'
+    | 'SignatureIcon'
     | 'Signpost'
     | 'SignpostBig'
     | 'SignpostBigIcon'
@@ -5246,8 +6163,12 @@ export interface PricingCard {
     | 'SnailIcon'
     | 'Snowflake'
     | 'SnowflakeIcon'
+    | 'SoapDispenserDroplet'
+    | 'SoapDispenserDropletIcon'
     | 'Sofa'
     | 'SofaIcon'
+    | 'SolarPanel'
+    | 'SolarPanelIcon'
     | 'SortAsc'
     | 'SortAscIcon'
     | 'SortDesc'
@@ -5272,12 +6193,18 @@ export interface PricingCard {
     | 'SpellCheckIcon'
     | 'Spline'
     | 'SplineIcon'
+    | 'SplinePointer'
+    | 'SplinePointerIcon'
     | 'Split'
     | 'SplitIcon'
     | 'SplitSquareHorizontal'
     | 'SplitSquareHorizontalIcon'
     | 'SplitSquareVertical'
     | 'SplitSquareVerticalIcon'
+    | 'Spool'
+    | 'SpoolIcon'
+    | 'Spotlight'
+    | 'SpotlightIcon'
     | 'SprayCan'
     | 'SprayCanIcon'
     | 'Sprout'
@@ -5313,6 +6240,8 @@ export interface PricingCard {
     | 'SquareAsteriskIcon'
     | 'SquareBottomDashedScissors'
     | 'SquareBottomDashedScissorsIcon'
+    | 'SquareChartGantt'
+    | 'SquareChartGanttIcon'
     | 'SquareCheck'
     | 'SquareCheckBig'
     | 'SquareCheckBigIcon'
@@ -5327,14 +6256,18 @@ export interface PricingCard {
     | 'SquareChevronUpIcon'
     | 'SquareCode'
     | 'SquareCodeIcon'
+    | 'SquareDashed'
     | 'SquareDashedBottom'
     | 'SquareDashedBottomCode'
     | 'SquareDashedBottomCodeIcon'
     | 'SquareDashedBottomIcon'
+    | 'SquareDashedIcon'
     | 'SquareDashedKanban'
     | 'SquareDashedKanbanIcon'
     | 'SquareDashedMousePointer'
     | 'SquareDashedMousePointerIcon'
+    | 'SquareDashedTopSolid'
+    | 'SquareDashedTopSolidIcon'
     | 'SquareDivide'
     | 'SquareDivideIcon'
     | 'SquareDot'
@@ -5362,6 +6295,8 @@ export interface PricingCard {
     | 'SquareParkingIcon'
     | 'SquareParkingOff'
     | 'SquareParkingOffIcon'
+    | 'SquarePause'
+    | 'SquarePauseIcon'
     | 'SquarePen'
     | 'SquarePenIcon'
     | 'SquarePercent'
@@ -5378,6 +6313,8 @@ export interface PricingCard {
     | 'SquarePowerIcon'
     | 'SquareRadical'
     | 'SquareRadicalIcon'
+    | 'SquareRoundCorner'
+    | 'SquareRoundCornerIcon'
     | 'SquareScissors'
     | 'SquareScissorsIcon'
     | 'SquareSigma'
@@ -5388,8 +6325,14 @@ export interface PricingCard {
     | 'SquareSplitHorizontalIcon'
     | 'SquareSplitVertical'
     | 'SquareSplitVerticalIcon'
+    | 'SquareSquare'
+    | 'SquareSquareIcon'
     | 'SquareStack'
     | 'SquareStackIcon'
+    | 'SquareStar'
+    | 'SquareStarIcon'
+    | 'SquareStop'
+    | 'SquareStopIcon'
     | 'SquareTerminal'
     | 'SquareTerminalIcon'
     | 'SquareUser'
@@ -5398,7 +6341,17 @@ export interface PricingCard {
     | 'SquareUserRoundIcon'
     | 'SquareX'
     | 'SquareXIcon'
+    | 'SquaresExclude'
+    | 'SquaresExcludeIcon'
+    | 'SquaresIntersect'
+    | 'SquaresIntersectIcon'
+    | 'SquaresSubtract'
+    | 'SquaresSubtractIcon'
+    | 'SquaresUnite'
+    | 'SquaresUniteIcon'
     | 'Squircle'
+    | 'SquircleDashed'
+    | 'SquircleDashedIcon'
     | 'SquircleIcon'
     | 'Squirrel'
     | 'SquirrelIcon'
@@ -5422,6 +6375,8 @@ export interface PricingCard {
     | 'StickerIcon'
     | 'StickyNote'
     | 'StickyNoteIcon'
+    | 'Stone'
+    | 'StoneIcon'
     | 'StopCircle'
     | 'StopCircleIcon'
     | 'Store'
@@ -5473,7 +6428,11 @@ export interface PricingCard {
     | 'TableCellsSplitIcon'
     | 'TableColumnsSplit'
     | 'TableColumnsSplitIcon'
+    | 'TableConfig'
+    | 'TableConfigIcon'
     | 'TableIcon'
+    | 'TableOfContents'
+    | 'TableOfContentsIcon'
     | 'TableProperties'
     | 'TablePropertiesIcon'
     | 'TableRowsSplit'
@@ -5521,11 +6480,21 @@ export interface PricingCard {
     | 'TestTubes'
     | 'TestTubesIcon'
     | 'Text'
+    | 'TextAlignCenter'
+    | 'TextAlignCenterIcon'
+    | 'TextAlignEnd'
+    | 'TextAlignEndIcon'
+    | 'TextAlignJustify'
+    | 'TextAlignJustifyIcon'
+    | 'TextAlignStart'
+    | 'TextAlignStartIcon'
     | 'TextCursor'
     | 'TextCursorIcon'
     | 'TextCursorInput'
     | 'TextCursorInputIcon'
     | 'TextIcon'
+    | 'TextInitial'
+    | 'TextInitialIcon'
     | 'TextQuote'
     | 'TextQuoteIcon'
     | 'TextSearch'
@@ -5534,6 +6503,8 @@ export interface PricingCard {
     | 'TextSelectIcon'
     | 'TextSelection'
     | 'TextSelectionIcon'
+    | 'TextWrap'
+    | 'TextWrapIcon'
     | 'Theater'
     | 'TheaterIcon'
     | 'Thermometer'
@@ -5560,6 +6531,10 @@ export interface PricingCard {
     | 'TicketSlashIcon'
     | 'TicketX'
     | 'TicketXIcon'
+    | 'Tickets'
+    | 'TicketsIcon'
+    | 'TicketsPlane'
+    | 'TicketsPlaneIcon'
     | 'Timer'
     | 'TimerIcon'
     | 'TimerOff'
@@ -5570,6 +6545,12 @@ export interface PricingCard {
     | 'ToggleLeftIcon'
     | 'ToggleRight'
     | 'ToggleRightIcon'
+    | 'Toilet'
+    | 'ToiletIcon'
+    | 'ToolCase'
+    | 'ToolCaseIcon'
+    | 'Toolbox'
+    | 'ToolboxIcon'
     | 'Tornado'
     | 'TornadoIcon'
     | 'Torus'
@@ -5596,6 +6577,8 @@ export interface PricingCard {
     | 'TrainTrackIcon'
     | 'TramFront'
     | 'TramFrontIcon'
+    | 'Transgender'
+    | 'TransgenderIcon'
     | 'Trash'
     | 'Trash2'
     | 'Trash2Icon'
@@ -5613,29 +6596,45 @@ export interface PricingCard {
     | 'TrendingDown'
     | 'TrendingDownIcon'
     | 'TrendingUp'
+    | 'TrendingUpDown'
+    | 'TrendingUpDownIcon'
     | 'TrendingUpIcon'
     | 'Triangle'
     | 'TriangleAlert'
     | 'TriangleAlertIcon'
+    | 'TriangleDashed'
+    | 'TriangleDashedIcon'
     | 'TriangleIcon'
     | 'TriangleRight'
     | 'TriangleRightIcon'
     | 'Trophy'
     | 'TrophyIcon'
     | 'Truck'
+    | 'TruckElectric'
+    | 'TruckElectricIcon'
     | 'TruckIcon'
+    | 'TurkishLira'
+    | 'TurkishLiraIcon'
+    | 'Turntable'
+    | 'TurntableIcon'
     | 'Turtle'
     | 'TurtleIcon'
     | 'Tv'
     | 'Tv2'
     | 'Tv2Icon'
     | 'TvIcon'
+    | 'TvMinimal'
+    | 'TvMinimalIcon'
+    | 'TvMinimalPlay'
+    | 'TvMinimalPlayIcon'
     | 'Twitch'
     | 'TwitchIcon'
     | 'Twitter'
     | 'TwitterIcon'
     | 'Type'
     | 'TypeIcon'
+    | 'TypeOutline'
+    | 'TypeOutlineIcon'
     | 'Umbrella'
     | 'UmbrellaIcon'
     | 'UmbrellaOff'
@@ -5688,10 +6687,14 @@ export interface PricingCard {
     | 'UserCog2Icon'
     | 'UserCogIcon'
     | 'UserIcon'
+    | 'UserLock'
+    | 'UserLockIcon'
     | 'UserMinus'
     | 'UserMinus2'
     | 'UserMinus2Icon'
     | 'UserMinusIcon'
+    | 'UserPen'
+    | 'UserPenIcon'
     | 'UserPlus'
     | 'UserPlus2'
     | 'UserPlus2Icon'
@@ -5704,6 +6707,8 @@ export interface PricingCard {
     | 'UserRoundIcon'
     | 'UserRoundMinus'
     | 'UserRoundMinusIcon'
+    | 'UserRoundPen'
+    | 'UserRoundPenIcon'
     | 'UserRoundPlus'
     | 'UserRoundPlusIcon'
     | 'UserRoundSearch'
@@ -5716,6 +6721,8 @@ export interface PricingCard {
     | 'UserSquare2'
     | 'UserSquare2Icon'
     | 'UserSquareIcon'
+    | 'UserStar'
+    | 'UserStarIcon'
     | 'UserX'
     | 'UserX2'
     | 'UserX2Icon'
@@ -5732,14 +6739,22 @@ export interface PricingCard {
     | 'UtensilsIcon'
     | 'UtilityPole'
     | 'UtilityPoleIcon'
+    | 'Van'
+    | 'VanIcon'
     | 'Variable'
     | 'VariableIcon'
     | 'Vault'
     | 'VaultIcon'
+    | 'VectorSquare'
+    | 'VectorSquareIcon'
     | 'Vegan'
     | 'VeganIcon'
     | 'VenetianMask'
     | 'VenetianMaskIcon'
+    | 'Venus'
+    | 'VenusAndMars'
+    | 'VenusAndMarsIcon'
+    | 'VenusIcon'
     | 'Verified'
     | 'VerifiedIcon'
     | 'Vibrate'
@@ -5756,12 +6771,16 @@ export interface PricingCard {
     | 'ViewIcon'
     | 'Voicemail'
     | 'VoicemailIcon'
+    | 'Volleyball'
+    | 'VolleyballIcon'
     | 'Volume'
     | 'Volume1'
     | 'Volume1Icon'
     | 'Volume2'
     | 'Volume2Icon'
     | 'VolumeIcon'
+    | 'VolumeOff'
+    | 'VolumeOffIcon'
     | 'VolumeX'
     | 'VolumeXIcon'
     | 'Vote'
@@ -5789,7 +6808,13 @@ export interface PricingCard {
     | 'Watch'
     | 'WatchIcon'
     | 'Waves'
+    | 'WavesArrowDown'
+    | 'WavesArrowDownIcon'
+    | 'WavesArrowUp'
+    | 'WavesArrowUpIcon'
     | 'WavesIcon'
+    | 'WavesLadder'
+    | 'WavesLadderIcon'
     | 'Waypoints'
     | 'WaypointsIcon'
     | 'Webcam'
@@ -5800,6 +6825,8 @@ export interface PricingCard {
     | 'WebhookOffIcon'
     | 'Weight'
     | 'WeightIcon'
+    | 'WeightTilde'
+    | 'WeightTildeIcon'
     | 'Wheat'
     | 'WheatIcon'
     | 'WheatOff'
@@ -5807,10 +6834,24 @@ export interface PricingCard {
     | 'WholeWord'
     | 'WholeWordIcon'
     | 'Wifi'
+    | 'WifiCog'
+    | 'WifiCogIcon'
+    | 'WifiHigh'
+    | 'WifiHighIcon'
     | 'WifiIcon'
+    | 'WifiLow'
+    | 'WifiLowIcon'
     | 'WifiOff'
     | 'WifiOffIcon'
+    | 'WifiPen'
+    | 'WifiPenIcon'
+    | 'WifiSync'
+    | 'WifiSyncIcon'
+    | 'WifiZero'
+    | 'WifiZeroIcon'
     | 'Wind'
+    | 'WindArrowDown'
+    | 'WindArrowDownIcon'
     | 'WindIcon'
     | 'Wine'
     | 'WineIcon'
@@ -5992,6 +7033,8 @@ export interface SectionHeroWithBadge {
           | 'AmpersandIcon'
           | 'Ampersands'
           | 'AmpersandsIcon'
+          | 'Amphora'
+          | 'AmphoraIcon'
           | 'Anchor'
           | 'AnchorIcon'
           | 'Angry'
@@ -6206,20 +7249,34 @@ export interface SectionHeroWithBadge {
           | 'BadgePlusIcon'
           | 'BadgePoundSterling'
           | 'BadgePoundSterlingIcon'
+          | 'BadgeQuestionMark'
+          | 'BadgeQuestionMarkIcon'
           | 'BadgeRussianRuble'
           | 'BadgeRussianRubleIcon'
           | 'BadgeSwissFranc'
           | 'BadgeSwissFrancIcon'
+          | 'BadgeTurkishLira'
+          | 'BadgeTurkishLiraIcon'
           | 'BadgeX'
           | 'BadgeXIcon'
           | 'BaggageClaim'
           | 'BaggageClaimIcon'
+          | 'Balloon'
+          | 'BalloonIcon'
           | 'Ban'
           | 'BanIcon'
           | 'Banana'
           | 'BananaIcon'
+          | 'Bandage'
+          | 'BandageIcon'
           | 'Banknote'
+          | 'BanknoteArrowDown'
+          | 'BanknoteArrowDownIcon'
+          | 'BanknoteArrowUp'
+          | 'BanknoteArrowUpIcon'
           | 'BanknoteIcon'
+          | 'BanknoteX'
+          | 'BanknoteXIcon'
           | 'BarChart'
           | 'BarChart2'
           | 'BarChart2Icon'
@@ -6236,6 +7293,8 @@ export interface SectionHeroWithBadge {
           | 'BarChartIcon'
           | 'Barcode'
           | 'BarcodeIcon'
+          | 'Barrel'
+          | 'BarrelIcon'
           | 'Baseline'
           | 'BaselineIcon'
           | 'Bath'
@@ -6250,6 +7309,8 @@ export interface SectionHeroWithBadge {
           | 'BatteryLowIcon'
           | 'BatteryMedium'
           | 'BatteryMediumIcon'
+          | 'BatteryPlus'
+          | 'BatteryPlusIcon'
           | 'BatteryWarning'
           | 'BatteryWarningIcon'
           | 'Beaker'
@@ -6296,14 +7357,20 @@ export interface SectionHeroWithBadge {
           | 'BetweenVerticalEndIcon'
           | 'BetweenVerticalStart'
           | 'BetweenVerticalStartIcon'
+          | 'BicepsFlexed'
+          | 'BicepsFlexedIcon'
           | 'Bike'
           | 'BikeIcon'
           | 'Binary'
           | 'BinaryIcon'
+          | 'Binoculars'
+          | 'BinocularsIcon'
           | 'Biohazard'
           | 'BiohazardIcon'
           | 'Bird'
           | 'BirdIcon'
+          | 'Birdhouse'
+          | 'BirdhouseIcon'
           | 'Bitcoin'
           | 'BitcoinIcon'
           | 'Blend'
@@ -6331,6 +7398,8 @@ export interface SectionHeroWithBadge {
           | 'Book'
           | 'BookA'
           | 'BookAIcon'
+          | 'BookAlert'
+          | 'BookAlertIcon'
           | 'BookAudio'
           | 'BookAudioIcon'
           | 'BookCheck'
@@ -6364,6 +7433,8 @@ export interface SectionHeroWithBadge {
           | 'BookOpenTextIcon'
           | 'BookPlus'
           | 'BookPlusIcon'
+          | 'BookSearch'
+          | 'BookSearchIcon'
           | 'BookTemplate'
           | 'BookTemplateIcon'
           | 'BookText'
@@ -6396,6 +7467,10 @@ export interface SectionHeroWithBadge {
           | 'BotMessageSquareIcon'
           | 'BotOff'
           | 'BotOffIcon'
+          | 'BottleWine'
+          | 'BottleWineIcon'
+          | 'BowArrow'
+          | 'BowArrowIcon'
           | 'Box'
           | 'BoxIcon'
           | 'BoxSelect'
@@ -6413,17 +7488,27 @@ export interface SectionHeroWithBadge {
           | 'BrainCogIcon'
           | 'BrainIcon'
           | 'BrickWall'
+          | 'BrickWallFire'
+          | 'BrickWallFireIcon'
           | 'BrickWallIcon'
+          | 'BrickWallShield'
+          | 'BrickWallShieldIcon'
           | 'Briefcase'
           | 'BriefcaseBusiness'
           | 'BriefcaseBusinessIcon'
+          | 'BriefcaseConveyorBelt'
+          | 'BriefcaseConveyorBeltIcon'
           | 'BriefcaseIcon'
           | 'BriefcaseMedical'
           | 'BriefcaseMedicalIcon'
           | 'BringToFront'
           | 'BringToFrontIcon'
           | 'Brush'
+          | 'BrushCleaning'
+          | 'BrushCleaningIcon'
           | 'BrushIcon'
+          | 'Bubbles'
+          | 'BubblesIcon'
           | 'Bug'
           | 'BugIcon'
           | 'BugOff'
@@ -6449,12 +7534,20 @@ export interface SectionHeroWithBadge {
           | 'Calculator'
           | 'CalculatorIcon'
           | 'Calendar'
+          | 'Calendar1'
+          | 'Calendar1Icon'
+          | 'CalendarArrowDown'
+          | 'CalendarArrowDownIcon'
+          | 'CalendarArrowUp'
+          | 'CalendarArrowUpIcon'
           | 'CalendarCheck'
           | 'CalendarCheck2'
           | 'CalendarCheck2Icon'
           | 'CalendarCheckIcon'
           | 'CalendarClock'
           | 'CalendarClockIcon'
+          | 'CalendarCog'
+          | 'CalendarCogIcon'
           | 'CalendarDays'
           | 'CalendarDaysIcon'
           | 'CalendarFold'
@@ -6476,10 +7569,14 @@ export interface SectionHeroWithBadge {
           | 'CalendarRangeIcon'
           | 'CalendarSearch'
           | 'CalendarSearchIcon'
+          | 'CalendarSync'
+          | 'CalendarSyncIcon'
           | 'CalendarX'
           | 'CalendarX2'
           | 'CalendarX2Icon'
           | 'CalendarXIcon'
+          | 'Calendars'
+          | 'CalendarsIcon'
           | 'Camera'
           | 'CameraIcon'
           | 'CameraOff'
@@ -6494,6 +7591,8 @@ export interface SectionHeroWithBadge {
           | 'CandyOffIcon'
           | 'Cannabis'
           | 'CannabisIcon'
+          | 'CannabisOff'
+          | 'CannabisOffIcon'
           | 'Captions'
           | 'CaptionsIcon'
           | 'CaptionsOff'
@@ -6506,6 +7605,8 @@ export interface SectionHeroWithBadge {
           | 'CarTaxiFrontIcon'
           | 'Caravan'
           | 'CaravanIcon'
+          | 'CardSim'
+          | 'CardSimIcon'
           | 'Carrot'
           | 'CarrotIcon'
           | 'CaseLower'
@@ -6524,6 +7625,52 @@ export interface SectionHeroWithBadge {
           | 'CatIcon'
           | 'Cctv'
           | 'CctvIcon'
+          | 'ChartArea'
+          | 'ChartAreaIcon'
+          | 'ChartBar'
+          | 'ChartBarBig'
+          | 'ChartBarBigIcon'
+          | 'ChartBarDecreasing'
+          | 'ChartBarDecreasingIcon'
+          | 'ChartBarIcon'
+          | 'ChartBarIncreasing'
+          | 'ChartBarIncreasingIcon'
+          | 'ChartBarStacked'
+          | 'ChartBarStackedIcon'
+          | 'ChartCandlestick'
+          | 'ChartCandlestickIcon'
+          | 'ChartColumn'
+          | 'ChartColumnBig'
+          | 'ChartColumnBigIcon'
+          | 'ChartColumnDecreasing'
+          | 'ChartColumnDecreasingIcon'
+          | 'ChartColumnIcon'
+          | 'ChartColumnIncreasing'
+          | 'ChartColumnIncreasingIcon'
+          | 'ChartColumnStacked'
+          | 'ChartColumnStackedIcon'
+          | 'ChartGantt'
+          | 'ChartGanttIcon'
+          | 'ChartLine'
+          | 'ChartLineIcon'
+          | 'ChartNetwork'
+          | 'ChartNetworkIcon'
+          | 'ChartNoAxesColumn'
+          | 'ChartNoAxesColumnDecreasing'
+          | 'ChartNoAxesColumnDecreasingIcon'
+          | 'ChartNoAxesColumnIcon'
+          | 'ChartNoAxesColumnIncreasing'
+          | 'ChartNoAxesColumnIncreasingIcon'
+          | 'ChartNoAxesCombined'
+          | 'ChartNoAxesCombinedIcon'
+          | 'ChartNoAxesGantt'
+          | 'ChartNoAxesGanttIcon'
+          | 'ChartPie'
+          | 'ChartPieIcon'
+          | 'ChartScatter'
+          | 'ChartScatterIcon'
+          | 'ChartSpline'
+          | 'ChartSplineIcon'
           | 'Check'
           | 'CheckCheck'
           | 'CheckCheckIcon'
@@ -6532,6 +7679,8 @@ export interface SectionHeroWithBadge {
           | 'CheckCircle2Icon'
           | 'CheckCircleIcon'
           | 'CheckIcon'
+          | 'CheckLine'
+          | 'CheckLineIcon'
           | 'CheckSquare'
           | 'CheckSquare2'
           | 'CheckSquare2Icon'
@@ -6540,6 +7689,18 @@ export interface SectionHeroWithBadge {
           | 'ChefHatIcon'
           | 'Cherry'
           | 'CherryIcon'
+          | 'ChessBishop'
+          | 'ChessBishopIcon'
+          | 'ChessKing'
+          | 'ChessKingIcon'
+          | 'ChessKnight'
+          | 'ChessKnightIcon'
+          | 'ChessPawn'
+          | 'ChessPawnIcon'
+          | 'ChessQueen'
+          | 'ChessQueenIcon'
+          | 'ChessRook'
+          | 'ChessRookIcon'
           | 'ChevronDown'
           | 'ChevronDownCircle'
           | 'ChevronDownCircleIcon'
@@ -6575,6 +7736,8 @@ export interface SectionHeroWithBadge {
           | 'ChevronsLeft'
           | 'ChevronsLeftIcon'
           | 'ChevronsLeftRight'
+          | 'ChevronsLeftRightEllipsis'
+          | 'ChevronsLeftRightEllipsisIcon'
           | 'ChevronsLeftRightIcon'
           | 'ChevronsRight'
           | 'ChevronsRightIcon'
@@ -6586,6 +7749,8 @@ export interface SectionHeroWithBadge {
           | 'ChevronsUpIcon'
           | 'Chrome'
           | 'ChromeIcon'
+          | 'Chromium'
+          | 'ChromiumIcon'
           | 'Church'
           | 'ChurchIcon'
           | 'Cigarette'
@@ -6637,6 +7802,8 @@ export interface SectionHeroWithBadge {
           | 'CircleEllipsisIcon'
           | 'CircleEqual'
           | 'CircleEqualIcon'
+          | 'CircleFadingArrowUp'
+          | 'CircleFadingArrowUpIcon'
           | 'CircleFadingPlus'
           | 'CircleFadingPlusIcon'
           | 'CircleGauge'
@@ -6656,18 +7823,28 @@ export interface SectionHeroWithBadge {
           | 'CirclePauseIcon'
           | 'CirclePercent'
           | 'CirclePercentIcon'
+          | 'CirclePile'
+          | 'CirclePileIcon'
           | 'CirclePlay'
           | 'CirclePlayIcon'
           | 'CirclePlus'
           | 'CirclePlusIcon'
+          | 'CirclePoundSterling'
+          | 'CirclePoundSterlingIcon'
           | 'CirclePower'
           | 'CirclePowerIcon'
+          | 'CircleQuestionMark'
+          | 'CircleQuestionMarkIcon'
           | 'CircleSlash'
           | 'CircleSlash2'
           | 'CircleSlash2Icon'
           | 'CircleSlashIcon'
           | 'CircleSlashed'
           | 'CircleSlashedIcon'
+          | 'CircleSmall'
+          | 'CircleSmallIcon'
+          | 'CircleStar'
+          | 'CircleStarIcon'
           | 'CircleStop'
           | 'CircleStopIcon'
           | 'CircleUser'
@@ -6685,6 +7862,8 @@ export interface SectionHeroWithBadge {
           | 'Clipboard'
           | 'ClipboardCheck'
           | 'ClipboardCheckIcon'
+          | 'ClipboardClock'
+          | 'ClipboardClockIcon'
           | 'ClipboardCopy'
           | 'ClipboardCopyIcon'
           | 'ClipboardEdit'
@@ -6733,8 +7912,28 @@ export interface SectionHeroWithBadge {
           | 'Clock8Icon'
           | 'Clock9'
           | 'Clock9Icon'
+          | 'ClockAlert'
+          | 'ClockAlertIcon'
+          | 'ClockArrowDown'
+          | 'ClockArrowDownIcon'
+          | 'ClockArrowUp'
+          | 'ClockArrowUpIcon'
+          | 'ClockCheck'
+          | 'ClockCheckIcon'
+          | 'ClockFading'
+          | 'ClockFadingIcon'
           | 'ClockIcon'
+          | 'ClockPlus'
+          | 'ClockPlusIcon'
+          | 'ClosedCaption'
+          | 'ClosedCaptionIcon'
           | 'Cloud'
+          | 'CloudAlert'
+          | 'CloudAlertIcon'
+          | 'CloudBackup'
+          | 'CloudBackupIcon'
+          | 'CloudCheck'
+          | 'CloudCheckIcon'
           | 'CloudCog'
           | 'CloudCogIcon'
           | 'CloudDownload'
@@ -6764,6 +7963,8 @@ export interface SectionHeroWithBadge {
           | 'CloudSunIcon'
           | 'CloudSunRain'
           | 'CloudSunRainIcon'
+          | 'CloudSync'
+          | 'CloudSyncIcon'
           | 'CloudUpload'
           | 'CloudUploadIcon'
           | 'Cloudy'
@@ -6794,10 +7995,14 @@ export interface SectionHeroWithBadge {
           | 'Columns2'
           | 'Columns2Icon'
           | 'Columns3'
+          | 'Columns3Cog'
+          | 'Columns3CogIcon'
           | 'Columns3Icon'
           | 'Columns4'
           | 'Columns4Icon'
           | 'ColumnsIcon'
+          | 'ColumnsSettings'
+          | 'ColumnsSettingsIcon'
           | 'Combine'
           | 'CombineIcon'
           | 'Command'
@@ -6886,12 +8091,18 @@ export interface SectionHeroWithBadge {
           | 'CurrencyIcon'
           | 'Cylinder'
           | 'CylinderIcon'
+          | 'Dam'
+          | 'DamIcon'
           | 'Database'
           | 'DatabaseBackup'
           | 'DatabaseBackupIcon'
           | 'DatabaseIcon'
           | 'DatabaseZap'
           | 'DatabaseZapIcon'
+          | 'DecimalsArrowLeft'
+          | 'DecimalsArrowLeftIcon'
+          | 'DecimalsArrowRight'
+          | 'DecimalsArrowRightIcon'
           | 'Delete'
           | 'DeleteIcon'
           | 'Dessert'
@@ -6950,6 +8161,8 @@ export interface SectionHeroWithBadge {
           | 'DonutIcon'
           | 'DoorClosed'
           | 'DoorClosedIcon'
+          | 'DoorClosedLocked'
+          | 'DoorClosedLockedIcon'
           | 'DoorOpen'
           | 'DoorOpenIcon'
           | 'Dot'
@@ -6968,8 +8181,12 @@ export interface SectionHeroWithBadge {
           | 'DribbbleIcon'
           | 'Drill'
           | 'DrillIcon'
+          | 'Drone'
+          | 'DroneIcon'
           | 'Droplet'
           | 'DropletIcon'
+          | 'DropletOff'
+          | 'DropletOffIcon'
           | 'Droplets'
           | 'DropletsIcon'
           | 'Drum'
@@ -7005,6 +8222,8 @@ export interface SectionHeroWithBadge {
           | 'EllipsisVertical'
           | 'EllipsisVerticalIcon'
           | 'Equal'
+          | 'EqualApproximately'
+          | 'EqualApproximatelyIcon'
           | 'EqualIcon'
           | 'EqualNot'
           | 'EqualNotIcon'
@@ -7012,13 +8231,19 @@ export interface SectionHeroWithBadge {
           | 'EqualSquareIcon'
           | 'Eraser'
           | 'EraserIcon'
+          | 'EthernetPort'
+          | 'EthernetPortIcon'
           | 'Euro'
           | 'EuroIcon'
+          | 'EvCharger'
+          | 'EvChargerIcon'
           | 'Expand'
           | 'ExpandIcon'
           | 'ExternalLink'
           | 'ExternalLinkIcon'
           | 'Eye'
+          | 'EyeClosed'
+          | 'EyeClosedIcon'
           | 'EyeIcon'
           | 'EyeOff'
           | 'EyeOffIcon'
@@ -7059,15 +8284,31 @@ export interface SectionHeroWithBadge {
           | 'FileBarChartIcon'
           | 'FileBox'
           | 'FileBoxIcon'
+          | 'FileBraces'
+          | 'FileBracesCorner'
+          | 'FileBracesCornerIcon'
+          | 'FileBracesIcon'
+          | 'FileChartColumn'
+          | 'FileChartColumnIcon'
+          | 'FileChartColumnIncreasing'
+          | 'FileChartColumnIncreasingIcon'
+          | 'FileChartLine'
+          | 'FileChartLineIcon'
+          | 'FileChartPie'
+          | 'FileChartPieIcon'
           | 'FileCheck'
           | 'FileCheck2'
           | 'FileCheck2Icon'
+          | 'FileCheckCorner'
+          | 'FileCheckCornerIcon'
           | 'FileCheckIcon'
           | 'FileClock'
           | 'FileClockIcon'
           | 'FileCode'
           | 'FileCode2'
           | 'FileCode2Icon'
+          | 'FileCodeCorner'
+          | 'FileCodeCornerIcon'
           | 'FileCodeIcon'
           | 'FileCog'
           | 'FileCog2'
@@ -7081,6 +8322,10 @@ export interface SectionHeroWithBadge {
           | 'FileDownIcon'
           | 'FileEdit'
           | 'FileEditIcon'
+          | 'FileExclamationPoint'
+          | 'FileExclamationPointIcon'
+          | 'FileHeadphone'
+          | 'FileHeadphoneIcon'
           | 'FileHeart'
           | 'FileHeartIcon'
           | 'FileIcon'
@@ -7105,6 +8350,8 @@ export interface SectionHeroWithBadge {
           | 'FileMinus'
           | 'FileMinus2'
           | 'FileMinus2Icon'
+          | 'FileMinusCorner'
+          | 'FileMinusCornerIcon'
           | 'FileMinusIcon'
           | 'FileMusic'
           | 'FileMusicIcon'
@@ -7116,18 +8363,28 @@ export interface SectionHeroWithBadge {
           | 'FilePenLineIcon'
           | 'FilePieChart'
           | 'FilePieChartIcon'
+          | 'FilePlay'
+          | 'FilePlayIcon'
           | 'FilePlus'
           | 'FilePlus2'
           | 'FilePlus2Icon'
+          | 'FilePlusCorner'
+          | 'FilePlusCornerIcon'
           | 'FilePlusIcon'
           | 'FileQuestion'
           | 'FileQuestionIcon'
+          | 'FileQuestionMark'
+          | 'FileQuestionMarkIcon'
           | 'FileScan'
           | 'FileScanIcon'
           | 'FileSearch'
           | 'FileSearch2'
           | 'FileSearch2Icon'
+          | 'FileSearchCorner'
+          | 'FileSearchCornerIcon'
           | 'FileSearchIcon'
+          | 'FileSignal'
+          | 'FileSignalIcon'
           | 'FileSignature'
           | 'FileSignatureIcon'
           | 'FileSliders'
@@ -7145,12 +8402,18 @@ export interface SectionHeroWithBadge {
           | 'FileType'
           | 'FileType2'
           | 'FileType2Icon'
+          | 'FileTypeCorner'
+          | 'FileTypeCornerIcon'
           | 'FileTypeIcon'
           | 'FileUp'
           | 'FileUpIcon'
+          | 'FileUser'
+          | 'FileUserIcon'
           | 'FileVideo'
           | 'FileVideo2'
           | 'FileVideo2Icon'
+          | 'FileVideoCamera'
+          | 'FileVideoCameraIcon'
           | 'FileVideoIcon'
           | 'FileVolume'
           | 'FileVolume2'
@@ -7161,6 +8424,8 @@ export interface SectionHeroWithBadge {
           | 'FileX'
           | 'FileX2'
           | 'FileX2Icon'
+          | 'FileXCorner'
+          | 'FileXCornerIcon'
           | 'FileXIcon'
           | 'Files'
           | 'FilesIcon'
@@ -7172,6 +8437,8 @@ export interface SectionHeroWithBadge {
           | 'FilterXIcon'
           | 'Fingerprint'
           | 'FingerprintIcon'
+          | 'FingerprintPattern'
+          | 'FingerprintPatternIcon'
           | 'FireExtinguisher'
           | 'FireExtinguisherIcon'
           | 'Fish'
@@ -7180,6 +8447,8 @@ export interface SectionHeroWithBadge {
           | 'FishOffIcon'
           | 'FishSymbol'
           | 'FishSymbolIcon'
+          | 'FishingHook'
+          | 'FishingHookIcon'
           | 'Flag'
           | 'FlagIcon'
           | 'FlagOff'
@@ -7229,6 +8498,8 @@ export interface SectionHeroWithBadge {
           | 'FolderClockIcon'
           | 'FolderClosed'
           | 'FolderClosedIcon'
+          | 'FolderCode'
+          | 'FolderCodeIcon'
           | 'FolderCog'
           | 'FolderCog2'
           | 'FolderCog2Icon'
@@ -7286,8 +8557,14 @@ export interface SectionHeroWithBadge {
           | 'FoldersIcon'
           | 'Footprints'
           | 'FootprintsIcon'
+          | 'ForkKnife'
+          | 'ForkKnifeCrossed'
+          | 'ForkKnifeCrossedIcon'
+          | 'ForkKnifeIcon'
           | 'Forklift'
           | 'ForkliftIcon'
+          | 'Form'
+          | 'FormIcon'
           | 'FormInput'
           | 'FormInputIcon'
           | 'Forward'
@@ -7304,6 +8581,12 @@ export interface SectionHeroWithBadge {
           | 'FullscreenIcon'
           | 'FunctionSquare'
           | 'FunctionSquareIcon'
+          | 'Funnel'
+          | 'FunnelIcon'
+          | 'FunnelPlus'
+          | 'FunnelPlusIcon'
+          | 'FunnelX'
+          | 'FunnelXIcon'
           | 'GalleryHorizontal'
           | 'GalleryHorizontalEnd'
           | 'GalleryHorizontalEndIcon'
@@ -7317,6 +8600,8 @@ export interface SectionHeroWithBadge {
           | 'Gamepad'
           | 'Gamepad2'
           | 'Gamepad2Icon'
+          | 'GamepadDirectional'
+          | 'GamepadDirectionalIcon'
           | 'GamepadIcon'
           | 'GanttChart'
           | 'GanttChartIcon'
@@ -7330,12 +8615,16 @@ export interface SectionHeroWithBadge {
           | 'GavelIcon'
           | 'Gem'
           | 'GemIcon'
+          | 'GeorgianLari'
+          | 'GeorgianLariIcon'
           | 'Ghost'
           | 'GhostIcon'
           | 'Gift'
           | 'GiftIcon'
           | 'GitBranch'
           | 'GitBranchIcon'
+          | 'GitBranchMinus'
+          | 'GitBranchMinusIcon'
           | 'GitBranchPlus'
           | 'GitBranchPlusIcon'
           | 'GitCommit'
@@ -7380,8 +8669,12 @@ export interface SectionHeroWithBadge {
           | 'GlobeIcon'
           | 'GlobeLock'
           | 'GlobeLockIcon'
+          | 'GlobeX'
+          | 'GlobeXIcon'
           | 'Goal'
           | 'GoalIcon'
+          | 'Gpu'
+          | 'GpuIcon'
           | 'Grab'
           | 'GrabIcon'
           | 'GraduationCap'
@@ -7390,15 +8683,25 @@ export interface SectionHeroWithBadge {
           | 'GrapeIcon'
           | 'Grid'
           | 'Grid2X2'
+          | 'Grid2X2Check'
+          | 'Grid2X2CheckIcon'
           | 'Grid2X2Icon'
+          | 'Grid2X2Plus'
+          | 'Grid2X2PlusIcon'
+          | 'Grid2X2X'
+          | 'Grid2X2XIcon'
           | 'Grid2x2'
           | 'Grid2x2Check'
           | 'Grid2x2CheckIcon'
           | 'Grid2x2Icon'
+          | 'Grid2x2Plus'
+          | 'Grid2x2PlusIcon'
           | 'Grid2x2X'
           | 'Grid2x2XIcon'
           | 'Grid3X3'
           | 'Grid3X3Icon'
+          | 'Grid3x2'
+          | 'Grid3x2Icon'
           | 'Grid3x3'
           | 'Grid3x3Icon'
           | 'GridIcon'
@@ -7414,11 +8717,17 @@ export interface SectionHeroWithBadge {
           | 'GuitarIcon'
           | 'Ham'
           | 'HamIcon'
+          | 'Hamburger'
+          | 'HamburgerIcon'
           | 'Hammer'
           | 'HammerIcon'
           | 'Hand'
           | 'HandCoins'
           | 'HandCoinsIcon'
+          | 'HandFist'
+          | 'HandFistIcon'
+          | 'HandGrab'
+          | 'HandGrabIcon'
           | 'HandHeart'
           | 'HandHeartIcon'
           | 'HandHelping'
@@ -7428,6 +8737,8 @@ export interface SectionHeroWithBadge {
           | 'HandMetalIcon'
           | 'HandPlatter'
           | 'HandPlatterIcon'
+          | 'Handbag'
+          | 'HandbagIcon'
           | 'Handshake'
           | 'HandshakeIcon'
           | 'HardDrive'
@@ -7440,8 +8751,12 @@ export interface SectionHeroWithBadge {
           | 'HardHatIcon'
           | 'Hash'
           | 'HashIcon'
+          | 'HatGlasses'
+          | 'HatGlassesIcon'
           | 'Haze'
           | 'HazeIcon'
+          | 'Hd'
+          | 'HdIcon'
           | 'HdmiPort'
           | 'HdmiPortIcon'
           | 'Heading'
@@ -7458,6 +8773,8 @@ export interface SectionHeroWithBadge {
           | 'Heading6'
           | 'Heading6Icon'
           | 'HeadingIcon'
+          | 'HeadphoneOff'
+          | 'HeadphoneOffIcon'
           | 'Headphones'
           | 'HeadphonesIcon'
           | 'Headset'
@@ -7468,12 +8785,18 @@ export interface SectionHeroWithBadge {
           | 'HeartHandshake'
           | 'HeartHandshakeIcon'
           | 'HeartIcon'
+          | 'HeartMinus'
+          | 'HeartMinusIcon'
           | 'HeartOff'
           | 'HeartOffIcon'
+          | 'HeartPlus'
+          | 'HeartPlusIcon'
           | 'HeartPulse'
           | 'HeartPulseIcon'
           | 'Heater'
           | 'HeaterIcon'
+          | 'Helicopter'
+          | 'HelicopterIcon'
           | 'HelpCircle'
           | 'HelpCircleIcon'
           | 'HelpingHand'
@@ -7496,6 +8819,16 @@ export interface SectionHeroWithBadge {
           | 'HotelIcon'
           | 'Hourglass'
           | 'HourglassIcon'
+          | 'House'
+          | 'HouseHeart'
+          | 'HouseHeartIcon'
+          | 'HouseIcon'
+          | 'HousePlug'
+          | 'HousePlugIcon'
+          | 'HousePlus'
+          | 'HousePlusIcon'
+          | 'HouseWifi'
+          | 'HouseWifiIcon'
           | 'IceCream'
           | 'IceCream2'
           | 'IceCream2Icon'
@@ -7505,6 +8838,10 @@ export interface SectionHeroWithBadge {
           | 'IceCreamConeIcon'
           | 'IceCreamIcon'
           | 'Icon'
+          | 'IdCard'
+          | 'IdCardIcon'
+          | 'IdCardLanyard'
+          | 'IdCardLanyardIcon'
           | 'Image'
           | 'ImageDown'
           | 'ImageDownIcon'
@@ -7519,6 +8856,8 @@ export interface SectionHeroWithBadge {
           | 'ImagePlusIcon'
           | 'ImageUp'
           | 'ImageUpIcon'
+          | 'ImageUpscale'
+          | 'ImageUpscaleIcon'
           | 'Images'
           | 'ImagesIcon'
           | 'Import'
@@ -7559,6 +8898,8 @@ export interface SectionHeroWithBadge {
           | 'KanbanSquareDashed'
           | 'KanbanSquareDashedIcon'
           | 'KanbanSquareIcon'
+          | 'Kayak'
+          | 'KayakIcon'
           | 'Key'
           | 'KeyIcon'
           | 'KeyRound'
@@ -7594,6 +8935,8 @@ export interface SectionHeroWithBadge {
           | 'Laptop2Icon'
           | 'LaptopIcon'
           | 'LaptopMinimal'
+          | 'LaptopMinimalCheck'
+          | 'LaptopMinimalCheckIcon'
           | 'LaptopMinimalIcon'
           | 'Lasso'
           | 'LassoIcon'
@@ -7607,6 +8950,8 @@ export interface SectionHeroWithBadge {
           | 'Layers3'
           | 'Layers3Icon'
           | 'LayersIcon'
+          | 'LayersPlus'
+          | 'LayersPlusIcon'
           | 'Layout'
           | 'LayoutDashboard'
           | 'LayoutDashboardIcon'
@@ -7625,6 +8970,10 @@ export interface SectionHeroWithBadge {
           | 'LeafIcon'
           | 'LeafyGreen'
           | 'LeafyGreenIcon'
+          | 'Lectern'
+          | 'LecternIcon'
+          | 'LetterText'
+          | 'LetterTextIcon'
           | 'Library'
           | 'LibraryBig'
           | 'LibraryBigIcon'
@@ -7641,6 +8990,8 @@ export interface SectionHeroWithBadge {
           | 'LightbulbOffIcon'
           | 'LineChart'
           | 'LineChartIcon'
+          | 'LineSquiggle'
+          | 'LineSquiggleIcon'
           | 'Link'
           | 'Link2'
           | 'Link2Icon'
@@ -7650,15 +9001,27 @@ export interface SectionHeroWithBadge {
           | 'Linkedin'
           | 'LinkedinIcon'
           | 'List'
+          | 'ListCheck'
+          | 'ListCheckIcon'
           | 'ListChecks'
           | 'ListChecksIcon'
+          | 'ListChevronsDownUp'
+          | 'ListChevronsDownUpIcon'
+          | 'ListChevronsUpDown'
+          | 'ListChevronsUpDownIcon'
           | 'ListCollapse'
           | 'ListCollapseIcon'
           | 'ListEnd'
           | 'ListEndIcon'
           | 'ListFilter'
           | 'ListFilterIcon'
+          | 'ListFilterPlus'
+          | 'ListFilterPlusIcon'
           | 'ListIcon'
+          | 'ListIndentDecrease'
+          | 'ListIndentDecreaseIcon'
+          | 'ListIndentIncrease'
+          | 'ListIndentIncreaseIcon'
           | 'ListMinus'
           | 'ListMinusIcon'
           | 'ListMusic'
@@ -7693,6 +9056,8 @@ export interface SectionHeroWithBadge {
           | 'LocateIcon'
           | 'LocateOff'
           | 'LocateOffIcon'
+          | 'LocationEdit'
+          | 'LocationEditIcon'
           | 'Lock'
           | 'LockIcon'
           | 'LockKeyhole'
@@ -7705,6 +9070,8 @@ export interface SectionHeroWithBadge {
           | 'LogInIcon'
           | 'LogOut'
           | 'LogOutIcon'
+          | 'Logs'
+          | 'LogsIcon'
           | 'Lollipop'
           | 'LollipopIcon'
           | 'LucideAArrowDown'
@@ -7757,6 +9124,7 @@ export interface SectionHeroWithBadge {
           | 'LucideAmbulance'
           | 'LucideAmpersand'
           | 'LucideAmpersands'
+          | 'LucideAmphora'
           | 'LucideAnchor'
           | 'LucideAngry'
           | 'LucideAnnoyed'
@@ -7864,13 +9232,20 @@ export interface SectionHeroWithBadge {
           | 'LucideBadgePercent'
           | 'LucideBadgePlus'
           | 'LucideBadgePoundSterling'
+          | 'LucideBadgeQuestionMark'
           | 'LucideBadgeRussianRuble'
           | 'LucideBadgeSwissFranc'
+          | 'LucideBadgeTurkishLira'
           | 'LucideBadgeX'
           | 'LucideBaggageClaim'
+          | 'LucideBalloon'
           | 'LucideBan'
           | 'LucideBanana'
+          | 'LucideBandage'
           | 'LucideBanknote'
+          | 'LucideBanknoteArrowDown'
+          | 'LucideBanknoteArrowUp'
+          | 'LucideBanknoteX'
           | 'LucideBarChart'
           | 'LucideBarChart2'
           | 'LucideBarChart3'
@@ -7879,6 +9254,7 @@ export interface SectionHeroWithBadge {
           | 'LucideBarChartHorizontal'
           | 'LucideBarChartHorizontalBig'
           | 'LucideBarcode'
+          | 'LucideBarrel'
           | 'LucideBaseline'
           | 'LucideBath'
           | 'LucideBattery'
@@ -7886,6 +9262,7 @@ export interface SectionHeroWithBadge {
           | 'LucideBatteryFull'
           | 'LucideBatteryLow'
           | 'LucideBatteryMedium'
+          | 'LucideBatteryPlus'
           | 'LucideBatteryWarning'
           | 'LucideBeaker'
           | 'LucideBean'
@@ -7909,10 +9286,13 @@ export interface SectionHeroWithBadge {
           | 'LucideBetweenHorizontalStart'
           | 'LucideBetweenVerticalEnd'
           | 'LucideBetweenVerticalStart'
+          | 'LucideBicepsFlexed'
           | 'LucideBike'
           | 'LucideBinary'
+          | 'LucideBinoculars'
           | 'LucideBiohazard'
           | 'LucideBird'
+          | 'LucideBirdhouse'
           | 'LucideBitcoin'
           | 'LucideBlend'
           | 'LucideBlinds'
@@ -7927,6 +9307,7 @@ export interface SectionHeroWithBadge {
           | 'LucideBone'
           | 'LucideBook'
           | 'LucideBookA'
+          | 'LucideBookAlert'
           | 'LucideBookAudio'
           | 'LucideBookCheck'
           | 'LucideBookCopy'
@@ -7943,6 +9324,7 @@ export interface SectionHeroWithBadge {
           | 'LucideBookOpenCheck'
           | 'LucideBookOpenText'
           | 'LucideBookPlus'
+          | 'LucideBookSearch'
           | 'LucideBookTemplate'
           | 'LucideBookText'
           | 'LucideBookType'
@@ -7959,6 +9341,8 @@ export interface SectionHeroWithBadge {
           | 'LucideBot'
           | 'LucideBotMessageSquare'
           | 'LucideBotOff'
+          | 'LucideBottleWine'
+          | 'LucideBowArrow'
           | 'LucideBox'
           | 'LucideBoxSelect'
           | 'LucideBoxes'
@@ -7968,11 +9352,16 @@ export interface SectionHeroWithBadge {
           | 'LucideBrainCircuit'
           | 'LucideBrainCog'
           | 'LucideBrickWall'
+          | 'LucideBrickWallFire'
+          | 'LucideBrickWallShield'
           | 'LucideBriefcase'
           | 'LucideBriefcaseBusiness'
+          | 'LucideBriefcaseConveyorBelt'
           | 'LucideBriefcaseMedical'
           | 'LucideBringToFront'
           | 'LucideBrush'
+          | 'LucideBrushCleaning'
+          | 'LucideBubbles'
           | 'LucideBug'
           | 'LucideBugOff'
           | 'LucideBugPlay'
@@ -7986,9 +9375,13 @@ export interface SectionHeroWithBadge {
           | 'LucideCakeSlice'
           | 'LucideCalculator'
           | 'LucideCalendar'
+          | 'LucideCalendar1'
+          | 'LucideCalendarArrowDown'
+          | 'LucideCalendarArrowUp'
           | 'LucideCalendarCheck'
           | 'LucideCalendarCheck2'
           | 'LucideCalendarClock'
+          | 'LucideCalendarCog'
           | 'LucideCalendarDays'
           | 'LucideCalendarFold'
           | 'LucideCalendarHeart'
@@ -7999,8 +9392,10 @@ export interface SectionHeroWithBadge {
           | 'LucideCalendarPlus2'
           | 'LucideCalendarRange'
           | 'LucideCalendarSearch'
+          | 'LucideCalendarSync'
           | 'LucideCalendarX'
           | 'LucideCalendarX2'
+          | 'LucideCalendars'
           | 'LucideCamera'
           | 'LucideCameraOff'
           | 'LucideCandlestickChart'
@@ -8008,12 +9403,14 @@ export interface SectionHeroWithBadge {
           | 'LucideCandyCane'
           | 'LucideCandyOff'
           | 'LucideCannabis'
+          | 'LucideCannabisOff'
           | 'LucideCaptions'
           | 'LucideCaptionsOff'
           | 'LucideCar'
           | 'LucideCarFront'
           | 'LucideCarTaxiFront'
           | 'LucideCaravan'
+          | 'LucideCardSim'
           | 'LucideCarrot'
           | 'LucideCaseLower'
           | 'LucideCaseSensitive'
@@ -8023,14 +9420,44 @@ export interface SectionHeroWithBadge {
           | 'LucideCastle'
           | 'LucideCat'
           | 'LucideCctv'
+          | 'LucideChartArea'
+          | 'LucideChartBar'
+          | 'LucideChartBarBig'
+          | 'LucideChartBarDecreasing'
+          | 'LucideChartBarIncreasing'
+          | 'LucideChartBarStacked'
+          | 'LucideChartCandlestick'
+          | 'LucideChartColumn'
+          | 'LucideChartColumnBig'
+          | 'LucideChartColumnDecreasing'
+          | 'LucideChartColumnIncreasing'
+          | 'LucideChartColumnStacked'
+          | 'LucideChartGantt'
+          | 'LucideChartLine'
+          | 'LucideChartNetwork'
+          | 'LucideChartNoAxesColumn'
+          | 'LucideChartNoAxesColumnDecreasing'
+          | 'LucideChartNoAxesColumnIncreasing'
+          | 'LucideChartNoAxesCombined'
+          | 'LucideChartNoAxesGantt'
+          | 'LucideChartPie'
+          | 'LucideChartScatter'
+          | 'LucideChartSpline'
           | 'LucideCheck'
           | 'LucideCheckCheck'
           | 'LucideCheckCircle'
           | 'LucideCheckCircle2'
+          | 'LucideCheckLine'
           | 'LucideCheckSquare'
           | 'LucideCheckSquare2'
           | 'LucideChefHat'
           | 'LucideCherry'
+          | 'LucideChessBishop'
+          | 'LucideChessKing'
+          | 'LucideChessKnight'
+          | 'LucideChessPawn'
+          | 'LucideChessQueen'
+          | 'LucideChessRook'
           | 'LucideChevronDown'
           | 'LucideChevronDownCircle'
           | 'LucideChevronDownSquare'
@@ -8049,11 +9476,13 @@ export interface SectionHeroWithBadge {
           | 'LucideChevronsDownUp'
           | 'LucideChevronsLeft'
           | 'LucideChevronsLeftRight'
+          | 'LucideChevronsLeftRightEllipsis'
           | 'LucideChevronsRight'
           | 'LucideChevronsRightLeft'
           | 'LucideChevronsUp'
           | 'LucideChevronsUpDown'
           | 'LucideChrome'
+          | 'LucideChromium'
           | 'LucideChurch'
           | 'LucideCigarette'
           | 'LucideCigaretteOff'
@@ -8080,6 +9509,7 @@ export interface SectionHeroWithBadge {
           | 'LucideCircleDotDashed'
           | 'LucideCircleEllipsis'
           | 'LucideCircleEqual'
+          | 'LucideCircleFadingArrowUp'
           | 'LucideCircleFadingPlus'
           | 'LucideCircleGauge'
           | 'LucideCircleHelp'
@@ -8089,12 +9519,17 @@ export interface SectionHeroWithBadge {
           | 'LucideCircleParkingOff'
           | 'LucideCirclePause'
           | 'LucideCirclePercent'
+          | 'LucideCirclePile'
           | 'LucideCirclePlay'
           | 'LucideCirclePlus'
+          | 'LucideCirclePoundSterling'
           | 'LucideCirclePower'
+          | 'LucideCircleQuestionMark'
           | 'LucideCircleSlash'
           | 'LucideCircleSlash2'
           | 'LucideCircleSlashed'
+          | 'LucideCircleSmall'
+          | 'LucideCircleStar'
           | 'LucideCircleStop'
           | 'LucideCircleUser'
           | 'LucideCircleUserRound'
@@ -8104,6 +9539,7 @@ export interface SectionHeroWithBadge {
           | 'LucideClapperboard'
           | 'LucideClipboard'
           | 'LucideClipboardCheck'
+          | 'LucideClipboardClock'
           | 'LucideClipboardCopy'
           | 'LucideClipboardEdit'
           | 'LucideClipboardList'
@@ -8128,7 +9564,17 @@ export interface SectionHeroWithBadge {
           | 'LucideClock7'
           | 'LucideClock8'
           | 'LucideClock9'
+          | 'LucideClockAlert'
+          | 'LucideClockArrowDown'
+          | 'LucideClockArrowUp'
+          | 'LucideClockCheck'
+          | 'LucideClockFading'
+          | 'LucideClockPlus'
+          | 'LucideClosedCaption'
           | 'LucideCloud'
+          | 'LucideCloudAlert'
+          | 'LucideCloudBackup'
+          | 'LucideCloudCheck'
           | 'LucideCloudCog'
           | 'LucideCloudDownload'
           | 'LucideCloudDrizzle'
@@ -8143,6 +9589,7 @@ export interface SectionHeroWithBadge {
           | 'LucideCloudSnow'
           | 'LucideCloudSun'
           | 'LucideCloudSunRain'
+          | 'LucideCloudSync'
           | 'LucideCloudUpload'
           | 'LucideCloudy'
           | 'LucideClover'
@@ -8159,7 +9606,9 @@ export interface SectionHeroWithBadge {
           | 'LucideColumns'
           | 'LucideColumns2'
           | 'LucideColumns3'
+          | 'LucideColumns3Cog'
           | 'LucideColumns4'
+          | 'LucideColumnsSettings'
           | 'LucideCombine'
           | 'LucideCommand'
           | 'LucideCompass'
@@ -8204,9 +9653,12 @@ export interface SectionHeroWithBadge {
           | 'LucideCurlyBraces'
           | 'LucideCurrency'
           | 'LucideCylinder'
+          | 'LucideDam'
           | 'LucideDatabase'
           | 'LucideDatabaseBackup'
           | 'LucideDatabaseZap'
+          | 'LucideDecimalsArrowLeft'
+          | 'LucideDecimalsArrowRight'
           | 'LucideDelete'
           | 'LucideDessert'
           | 'LucideDiameter'
@@ -8236,6 +9688,7 @@ export interface SectionHeroWithBadge {
           | 'LucideDollarSign'
           | 'LucideDonut'
           | 'LucideDoorClosed'
+          | 'LucideDoorClosedLocked'
           | 'LucideDoorOpen'
           | 'LucideDot'
           | 'LucideDotSquare'
@@ -8245,7 +9698,9 @@ export interface SectionHeroWithBadge {
           | 'LucideDrama'
           | 'LucideDribbble'
           | 'LucideDrill'
+          | 'LucideDrone'
           | 'LucideDroplet'
+          | 'LucideDropletOff'
           | 'LucideDroplets'
           | 'LucideDrum'
           | 'LucideDrumstick'
@@ -8264,13 +9719,17 @@ export interface SectionHeroWithBadge {
           | 'LucideEllipsis'
           | 'LucideEllipsisVertical'
           | 'LucideEqual'
+          | 'LucideEqualApproximately'
           | 'LucideEqualNot'
           | 'LucideEqualSquare'
           | 'LucideEraser'
+          | 'LucideEthernetPort'
           | 'LucideEuro'
+          | 'LucideEvCharger'
           | 'LucideExpand'
           | 'LucideExternalLink'
           | 'LucideEye'
+          | 'LucideEyeClosed'
           | 'LucideEyeOff'
           | 'LucideFacebook'
           | 'LucideFactory'
@@ -8291,17 +9750,27 @@ export interface SectionHeroWithBadge {
           | 'LucideFileBarChart'
           | 'LucideFileBarChart2'
           | 'LucideFileBox'
+          | 'LucideFileBraces'
+          | 'LucideFileBracesCorner'
+          | 'LucideFileChartColumn'
+          | 'LucideFileChartColumnIncreasing'
+          | 'LucideFileChartLine'
+          | 'LucideFileChartPie'
           | 'LucideFileCheck'
           | 'LucideFileCheck2'
+          | 'LucideFileCheckCorner'
           | 'LucideFileClock'
           | 'LucideFileCode'
           | 'LucideFileCode2'
+          | 'LucideFileCodeCorner'
           | 'LucideFileCog'
           | 'LucideFileCog2'
           | 'LucideFileDiff'
           | 'LucideFileDigit'
           | 'LucideFileDown'
           | 'LucideFileEdit'
+          | 'LucideFileExclamationPoint'
+          | 'LucideFileHeadphone'
           | 'LucideFileHeart'
           | 'LucideFileImage'
           | 'LucideFileInput'
@@ -8314,17 +9783,23 @@ export interface SectionHeroWithBadge {
           | 'LucideFileLock2'
           | 'LucideFileMinus'
           | 'LucideFileMinus2'
+          | 'LucideFileMinusCorner'
           | 'LucideFileMusic'
           | 'LucideFileOutput'
           | 'LucideFilePen'
           | 'LucideFilePenLine'
           | 'LucideFilePieChart'
+          | 'LucideFilePlay'
           | 'LucideFilePlus'
           | 'LucideFilePlus2'
+          | 'LucideFilePlusCorner'
           | 'LucideFileQuestion'
+          | 'LucideFileQuestionMark'
           | 'LucideFileScan'
           | 'LucideFileSearch'
           | 'LucideFileSearch2'
+          | 'LucideFileSearchCorner'
+          | 'LucideFileSignal'
           | 'LucideFileSignature'
           | 'LucideFileSliders'
           | 'LucideFileSpreadsheet'
@@ -8334,23 +9809,29 @@ export interface SectionHeroWithBadge {
           | 'LucideFileText'
           | 'LucideFileType'
           | 'LucideFileType2'
+          | 'LucideFileTypeCorner'
           | 'LucideFileUp'
+          | 'LucideFileUser'
           | 'LucideFileVideo'
           | 'LucideFileVideo2'
+          | 'LucideFileVideoCamera'
           | 'LucideFileVolume'
           | 'LucideFileVolume2'
           | 'LucideFileWarning'
           | 'LucideFileX'
           | 'LucideFileX2'
+          | 'LucideFileXCorner'
           | 'LucideFiles'
           | 'LucideFilm'
           | 'LucideFilter'
           | 'LucideFilterX'
           | 'LucideFingerprint'
+          | 'LucideFingerprintPattern'
           | 'LucideFireExtinguisher'
           | 'LucideFish'
           | 'LucideFishOff'
           | 'LucideFishSymbol'
+          | 'LucideFishingHook'
           | 'LucideFlag'
           | 'LucideFlagOff'
           | 'LucideFlagTriangleLeft'
@@ -8376,6 +9857,7 @@ export interface SectionHeroWithBadge {
           | 'LucideFolderCheck'
           | 'LucideFolderClock'
           | 'LucideFolderClosed'
+          | 'LucideFolderCode'
           | 'LucideFolderCog'
           | 'LucideFolderCog2'
           | 'LucideFolderDot'
@@ -8404,7 +9886,10 @@ export interface SectionHeroWithBadge {
           | 'LucideFolderX'
           | 'LucideFolders'
           | 'LucideFootprints'
+          | 'LucideForkKnife'
+          | 'LucideForkKnifeCrossed'
           | 'LucideForklift'
+          | 'LucideForm'
           | 'LucideFormInput'
           | 'LucideForward'
           | 'LucideFrame'
@@ -8413,6 +9898,9 @@ export interface SectionHeroWithBadge {
           | 'LucideFuel'
           | 'LucideFullscreen'
           | 'LucideFunctionSquare'
+          | 'LucideFunnel'
+          | 'LucideFunnelPlus'
+          | 'LucideFunnelX'
           | 'LucideGalleryHorizontal'
           | 'LucideGalleryHorizontalEnd'
           | 'LucideGalleryThumbnails'
@@ -8420,15 +9908,18 @@ export interface SectionHeroWithBadge {
           | 'LucideGalleryVerticalEnd'
           | 'LucideGamepad'
           | 'LucideGamepad2'
+          | 'LucideGamepadDirectional'
           | 'LucideGanttChart'
           | 'LucideGanttChartSquare'
           | 'LucideGauge'
           | 'LucideGaugeCircle'
           | 'LucideGavel'
           | 'LucideGem'
+          | 'LucideGeorgianLari'
           | 'LucideGhost'
           | 'LucideGift'
           | 'LucideGitBranch'
+          | 'LucideGitBranchMinus'
           | 'LucideGitBranchPlus'
           | 'LucideGitCommit'
           | 'LucideGitCommitHorizontal'
@@ -8451,16 +9942,23 @@ export interface SectionHeroWithBadge {
           | 'LucideGlobe'
           | 'LucideGlobe2'
           | 'LucideGlobeLock'
+          | 'LucideGlobeX'
           | 'LucideGoal'
+          | 'LucideGpu'
           | 'LucideGrab'
           | 'LucideGraduationCap'
           | 'LucideGrape'
           | 'LucideGrid'
           | 'LucideGrid2X2'
+          | 'LucideGrid2X2Check'
+          | 'LucideGrid2X2Plus'
+          | 'LucideGrid2X2X'
           | 'LucideGrid2x2'
           | 'LucideGrid2x2Check'
+          | 'LucideGrid2x2Plus'
           | 'LucideGrid2x2X'
           | 'LucideGrid3X3'
+          | 'LucideGrid3x2'
           | 'LucideGrid3x3'
           | 'LucideGrip'
           | 'LucideGripHorizontal'
@@ -8468,20 +9966,26 @@ export interface SectionHeroWithBadge {
           | 'LucideGroup'
           | 'LucideGuitar'
           | 'LucideHam'
+          | 'LucideHamburger'
           | 'LucideHammer'
           | 'LucideHand'
           | 'LucideHandCoins'
+          | 'LucideHandFist'
+          | 'LucideHandGrab'
           | 'LucideHandHeart'
           | 'LucideHandHelping'
           | 'LucideHandMetal'
           | 'LucideHandPlatter'
+          | 'LucideHandbag'
           | 'LucideHandshake'
           | 'LucideHardDrive'
           | 'LucideHardDriveDownload'
           | 'LucideHardDriveUpload'
           | 'LucideHardHat'
           | 'LucideHash'
+          | 'LucideHatGlasses'
           | 'LucideHaze'
+          | 'LucideHd'
           | 'LucideHdmiPort'
           | 'LucideHeading'
           | 'LucideHeading1'
@@ -8490,14 +9994,18 @@ export interface SectionHeroWithBadge {
           | 'LucideHeading4'
           | 'LucideHeading5'
           | 'LucideHeading6'
+          | 'LucideHeadphoneOff'
           | 'LucideHeadphones'
           | 'LucideHeadset'
           | 'LucideHeart'
           | 'LucideHeartCrack'
           | 'LucideHeartHandshake'
+          | 'LucideHeartMinus'
           | 'LucideHeartOff'
+          | 'LucideHeartPlus'
           | 'LucideHeartPulse'
           | 'LucideHeater'
+          | 'LucideHelicopter'
           | 'LucideHelpCircle'
           | 'LucideHelpingHand'
           | 'LucideHexagon'
@@ -8509,10 +10017,17 @@ export interface SectionHeroWithBadge {
           | 'LucideHospital'
           | 'LucideHotel'
           | 'LucideHourglass'
+          | 'LucideHouse'
+          | 'LucideHouseHeart'
+          | 'LucideHousePlug'
+          | 'LucideHousePlus'
+          | 'LucideHouseWifi'
           | 'LucideIceCream'
           | 'LucideIceCream2'
           | 'LucideIceCreamBowl'
           | 'LucideIceCreamCone'
+          | 'LucideIdCard'
+          | 'LucideIdCardLanyard'
           | 'LucideImage'
           | 'LucideImageDown'
           | 'LucideImageMinus'
@@ -8520,6 +10035,7 @@ export interface SectionHeroWithBadge {
           | 'LucideImagePlay'
           | 'LucideImagePlus'
           | 'LucideImageUp'
+          | 'LucideImageUpscale'
           | 'LucideImages'
           | 'LucideImport'
           | 'LucideInbox'
@@ -8540,6 +10056,7 @@ export interface SectionHeroWithBadge {
           | 'LucideKanban'
           | 'LucideKanbanSquare'
           | 'LucideKanbanSquareDashed'
+          | 'LucideKayak'
           | 'LucideKey'
           | 'LucideKeyRound'
           | 'LucideKeySquare'
@@ -8558,12 +10075,14 @@ export interface SectionHeroWithBadge {
           | 'LucideLaptop'
           | 'LucideLaptop2'
           | 'LucideLaptopMinimal'
+          | 'LucideLaptopMinimalCheck'
           | 'LucideLasso'
           | 'LucideLassoSelect'
           | 'LucideLaugh'
           | 'LucideLayers'
           | 'LucideLayers2'
           | 'LucideLayers3'
+          | 'LucideLayersPlus'
           | 'LucideLayout'
           | 'LucideLayoutDashboard'
           | 'LucideLayoutGrid'
@@ -8573,6 +10092,8 @@ export interface SectionHeroWithBadge {
           | 'LucideLayoutTemplate'
           | 'LucideLeaf'
           | 'LucideLeafyGreen'
+          | 'LucideLectern'
+          | 'LucideLetterText'
           | 'LucideLibrary'
           | 'LucideLibraryBig'
           | 'LucideLibrarySquare'
@@ -8581,15 +10102,22 @@ export interface SectionHeroWithBadge {
           | 'LucideLightbulb'
           | 'LucideLightbulbOff'
           | 'LucideLineChart'
+          | 'LucideLineSquiggle'
           | 'LucideLink'
           | 'LucideLink2'
           | 'LucideLink2Off'
           | 'LucideLinkedin'
           | 'LucideList'
+          | 'LucideListCheck'
           | 'LucideListChecks'
+          | 'LucideListChevronsDownUp'
+          | 'LucideListChevronsUpDown'
           | 'LucideListCollapse'
           | 'LucideListEnd'
           | 'LucideListFilter'
+          | 'LucideListFilterPlus'
+          | 'LucideListIndentDecrease'
+          | 'LucideListIndentIncrease'
           | 'LucideListMinus'
           | 'LucideListMusic'
           | 'LucideListOrdered'
@@ -8607,12 +10135,14 @@ export interface SectionHeroWithBadge {
           | 'LucideLocate'
           | 'LucideLocateFixed'
           | 'LucideLocateOff'
+          | 'LucideLocationEdit'
           | 'LucideLock'
           | 'LucideLockKeyhole'
           | 'LucideLockKeyholeOpen'
           | 'LucideLockOpen'
           | 'LucideLogIn'
           | 'LucideLogOut'
+          | 'LucideLogs'
           | 'LucideLollipop'
           | 'LucideLuggage'
           | 'LucideMSquare'
@@ -8623,15 +10153,30 @@ export interface SectionHeroWithBadge {
           | 'LucideMailOpen'
           | 'LucideMailPlus'
           | 'LucideMailQuestion'
+          | 'LucideMailQuestionMark'
           | 'LucideMailSearch'
           | 'LucideMailWarning'
           | 'LucideMailX'
           | 'LucideMailbox'
           | 'LucideMails'
           | 'LucideMap'
+          | 'LucideMapMinus'
           | 'LucideMapPin'
+          | 'LucideMapPinCheck'
+          | 'LucideMapPinCheckInside'
+          | 'LucideMapPinHouse'
+          | 'LucideMapPinMinus'
+          | 'LucideMapPinMinusInside'
           | 'LucideMapPinOff'
+          | 'LucideMapPinPen'
+          | 'LucideMapPinPlus'
+          | 'LucideMapPinPlusInside'
+          | 'LucideMapPinX'
+          | 'LucideMapPinXInside'
           | 'LucideMapPinned'
+          | 'LucideMapPlus'
+          | 'LucideMars'
+          | 'LucideMarsStroke'
           | 'LucideMartini'
           | 'LucideMaximize'
           | 'LucideMaximize2'
@@ -8651,6 +10196,7 @@ export interface SectionHeroWithBadge {
           | 'LucideMessageCircleOff'
           | 'LucideMessageCirclePlus'
           | 'LucideMessageCircleQuestion'
+          | 'LucideMessageCircleQuestionMark'
           | 'LucideMessageCircleReply'
           | 'LucideMessageCircleWarning'
           | 'LucideMessageCircleX'
@@ -8660,6 +10206,7 @@ export interface SectionHeroWithBadge {
           | 'LucideMessageSquareDiff'
           | 'LucideMessageSquareDot'
           | 'LucideMessageSquareHeart'
+          | 'LucideMessageSquareLock'
           | 'LucideMessageSquareMore'
           | 'LucideMessageSquareOff'
           | 'LucideMessageSquarePlus'
@@ -8674,6 +10221,7 @@ export interface SectionHeroWithBadge {
           | 'LucideMic2'
           | 'LucideMicOff'
           | 'LucideMicVocal'
+          | 'LucideMicrochip'
           | 'LucideMicroscope'
           | 'LucideMicrowave'
           | 'LucideMilestone'
@@ -8686,6 +10234,8 @@ export interface SectionHeroWithBadge {
           | 'LucideMinusSquare'
           | 'LucideMonitor'
           | 'LucideMonitorCheck'
+          | 'LucideMonitorCloud'
+          | 'LucideMonitorCog'
           | 'LucideMonitorDot'
           | 'LucideMonitorDown'
           | 'LucideMonitorOff'
@@ -8700,12 +10250,14 @@ export interface SectionHeroWithBadge {
           | 'LucideMoonStar'
           | 'LucideMoreHorizontal'
           | 'LucideMoreVertical'
+          | 'LucideMotorbike'
           | 'LucideMountain'
           | 'LucideMountainSnow'
           | 'LucideMouse'
           | 'LucideMouseOff'
           | 'LucideMousePointer'
           | 'LucideMousePointer2'
+          | 'LucideMousePointer2Off'
           | 'LucideMousePointerBan'
           | 'LucideMousePointerClick'
           | 'LucideMousePointerSquareDashed'
@@ -8735,6 +10287,7 @@ export interface SectionHeroWithBadge {
           | 'LucideNetwork'
           | 'LucideNewspaper'
           | 'LucideNfc'
+          | 'LucideNonBinary'
           | 'LucideNotebook'
           | 'LucideNotebookPen'
           | 'LucideNotebookTabs'
@@ -8745,8 +10298,10 @@ export interface SectionHeroWithBadge {
           | 'LucideNutOff'
           | 'LucideOctagon'
           | 'LucideOctagonAlert'
+          | 'LucideOctagonMinus'
           | 'LucideOctagonPause'
           | 'LucideOctagonX'
+          | 'LucideOmega'
           | 'LucideOption'
           | 'LucideOrbit'
           | 'LucideOrigami'
@@ -8763,8 +10318,10 @@ export interface SectionHeroWithBadge {
           | 'LucidePaintRoller'
           | 'LucidePaintbrush'
           | 'LucidePaintbrush2'
+          | 'LucidePaintbrushVertical'
           | 'LucidePalette'
           | 'LucidePalmtree'
+          | 'LucidePanda'
           | 'LucidePanelBottom'
           | 'LucidePanelBottomClose'
           | 'LucidePanelBottomDashed'
@@ -8775,12 +10332,14 @@ export interface SectionHeroWithBadge {
           | 'LucidePanelLeftDashed'
           | 'LucidePanelLeftInactive'
           | 'LucidePanelLeftOpen'
+          | 'LucidePanelLeftRightDashed'
           | 'LucidePanelRight'
           | 'LucidePanelRightClose'
           | 'LucidePanelRightDashed'
           | 'LucidePanelRightInactive'
           | 'LucidePanelRightOpen'
           | 'LucidePanelTop'
+          | 'LucidePanelTopBottomDashed'
           | 'LucidePanelTopClose'
           | 'LucidePanelTopDashed'
           | 'LucidePanelTopInactive'
@@ -8806,10 +10365,12 @@ export interface SectionHeroWithBadge {
           | 'LucidePen'
           | 'LucidePenBox'
           | 'LucidePenLine'
+          | 'LucidePenOff'
           | 'LucidePenSquare'
           | 'LucidePenTool'
           | 'LucidePencil'
           | 'LucidePencilLine'
+          | 'LucidePencilOff'
           | 'LucidePencilRuler'
           | 'LucidePentagon'
           | 'LucidePercent'
@@ -8817,6 +10378,7 @@ export interface SectionHeroWithBadge {
           | 'LucidePercentDiamond'
           | 'LucidePercentSquare'
           | 'LucidePersonStanding'
+          | 'LucidePhilippinePeso'
           | 'LucidePhone'
           | 'LucidePhoneCall'
           | 'LucidePhoneForwarded'
@@ -8837,6 +10399,7 @@ export interface SectionHeroWithBadge {
           | 'LucidePilcrowRight'
           | 'LucidePilcrowSquare'
           | 'LucidePill'
+          | 'LucidePillBottle'
           | 'LucidePin'
           | 'LucidePinOff'
           | 'LucidePipette'
@@ -8868,6 +10431,8 @@ export interface SectionHeroWithBadge {
           | 'LucidePowerSquare'
           | 'LucidePresentation'
           | 'LucidePrinter'
+          | 'LucidePrinterCheck'
+          | 'LucidePrinterX'
           | 'LucideProjector'
           | 'LucideProportions'
           | 'LucidePuzzle'
@@ -8895,7 +10460,10 @@ export interface SectionHeroWithBadge {
           | 'LucideReceiptRussianRuble'
           | 'LucideReceiptSwissFranc'
           | 'LucideReceiptText'
+          | 'LucideReceiptTurkishLira'
+          | 'LucideRectangleCircle'
           | 'LucideRectangleEllipsis'
+          | 'LucideRectangleGoggles'
           | 'LucideRectangleHorizontal'
           | 'LucideRectangleVertical'
           | 'LucideRecycle'
@@ -8921,9 +10489,11 @@ export interface SectionHeroWithBadge {
           | 'LucideRocket'
           | 'LucideRockingChair'
           | 'LucideRollerCoaster'
+          | 'LucideRose'
           | 'LucideRotate3D'
           | 'LucideRotate3d'
           | 'LucideRotateCcw'
+          | 'LucideRotateCcwKey'
           | 'LucideRotateCcwSquare'
           | 'LucideRotateCw'
           | 'LucideRotateCwSquare'
@@ -8936,14 +10506,17 @@ export interface SectionHeroWithBadge {
           | 'LucideRows4'
           | 'LucideRss'
           | 'LucideRuler'
+          | 'LucideRulerDimensionLine'
           | 'LucideRussianRuble'
           | 'LucideSailboat'
           | 'LucideSalad'
           | 'LucideSandwich'
           | 'LucideSatellite'
           | 'LucideSatelliteDish'
+          | 'LucideSaudiRiyal'
           | 'LucideSave'
           | 'LucideSaveAll'
+          | 'LucideSaveOff'
           | 'LucideScale'
           | 'LucideScale3D'
           | 'LucideScale3d'
@@ -8952,7 +10525,9 @@ export interface SectionHeroWithBadge {
           | 'LucideScanBarcode'
           | 'LucideScanEye'
           | 'LucideScanFace'
+          | 'LucideScanHeart'
           | 'LucideScanLine'
+          | 'LucideScanQrCode'
           | 'LucideScanSearch'
           | 'LucideScanText'
           | 'LucideScatterChart'
@@ -8962,15 +10537,18 @@ export interface SectionHeroWithBadge {
           | 'LucideScissorsLineDashed'
           | 'LucideScissorsSquare'
           | 'LucideScissorsSquareDashedBottom'
+          | 'LucideScooter'
           | 'LucideScreenShare'
           | 'LucideScreenShareOff'
           | 'LucideScroll'
           | 'LucideScrollText'
           | 'LucideSearch'
+          | 'LucideSearchAlert'
           | 'LucideSearchCheck'
           | 'LucideSearchCode'
           | 'LucideSearchSlash'
           | 'LucideSearchX'
+          | 'LucideSection'
           | 'LucideSend'
           | 'LucideSendHorizonal'
           | 'LucideSendHorizontal'
@@ -8999,6 +10577,8 @@ export interface SectionHeroWithBadge {
           | 'LucideShieldOff'
           | 'LucideShieldPlus'
           | 'LucideShieldQuestion'
+          | 'LucideShieldQuestionMark'
+          | 'LucideShieldUser'
           | 'LucideShieldX'
           | 'LucideShip'
           | 'LucideShipWheel'
@@ -9008,6 +10588,8 @@ export interface SectionHeroWithBadge {
           | 'LucideShoppingCart'
           | 'LucideShovel'
           | 'LucideShowerHead'
+          | 'LucideShredder'
+          | 'LucideShrimp'
           | 'LucideShrink'
           | 'LucideShrub'
           | 'LucideShuffle'
@@ -9021,6 +10603,7 @@ export interface SectionHeroWithBadge {
           | 'LucideSignalLow'
           | 'LucideSignalMedium'
           | 'LucideSignalZero'
+          | 'LucideSignature'
           | 'LucideSignpost'
           | 'LucideSignpostBig'
           | 'LucideSiren'
@@ -9041,7 +10624,9 @@ export interface SectionHeroWithBadge {
           | 'LucideSmilePlus'
           | 'LucideSnail'
           | 'LucideSnowflake'
+          | 'LucideSoapDispenserDroplet'
           | 'LucideSofa'
+          | 'LucideSolarPanel'
           | 'LucideSortAsc'
           | 'LucideSortDesc'
           | 'LucideSoup'
@@ -9054,9 +10639,12 @@ export interface SectionHeroWithBadge {
           | 'LucideSpellCheck'
           | 'LucideSpellCheck2'
           | 'LucideSpline'
+          | 'LucideSplinePointer'
           | 'LucideSplit'
           | 'LucideSplitSquareHorizontal'
           | 'LucideSplitSquareVertical'
+          | 'LucideSpool'
+          | 'LucideSpotlight'
           | 'LucideSprayCan'
           | 'LucideSprout'
           | 'LucideSquare'
@@ -9075,6 +10663,7 @@ export interface SectionHeroWithBadge {
           | 'LucideSquareArrowUpRight'
           | 'LucideSquareAsterisk'
           | 'LucideSquareBottomDashedScissors'
+          | 'LucideSquareChartGantt'
           | 'LucideSquareCheck'
           | 'LucideSquareCheckBig'
           | 'LucideSquareChevronDown'
@@ -9082,10 +10671,12 @@ export interface SectionHeroWithBadge {
           | 'LucideSquareChevronRight'
           | 'LucideSquareChevronUp'
           | 'LucideSquareCode'
+          | 'LucideSquareDashed'
           | 'LucideSquareDashedBottom'
           | 'LucideSquareDashedBottomCode'
           | 'LucideSquareDashedKanban'
           | 'LucideSquareDashedMousePointer'
+          | 'LucideSquareDashedTopSolid'
           | 'LucideSquareDivide'
           | 'LucideSquareDot'
           | 'LucideSquareEqual'
@@ -9099,6 +10690,7 @@ export interface SectionHeroWithBadge {
           | 'LucideSquareMousePointer'
           | 'LucideSquareParking'
           | 'LucideSquareParkingOff'
+          | 'LucideSquarePause'
           | 'LucideSquarePen'
           | 'LucideSquarePercent'
           | 'LucideSquarePi'
@@ -9107,17 +10699,26 @@ export interface SectionHeroWithBadge {
           | 'LucideSquarePlus'
           | 'LucideSquarePower'
           | 'LucideSquareRadical'
+          | 'LucideSquareRoundCorner'
           | 'LucideSquareScissors'
           | 'LucideSquareSigma'
           | 'LucideSquareSlash'
           | 'LucideSquareSplitHorizontal'
           | 'LucideSquareSplitVertical'
+          | 'LucideSquareSquare'
           | 'LucideSquareStack'
+          | 'LucideSquareStar'
+          | 'LucideSquareStop'
           | 'LucideSquareTerminal'
           | 'LucideSquareUser'
           | 'LucideSquareUserRound'
           | 'LucideSquareX'
+          | 'LucideSquaresExclude'
+          | 'LucideSquaresIntersect'
+          | 'LucideSquaresSubtract'
+          | 'LucideSquaresUnite'
           | 'LucideSquircle'
+          | 'LucideSquircleDashed'
           | 'LucideSquirrel'
           | 'LucideStamp'
           | 'LucideStar'
@@ -9129,6 +10730,7 @@ export interface SectionHeroWithBadge {
           | 'LucideStethoscope'
           | 'LucideSticker'
           | 'LucideStickyNote'
+          | 'LucideStone'
           | 'LucideStopCircle'
           | 'LucideStore'
           | 'LucideStretchHorizontal'
@@ -9155,6 +10757,8 @@ export interface SectionHeroWithBadge {
           | 'LucideTableCellsMerge'
           | 'LucideTableCellsSplit'
           | 'LucideTableColumnsSplit'
+          | 'LucideTableConfig'
+          | 'LucideTableOfContents'
           | 'LucideTableProperties'
           | 'LucideTableRowsSplit'
           | 'LucideTablet'
@@ -9179,12 +10783,18 @@ export interface SectionHeroWithBadge {
           | 'LucideTestTubeDiagonal'
           | 'LucideTestTubes'
           | 'LucideText'
+          | 'LucideTextAlignCenter'
+          | 'LucideTextAlignEnd'
+          | 'LucideTextAlignJustify'
+          | 'LucideTextAlignStart'
           | 'LucideTextCursor'
           | 'LucideTextCursorInput'
+          | 'LucideTextInitial'
           | 'LucideTextQuote'
           | 'LucideTextSearch'
           | 'LucideTextSelect'
           | 'LucideTextSelection'
+          | 'LucideTextWrap'
           | 'LucideTheater'
           | 'LucideThermometer'
           | 'LucideThermometerSnowflake'
@@ -9198,11 +10808,16 @@ export interface SectionHeroWithBadge {
           | 'LucideTicketPlus'
           | 'LucideTicketSlash'
           | 'LucideTicketX'
+          | 'LucideTickets'
+          | 'LucideTicketsPlane'
           | 'LucideTimer'
           | 'LucideTimerOff'
           | 'LucideTimerReset'
           | 'LucideToggleLeft'
           | 'LucideToggleRight'
+          | 'LucideToilet'
+          | 'LucideToolCase'
+          | 'LucideToolbox'
           | 'LucideTornado'
           | 'LucideTorus'
           | 'LucideTouchpad'
@@ -9216,6 +10831,7 @@ export interface SectionHeroWithBadge {
           | 'LucideTrainFrontTunnel'
           | 'LucideTrainTrack'
           | 'LucideTramFront'
+          | 'LucideTransgender'
           | 'LucideTrash'
           | 'LucideTrash2'
           | 'LucideTreeDeciduous'
@@ -9225,17 +10841,25 @@ export interface SectionHeroWithBadge {
           | 'LucideTrello'
           | 'LucideTrendingDown'
           | 'LucideTrendingUp'
+          | 'LucideTrendingUpDown'
           | 'LucideTriangle'
           | 'LucideTriangleAlert'
+          | 'LucideTriangleDashed'
           | 'LucideTriangleRight'
           | 'LucideTrophy'
           | 'LucideTruck'
+          | 'LucideTruckElectric'
+          | 'LucideTurkishLira'
+          | 'LucideTurntable'
           | 'LucideTurtle'
           | 'LucideTv'
           | 'LucideTv2'
+          | 'LucideTvMinimal'
+          | 'LucideTvMinimalPlay'
           | 'LucideTwitch'
           | 'LucideTwitter'
           | 'LucideType'
+          | 'LucideTypeOutline'
           | 'LucideUmbrella'
           | 'LucideUmbrellaOff'
           | 'LucideUnderline'
@@ -9262,20 +10886,24 @@ export interface SectionHeroWithBadge {
           | 'LucideUserCircle2'
           | 'LucideUserCog'
           | 'LucideUserCog2'
+          | 'LucideUserLock'
           | 'LucideUserMinus'
           | 'LucideUserMinus2'
+          | 'LucideUserPen'
           | 'LucideUserPlus'
           | 'LucideUserPlus2'
           | 'LucideUserRound'
           | 'LucideUserRoundCheck'
           | 'LucideUserRoundCog'
           | 'LucideUserRoundMinus'
+          | 'LucideUserRoundPen'
           | 'LucideUserRoundPlus'
           | 'LucideUserRoundSearch'
           | 'LucideUserRoundX'
           | 'LucideUserSearch'
           | 'LucideUserSquare'
           | 'LucideUserSquare2'
+          | 'LucideUserStar'
           | 'LucideUserX'
           | 'LucideUserX2'
           | 'LucideUsers'
@@ -9284,10 +10912,14 @@ export interface SectionHeroWithBadge {
           | 'LucideUtensils'
           | 'LucideUtensilsCrossed'
           | 'LucideUtilityPole'
+          | 'LucideVan'
           | 'LucideVariable'
           | 'LucideVault'
+          | 'LucideVectorSquare'
           | 'LucideVegan'
           | 'LucideVenetianMask'
+          | 'LucideVenus'
+          | 'LucideVenusAndMars'
           | 'LucideVerified'
           | 'LucideVibrate'
           | 'LucideVibrateOff'
@@ -9296,9 +10928,11 @@ export interface SectionHeroWithBadge {
           | 'LucideVideotape'
           | 'LucideView'
           | 'LucideVoicemail'
+          | 'LucideVolleyball'
           | 'LucideVolume'
           | 'LucideVolume1'
           | 'LucideVolume2'
+          | 'LucideVolumeOff'
           | 'LucideVolumeX'
           | 'LucideVote'
           | 'LucideWallet'
@@ -9313,17 +10947,28 @@ export interface SectionHeroWithBadge {
           | 'LucideWashingMachine'
           | 'LucideWatch'
           | 'LucideWaves'
+          | 'LucideWavesArrowDown'
+          | 'LucideWavesArrowUp'
+          | 'LucideWavesLadder'
           | 'LucideWaypoints'
           | 'LucideWebcam'
           | 'LucideWebhook'
           | 'LucideWebhookOff'
           | 'LucideWeight'
+          | 'LucideWeightTilde'
           | 'LucideWheat'
           | 'LucideWheatOff'
           | 'LucideWholeWord'
           | 'LucideWifi'
+          | 'LucideWifiCog'
+          | 'LucideWifiHigh'
+          | 'LucideWifiLow'
           | 'LucideWifiOff'
+          | 'LucideWifiPen'
+          | 'LucideWifiSync'
+          | 'LucideWifiZero'
           | 'LucideWind'
+          | 'LucideWindArrowDown'
           | 'LucideWine'
           | 'LucideWineOff'
           | 'LucideWorkflow'
@@ -9357,6 +11002,8 @@ export interface SectionHeroWithBadge {
           | 'MailPlusIcon'
           | 'MailQuestion'
           | 'MailQuestionIcon'
+          | 'MailQuestionMark'
+          | 'MailQuestionMarkIcon'
           | 'MailSearch'
           | 'MailSearchIcon'
           | 'MailWarning'
@@ -9369,12 +11016,40 @@ export interface SectionHeroWithBadge {
           | 'MailsIcon'
           | 'Map'
           | 'MapIcon'
+          | 'MapMinus'
+          | 'MapMinusIcon'
           | 'MapPin'
+          | 'MapPinCheck'
+          | 'MapPinCheckIcon'
+          | 'MapPinCheckInside'
+          | 'MapPinCheckInsideIcon'
+          | 'MapPinHouse'
+          | 'MapPinHouseIcon'
           | 'MapPinIcon'
+          | 'MapPinMinus'
+          | 'MapPinMinusIcon'
+          | 'MapPinMinusInside'
+          | 'MapPinMinusInsideIcon'
           | 'MapPinOff'
           | 'MapPinOffIcon'
+          | 'MapPinPen'
+          | 'MapPinPenIcon'
+          | 'MapPinPlus'
+          | 'MapPinPlusIcon'
+          | 'MapPinPlusInside'
+          | 'MapPinPlusInsideIcon'
+          | 'MapPinX'
+          | 'MapPinXIcon'
+          | 'MapPinXInside'
+          | 'MapPinXInsideIcon'
           | 'MapPinned'
           | 'MapPinnedIcon'
+          | 'MapPlus'
+          | 'MapPlusIcon'
+          | 'Mars'
+          | 'MarsIcon'
+          | 'MarsStroke'
+          | 'MarsStrokeIcon'
           | 'Martini'
           | 'MartiniIcon'
           | 'Maximize'
@@ -9413,6 +11088,8 @@ export interface SectionHeroWithBadge {
           | 'MessageCirclePlusIcon'
           | 'MessageCircleQuestion'
           | 'MessageCircleQuestionIcon'
+          | 'MessageCircleQuestionMark'
+          | 'MessageCircleQuestionMarkIcon'
           | 'MessageCircleReply'
           | 'MessageCircleReplyIcon'
           | 'MessageCircleWarning'
@@ -9431,6 +11108,8 @@ export interface SectionHeroWithBadge {
           | 'MessageSquareHeart'
           | 'MessageSquareHeartIcon'
           | 'MessageSquareIcon'
+          | 'MessageSquareLock'
+          | 'MessageSquareLockIcon'
           | 'MessageSquareMore'
           | 'MessageSquareMoreIcon'
           | 'MessageSquareOff'
@@ -9459,6 +11138,8 @@ export interface SectionHeroWithBadge {
           | 'MicOffIcon'
           | 'MicVocal'
           | 'MicVocalIcon'
+          | 'Microchip'
+          | 'MicrochipIcon'
           | 'Microscope'
           | 'MicroscopeIcon'
           | 'Microwave'
@@ -9482,6 +11163,10 @@ export interface SectionHeroWithBadge {
           | 'Monitor'
           | 'MonitorCheck'
           | 'MonitorCheckIcon'
+          | 'MonitorCloud'
+          | 'MonitorCloudIcon'
+          | 'MonitorCog'
+          | 'MonitorCogIcon'
           | 'MonitorDot'
           | 'MonitorDotIcon'
           | 'MonitorDown'
@@ -9511,6 +11196,8 @@ export interface SectionHeroWithBadge {
           | 'MoreHorizontalIcon'
           | 'MoreVertical'
           | 'MoreVerticalIcon'
+          | 'Motorbike'
+          | 'MotorbikeIcon'
           | 'Mountain'
           | 'MountainIcon'
           | 'MountainSnow'
@@ -9522,6 +11209,8 @@ export interface SectionHeroWithBadge {
           | 'MousePointer'
           | 'MousePointer2'
           | 'MousePointer2Icon'
+          | 'MousePointer2Off'
+          | 'MousePointer2OffIcon'
           | 'MousePointerBan'
           | 'MousePointerBanIcon'
           | 'MousePointerClick'
@@ -9581,6 +11270,8 @@ export interface SectionHeroWithBadge {
           | 'NewspaperIcon'
           | 'Nfc'
           | 'NfcIcon'
+          | 'NonBinary'
+          | 'NonBinaryIcon'
           | 'Notebook'
           | 'NotebookIcon'
           | 'NotebookPen'
@@ -9601,10 +11292,14 @@ export interface SectionHeroWithBadge {
           | 'OctagonAlert'
           | 'OctagonAlertIcon'
           | 'OctagonIcon'
+          | 'OctagonMinus'
+          | 'OctagonMinusIcon'
           | 'OctagonPause'
           | 'OctagonPauseIcon'
           | 'OctagonX'
           | 'OctagonXIcon'
+          | 'Omega'
+          | 'OmegaIcon'
           | 'Option'
           | 'OptionIcon'
           | 'Orbit'
@@ -9637,10 +11332,14 @@ export interface SectionHeroWithBadge {
           | 'Paintbrush2'
           | 'Paintbrush2Icon'
           | 'PaintbrushIcon'
+          | 'PaintbrushVertical'
+          | 'PaintbrushVerticalIcon'
           | 'Palette'
           | 'PaletteIcon'
           | 'Palmtree'
           | 'PalmtreeIcon'
+          | 'Panda'
+          | 'PandaIcon'
           | 'PanelBottom'
           | 'PanelBottomClose'
           | 'PanelBottomCloseIcon'
@@ -9661,6 +11360,8 @@ export interface SectionHeroWithBadge {
           | 'PanelLeftInactiveIcon'
           | 'PanelLeftOpen'
           | 'PanelLeftOpenIcon'
+          | 'PanelLeftRightDashed'
+          | 'PanelLeftRightDashedIcon'
           | 'PanelRight'
           | 'PanelRightClose'
           | 'PanelRightCloseIcon'
@@ -9672,6 +11373,8 @@ export interface SectionHeroWithBadge {
           | 'PanelRightOpen'
           | 'PanelRightOpenIcon'
           | 'PanelTop'
+          | 'PanelTopBottomDashed'
+          | 'PanelTopBottomDashedIcon'
           | 'PanelTopClose'
           | 'PanelTopCloseIcon'
           | 'PanelTopDashed'
@@ -9723,6 +11426,8 @@ export interface SectionHeroWithBadge {
           | 'PenIcon'
           | 'PenLine'
           | 'PenLineIcon'
+          | 'PenOff'
+          | 'PenOffIcon'
           | 'PenSquare'
           | 'PenSquareIcon'
           | 'PenTool'
@@ -9731,6 +11436,8 @@ export interface SectionHeroWithBadge {
           | 'PencilIcon'
           | 'PencilLine'
           | 'PencilLineIcon'
+          | 'PencilOff'
+          | 'PencilOffIcon'
           | 'PencilRuler'
           | 'PencilRulerIcon'
           | 'Pentagon'
@@ -9745,6 +11452,8 @@ export interface SectionHeroWithBadge {
           | 'PercentSquareIcon'
           | 'PersonStanding'
           | 'PersonStandingIcon'
+          | 'PhilippinePeso'
+          | 'PhilippinePesoIcon'
           | 'Phone'
           | 'PhoneCall'
           | 'PhoneCallIcon'
@@ -9784,6 +11493,8 @@ export interface SectionHeroWithBadge {
           | 'PilcrowSquare'
           | 'PilcrowSquareIcon'
           | 'Pill'
+          | 'PillBottle'
+          | 'PillBottleIcon'
           | 'PillIcon'
           | 'Pin'
           | 'PinIcon'
@@ -9846,7 +11557,11 @@ export interface SectionHeroWithBadge {
           | 'Presentation'
           | 'PresentationIcon'
           | 'Printer'
+          | 'PrinterCheck'
+          | 'PrinterCheckIcon'
           | 'PrinterIcon'
+          | 'PrinterX'
+          | 'PrinterXIcon'
           | 'Projector'
           | 'ProjectorIcon'
           | 'Proportions'
@@ -9901,8 +11616,14 @@ export interface SectionHeroWithBadge {
           | 'ReceiptSwissFrancIcon'
           | 'ReceiptText'
           | 'ReceiptTextIcon'
+          | 'ReceiptTurkishLira'
+          | 'ReceiptTurkishLiraIcon'
+          | 'RectangleCircle'
+          | 'RectangleCircleIcon'
           | 'RectangleEllipsis'
           | 'RectangleEllipsisIcon'
+          | 'RectangleGoggles'
+          | 'RectangleGogglesIcon'
           | 'RectangleHorizontal'
           | 'RectangleHorizontalIcon'
           | 'RectangleVertical'
@@ -9953,12 +11674,16 @@ export interface SectionHeroWithBadge {
           | 'RockingChairIcon'
           | 'RollerCoaster'
           | 'RollerCoasterIcon'
+          | 'Rose'
+          | 'RoseIcon'
           | 'Rotate3D'
           | 'Rotate3DIcon'
           | 'Rotate3d'
           | 'Rotate3dIcon'
           | 'RotateCcw'
           | 'RotateCcwIcon'
+          | 'RotateCcwKey'
+          | 'RotateCcwKeyIcon'
           | 'RotateCcwSquare'
           | 'RotateCcwSquareIcon'
           | 'RotateCw'
@@ -9982,6 +11707,8 @@ export interface SectionHeroWithBadge {
           | 'Rss'
           | 'RssIcon'
           | 'Ruler'
+          | 'RulerDimensionLine'
+          | 'RulerDimensionLineIcon'
           | 'RulerIcon'
           | 'RussianRuble'
           | 'RussianRubleIcon'
@@ -9995,10 +11722,14 @@ export interface SectionHeroWithBadge {
           | 'SatelliteDish'
           | 'SatelliteDishIcon'
           | 'SatelliteIcon'
+          | 'SaudiRiyal'
+          | 'SaudiRiyalIcon'
           | 'Save'
           | 'SaveAll'
           | 'SaveAllIcon'
           | 'SaveIcon'
+          | 'SaveOff'
+          | 'SaveOffIcon'
           | 'Scale'
           | 'Scale3D'
           | 'Scale3DIcon'
@@ -10014,9 +11745,13 @@ export interface SectionHeroWithBadge {
           | 'ScanEyeIcon'
           | 'ScanFace'
           | 'ScanFaceIcon'
+          | 'ScanHeart'
+          | 'ScanHeartIcon'
           | 'ScanIcon'
           | 'ScanLine'
           | 'ScanLineIcon'
+          | 'ScanQrCode'
+          | 'ScanQrCodeIcon'
           | 'ScanSearch'
           | 'ScanSearchIcon'
           | 'ScanText'
@@ -10035,6 +11770,8 @@ export interface SectionHeroWithBadge {
           | 'ScissorsSquareDashedBottom'
           | 'ScissorsSquareDashedBottomIcon'
           | 'ScissorsSquareIcon'
+          | 'Scooter'
+          | 'ScooterIcon'
           | 'ScreenShare'
           | 'ScreenShareIcon'
           | 'ScreenShareOff'
@@ -10044,6 +11781,8 @@ export interface SectionHeroWithBadge {
           | 'ScrollText'
           | 'ScrollTextIcon'
           | 'Search'
+          | 'SearchAlert'
+          | 'SearchAlertIcon'
           | 'SearchCheck'
           | 'SearchCheckIcon'
           | 'SearchCode'
@@ -10053,6 +11792,8 @@ export interface SectionHeroWithBadge {
           | 'SearchSlashIcon'
           | 'SearchX'
           | 'SearchXIcon'
+          | 'Section'
+          | 'SectionIcon'
           | 'Send'
           | 'SendHorizonal'
           | 'SendHorizonalIcon'
@@ -10109,6 +11850,10 @@ export interface SectionHeroWithBadge {
           | 'ShieldPlusIcon'
           | 'ShieldQuestion'
           | 'ShieldQuestionIcon'
+          | 'ShieldQuestionMark'
+          | 'ShieldQuestionMarkIcon'
+          | 'ShieldUser'
+          | 'ShieldUserIcon'
           | 'ShieldX'
           | 'ShieldXIcon'
           | 'Ship'
@@ -10127,6 +11872,10 @@ export interface SectionHeroWithBadge {
           | 'ShovelIcon'
           | 'ShowerHead'
           | 'ShowerHeadIcon'
+          | 'Shredder'
+          | 'ShredderIcon'
+          | 'Shrimp'
+          | 'ShrimpIcon'
           | 'Shrink'
           | 'ShrinkIcon'
           | 'Shrub'
@@ -10153,6 +11902,8 @@ export interface SectionHeroWithBadge {
           | 'SignalMediumIcon'
           | 'SignalZero'
           | 'SignalZeroIcon'
+          | 'Signature'
+          | 'SignatureIcon'
           | 'Signpost'
           | 'SignpostBig'
           | 'SignpostBigIcon'
@@ -10193,8 +11944,12 @@ export interface SectionHeroWithBadge {
           | 'SnailIcon'
           | 'Snowflake'
           | 'SnowflakeIcon'
+          | 'SoapDispenserDroplet'
+          | 'SoapDispenserDropletIcon'
           | 'Sofa'
           | 'SofaIcon'
+          | 'SolarPanel'
+          | 'SolarPanelIcon'
           | 'SortAsc'
           | 'SortAscIcon'
           | 'SortDesc'
@@ -10219,12 +11974,18 @@ export interface SectionHeroWithBadge {
           | 'SpellCheckIcon'
           | 'Spline'
           | 'SplineIcon'
+          | 'SplinePointer'
+          | 'SplinePointerIcon'
           | 'Split'
           | 'SplitIcon'
           | 'SplitSquareHorizontal'
           | 'SplitSquareHorizontalIcon'
           | 'SplitSquareVertical'
           | 'SplitSquareVerticalIcon'
+          | 'Spool'
+          | 'SpoolIcon'
+          | 'Spotlight'
+          | 'SpotlightIcon'
           | 'SprayCan'
           | 'SprayCanIcon'
           | 'Sprout'
@@ -10260,6 +12021,8 @@ export interface SectionHeroWithBadge {
           | 'SquareAsteriskIcon'
           | 'SquareBottomDashedScissors'
           | 'SquareBottomDashedScissorsIcon'
+          | 'SquareChartGantt'
+          | 'SquareChartGanttIcon'
           | 'SquareCheck'
           | 'SquareCheckBig'
           | 'SquareCheckBigIcon'
@@ -10274,14 +12037,18 @@ export interface SectionHeroWithBadge {
           | 'SquareChevronUpIcon'
           | 'SquareCode'
           | 'SquareCodeIcon'
+          | 'SquareDashed'
           | 'SquareDashedBottom'
           | 'SquareDashedBottomCode'
           | 'SquareDashedBottomCodeIcon'
           | 'SquareDashedBottomIcon'
+          | 'SquareDashedIcon'
           | 'SquareDashedKanban'
           | 'SquareDashedKanbanIcon'
           | 'SquareDashedMousePointer'
           | 'SquareDashedMousePointerIcon'
+          | 'SquareDashedTopSolid'
+          | 'SquareDashedTopSolidIcon'
           | 'SquareDivide'
           | 'SquareDivideIcon'
           | 'SquareDot'
@@ -10309,6 +12076,8 @@ export interface SectionHeroWithBadge {
           | 'SquareParkingIcon'
           | 'SquareParkingOff'
           | 'SquareParkingOffIcon'
+          | 'SquarePause'
+          | 'SquarePauseIcon'
           | 'SquarePen'
           | 'SquarePenIcon'
           | 'SquarePercent'
@@ -10325,6 +12094,8 @@ export interface SectionHeroWithBadge {
           | 'SquarePowerIcon'
           | 'SquareRadical'
           | 'SquareRadicalIcon'
+          | 'SquareRoundCorner'
+          | 'SquareRoundCornerIcon'
           | 'SquareScissors'
           | 'SquareScissorsIcon'
           | 'SquareSigma'
@@ -10335,8 +12106,14 @@ export interface SectionHeroWithBadge {
           | 'SquareSplitHorizontalIcon'
           | 'SquareSplitVertical'
           | 'SquareSplitVerticalIcon'
+          | 'SquareSquare'
+          | 'SquareSquareIcon'
           | 'SquareStack'
           | 'SquareStackIcon'
+          | 'SquareStar'
+          | 'SquareStarIcon'
+          | 'SquareStop'
+          | 'SquareStopIcon'
           | 'SquareTerminal'
           | 'SquareTerminalIcon'
           | 'SquareUser'
@@ -10345,7 +12122,17 @@ export interface SectionHeroWithBadge {
           | 'SquareUserRoundIcon'
           | 'SquareX'
           | 'SquareXIcon'
+          | 'SquaresExclude'
+          | 'SquaresExcludeIcon'
+          | 'SquaresIntersect'
+          | 'SquaresIntersectIcon'
+          | 'SquaresSubtract'
+          | 'SquaresSubtractIcon'
+          | 'SquaresUnite'
+          | 'SquaresUniteIcon'
           | 'Squircle'
+          | 'SquircleDashed'
+          | 'SquircleDashedIcon'
           | 'SquircleIcon'
           | 'Squirrel'
           | 'SquirrelIcon'
@@ -10369,6 +12156,8 @@ export interface SectionHeroWithBadge {
           | 'StickerIcon'
           | 'StickyNote'
           | 'StickyNoteIcon'
+          | 'Stone'
+          | 'StoneIcon'
           | 'StopCircle'
           | 'StopCircleIcon'
           | 'Store'
@@ -10420,7 +12209,11 @@ export interface SectionHeroWithBadge {
           | 'TableCellsSplitIcon'
           | 'TableColumnsSplit'
           | 'TableColumnsSplitIcon'
+          | 'TableConfig'
+          | 'TableConfigIcon'
           | 'TableIcon'
+          | 'TableOfContents'
+          | 'TableOfContentsIcon'
           | 'TableProperties'
           | 'TablePropertiesIcon'
           | 'TableRowsSplit'
@@ -10468,11 +12261,21 @@ export interface SectionHeroWithBadge {
           | 'TestTubes'
           | 'TestTubesIcon'
           | 'Text'
+          | 'TextAlignCenter'
+          | 'TextAlignCenterIcon'
+          | 'TextAlignEnd'
+          | 'TextAlignEndIcon'
+          | 'TextAlignJustify'
+          | 'TextAlignJustifyIcon'
+          | 'TextAlignStart'
+          | 'TextAlignStartIcon'
           | 'TextCursor'
           | 'TextCursorIcon'
           | 'TextCursorInput'
           | 'TextCursorInputIcon'
           | 'TextIcon'
+          | 'TextInitial'
+          | 'TextInitialIcon'
           | 'TextQuote'
           | 'TextQuoteIcon'
           | 'TextSearch'
@@ -10481,6 +12284,8 @@ export interface SectionHeroWithBadge {
           | 'TextSelectIcon'
           | 'TextSelection'
           | 'TextSelectionIcon'
+          | 'TextWrap'
+          | 'TextWrapIcon'
           | 'Theater'
           | 'TheaterIcon'
           | 'Thermometer'
@@ -10507,6 +12312,10 @@ export interface SectionHeroWithBadge {
           | 'TicketSlashIcon'
           | 'TicketX'
           | 'TicketXIcon'
+          | 'Tickets'
+          | 'TicketsIcon'
+          | 'TicketsPlane'
+          | 'TicketsPlaneIcon'
           | 'Timer'
           | 'TimerIcon'
           | 'TimerOff'
@@ -10517,6 +12326,12 @@ export interface SectionHeroWithBadge {
           | 'ToggleLeftIcon'
           | 'ToggleRight'
           | 'ToggleRightIcon'
+          | 'Toilet'
+          | 'ToiletIcon'
+          | 'ToolCase'
+          | 'ToolCaseIcon'
+          | 'Toolbox'
+          | 'ToolboxIcon'
           | 'Tornado'
           | 'TornadoIcon'
           | 'Torus'
@@ -10543,6 +12358,8 @@ export interface SectionHeroWithBadge {
           | 'TrainTrackIcon'
           | 'TramFront'
           | 'TramFrontIcon'
+          | 'Transgender'
+          | 'TransgenderIcon'
           | 'Trash'
           | 'Trash2'
           | 'Trash2Icon'
@@ -10560,29 +12377,45 @@ export interface SectionHeroWithBadge {
           | 'TrendingDown'
           | 'TrendingDownIcon'
           | 'TrendingUp'
+          | 'TrendingUpDown'
+          | 'TrendingUpDownIcon'
           | 'TrendingUpIcon'
           | 'Triangle'
           | 'TriangleAlert'
           | 'TriangleAlertIcon'
+          | 'TriangleDashed'
+          | 'TriangleDashedIcon'
           | 'TriangleIcon'
           | 'TriangleRight'
           | 'TriangleRightIcon'
           | 'Trophy'
           | 'TrophyIcon'
           | 'Truck'
+          | 'TruckElectric'
+          | 'TruckElectricIcon'
           | 'TruckIcon'
+          | 'TurkishLira'
+          | 'TurkishLiraIcon'
+          | 'Turntable'
+          | 'TurntableIcon'
           | 'Turtle'
           | 'TurtleIcon'
           | 'Tv'
           | 'Tv2'
           | 'Tv2Icon'
           | 'TvIcon'
+          | 'TvMinimal'
+          | 'TvMinimalIcon'
+          | 'TvMinimalPlay'
+          | 'TvMinimalPlayIcon'
           | 'Twitch'
           | 'TwitchIcon'
           | 'Twitter'
           | 'TwitterIcon'
           | 'Type'
           | 'TypeIcon'
+          | 'TypeOutline'
+          | 'TypeOutlineIcon'
           | 'Umbrella'
           | 'UmbrellaIcon'
           | 'UmbrellaOff'
@@ -10635,10 +12468,14 @@ export interface SectionHeroWithBadge {
           | 'UserCog2Icon'
           | 'UserCogIcon'
           | 'UserIcon'
+          | 'UserLock'
+          | 'UserLockIcon'
           | 'UserMinus'
           | 'UserMinus2'
           | 'UserMinus2Icon'
           | 'UserMinusIcon'
+          | 'UserPen'
+          | 'UserPenIcon'
           | 'UserPlus'
           | 'UserPlus2'
           | 'UserPlus2Icon'
@@ -10651,6 +12488,8 @@ export interface SectionHeroWithBadge {
           | 'UserRoundIcon'
           | 'UserRoundMinus'
           | 'UserRoundMinusIcon'
+          | 'UserRoundPen'
+          | 'UserRoundPenIcon'
           | 'UserRoundPlus'
           | 'UserRoundPlusIcon'
           | 'UserRoundSearch'
@@ -10663,6 +12502,8 @@ export interface SectionHeroWithBadge {
           | 'UserSquare2'
           | 'UserSquare2Icon'
           | 'UserSquareIcon'
+          | 'UserStar'
+          | 'UserStarIcon'
           | 'UserX'
           | 'UserX2'
           | 'UserX2Icon'
@@ -10679,14 +12520,22 @@ export interface SectionHeroWithBadge {
           | 'UtensilsIcon'
           | 'UtilityPole'
           | 'UtilityPoleIcon'
+          | 'Van'
+          | 'VanIcon'
           | 'Variable'
           | 'VariableIcon'
           | 'Vault'
           | 'VaultIcon'
+          | 'VectorSquare'
+          | 'VectorSquareIcon'
           | 'Vegan'
           | 'VeganIcon'
           | 'VenetianMask'
           | 'VenetianMaskIcon'
+          | 'Venus'
+          | 'VenusAndMars'
+          | 'VenusAndMarsIcon'
+          | 'VenusIcon'
           | 'Verified'
           | 'VerifiedIcon'
           | 'Vibrate'
@@ -10703,12 +12552,16 @@ export interface SectionHeroWithBadge {
           | 'ViewIcon'
           | 'Voicemail'
           | 'VoicemailIcon'
+          | 'Volleyball'
+          | 'VolleyballIcon'
           | 'Volume'
           | 'Volume1'
           | 'Volume1Icon'
           | 'Volume2'
           | 'Volume2Icon'
           | 'VolumeIcon'
+          | 'VolumeOff'
+          | 'VolumeOffIcon'
           | 'VolumeX'
           | 'VolumeXIcon'
           | 'Vote'
@@ -10736,7 +12589,13 @@ export interface SectionHeroWithBadge {
           | 'Watch'
           | 'WatchIcon'
           | 'Waves'
+          | 'WavesArrowDown'
+          | 'WavesArrowDownIcon'
+          | 'WavesArrowUp'
+          | 'WavesArrowUpIcon'
           | 'WavesIcon'
+          | 'WavesLadder'
+          | 'WavesLadderIcon'
           | 'Waypoints'
           | 'WaypointsIcon'
           | 'Webcam'
@@ -10747,6 +12606,8 @@ export interface SectionHeroWithBadge {
           | 'WebhookOffIcon'
           | 'Weight'
           | 'WeightIcon'
+          | 'WeightTilde'
+          | 'WeightTildeIcon'
           | 'Wheat'
           | 'WheatIcon'
           | 'WheatOff'
@@ -10754,10 +12615,24 @@ export interface SectionHeroWithBadge {
           | 'WholeWord'
           | 'WholeWordIcon'
           | 'Wifi'
+          | 'WifiCog'
+          | 'WifiCogIcon'
+          | 'WifiHigh'
+          | 'WifiHighIcon'
           | 'WifiIcon'
+          | 'WifiLow'
+          | 'WifiLowIcon'
           | 'WifiOff'
           | 'WifiOffIcon'
+          | 'WifiPen'
+          | 'WifiPenIcon'
+          | 'WifiSync'
+          | 'WifiSyncIcon'
+          | 'WifiZero'
+          | 'WifiZeroIcon'
           | 'Wind'
+          | 'WindArrowDown'
+          | 'WindArrowDownIcon'
           | 'WindIcon'
           | 'Wine'
           | 'WineIcon'
@@ -10838,6 +12713,577 @@ export interface ServiceCardBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'serviceCard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmbedCodeBlock".
+ */
+export interface EmbedCodeBlock {
+  /**
+   * Paste trusted HTML / iframe / script embed code here (for example Dubsado, Calendly, or other form embeds).
+   */
+  embedCode: string;
+  widthMode?: ('content' | 'full' | 'custom') | null;
+  /**
+   * Only used when “Custom width (px)” is selected.
+   */
+  customWidth?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'embedCode';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureCardsBlock".
+ */
+export interface FeatureCardsBlock {
+  /**
+   * Small text above the title
+   */
+  eyebrow?: string | null;
+  title: string;
+  /**
+   * Optional description below the title
+   */
+  description?: string | null;
+  features: {
+    image: number | Media;
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureCards';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureHighlightsBlock".
+ */
+export interface FeatureHighlightsBlock {
+  /**
+   * Optional badge text displayed above the title
+   */
+  badgeText?: string | null;
+  title: string;
+  /**
+   * Optional subtitle or description
+   */
+  subtitle?: string | null;
+  features: {
+    title: string;
+    /**
+     * Optional detailed description of the feature
+     */
+    description?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * When an image is added, features will display in a 2-column layout. Without image, features will display in a 3-column grid.
+   */
+  image?: (number | null) | Media;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureHighlights';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextSectionBlock".
+ */
+export interface TextSectionBlock {
+  eyebrow?: string | null;
+  title: string;
+  description?: string | null;
+  cta: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  textAlignment?: ('start' | 'center' | 'end') | null;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'textSection';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageContentType".
+ */
+export interface ImageContentType {
+  /**
+   * Small text above the title
+   */
+  eyebrow?: string | null;
+  title: string;
+  description?: string | null;
+  image: number | Media;
+  cta: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  /**
+   * Position of text content relative to image
+   */
+  textPlacement?: ('left' | 'right') | null;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock".
+ */
+export interface FAQBlock {
+  eyebrow?: string | null;
+  title: string;
+  description?: string | null;
+  faqItems: {
+    question: string;
+    answer: string;
+    id?: string | null;
+  }[];
+  /**
+   * Alignment of the header section
+   */
+  textAlignment?: ('start' | 'center' | 'end') | null;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQGridBlock".
+ */
+export interface FAQGridBlock {
+  title: string;
+  description?: string | null;
+  faqItems: {
+    question: string;
+    answer: string;
+    id?: string | null;
+  }[];
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faqGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Testimonial1Block".
+ */
+export interface Testimonial1Block {
+  /**
+   * The testimonial quote text
+   */
+  quote: string;
+  authorName: string;
+  /**
+   * Job title or role (optional)
+   */
+  authorRole?: string | null;
+  /**
+   * Company or organization name (optional)
+   */
+  authorCompany?: string | null;
+  /**
+   * Author profile picture (optional)
+   */
+  authorImage?: (number | null) | Media;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonial1';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Testimonial3Type".
+ */
+export interface Testimonial3Type {
+  /**
+   * Small text above the title (optional)
+   */
+  eyebrow?: string | null;
+  /**
+   * Main heading for the testimonial section
+   */
+  title?: string | null;
+  /**
+   * Descriptive text below the title (optional)
+   */
+  description?: string | null;
+  /**
+   * Optional button or link in the header section
+   */
+  cta: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  /**
+   * Add testimonials that users can navigate through
+   */
+  testimonials: {
+    /**
+     * The testimonial quote text
+     */
+    quote: string;
+    /**
+     * Author full name
+     */
+    authorName: string;
+    /**
+     * Job title or role (optional)
+     */
+    authorRole?: string | null;
+    /**
+     * Company or organization name (optional)
+     */
+    authorCompany?: string | null;
+    /**
+     * Author profile picture (optional)
+     */
+    authorImage?: (number | null) | Media;
+    id?: string | null;
+  }[];
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonial3';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Testimonial4Type".
+ */
+export interface Testimonial4Type {
+  /**
+   * Small text above the title (optional)
+   */
+  eyebrow?: string | null;
+  /**
+   * Main heading for the testimonial section
+   */
+  title?: string | null;
+  /**
+   * Descriptive text below the title (optional)
+   */
+  description?: string | null;
+  /**
+   * Optional button or link in the header section
+   */
+  cta: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  /**
+   * Add testimonial cards with ratings and author information
+   */
+  testimonials: {
+    /**
+     * The testimonial quote text
+     */
+    quote: string;
+    /**
+     * Author full name
+     */
+    authorName: string;
+    /**
+     * Job title or role (optional)
+     */
+    authorRole?: string | null;
+    /**
+     * Company or organization name (optional)
+     */
+    authorCompany?: string | null;
+    /**
+     * Author profile picture (optional)
+     */
+    authorImage?: (number | null) | Media;
+    /**
+     * Star rating for the testimonial
+     */
+    rating?: ('5' | '4.5' | '4' | '3.5' | '3') | null;
+    id?: string | null;
+  }[];
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonial4';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialGridBlock".
+ */
+export interface TestimonialGridBlock {
+  /**
+   * Section title (optional)
+   */
+  title?: string | null;
+  /**
+   * Section description (optional)
+   */
+  description?: string | null;
+  /**
+   * Add 3-6 testimonials for optimal grid layout
+   */
+  testimonials: {
+    /**
+     * The testimonial quote text
+     */
+    quote: string;
+    /**
+     * Author full name
+     */
+    authorName: string;
+    /**
+     * Job title or role (optional)
+     */
+    authorRole?: string | null;
+    /**
+     * Company or organization name (optional)
+     */
+    authorCompany?: string | null;
+    /**
+     * Author profile picture (optional)
+     */
+    authorImage?: (number | null) | Media;
+    id?: string | null;
+  }[];
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonialGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Pricing1Block".
+ */
+export interface Pricing1Block {
+  title: string;
+  /**
+   * Optional description below the title
+   */
+  description?: string | null;
+  /**
+   * Add 1–4 pricing plans
+   */
+  plans: {
+    /**
+     * Plan name, e.g. "Starter", "Pro"
+     */
+    name: string;
+    /**
+     * Price display string, e.g. "$29", "Free"
+     */
+    price: string;
+    /**
+     * e.g. "/month", "/year", "one-time"
+     */
+    interval?: string | null;
+    /**
+     * Short plan description (optional)
+     */
+    description?: string | null;
+    features: {
+      feature: string;
+      id?: string | null;
+    }[];
+    highlighted?: boolean | null;
+    cta: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+    id?: string | null;
+  }[];
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pricing1';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -11049,6 +13495,10 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
+        relationTo: 'user-avatar';
+        value: number | UserAvatar;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -11139,6 +13589,8 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
+        ctaCard?: T | CtaCardBlockSelect<T>;
+        ctaSection?: T | CtaSectionBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
@@ -11186,6 +13638,18 @@ export interface PagesSelect<T extends boolean = true> {
         pricingPlanGrid?: T | PricingPlanGridSelect<T>;
         sectionHeroWithBadge?: T | SectionHeroWithBadgeSelect<T>;
         serviceCardGrid?: T | ServiceCardGridBlockSelect<T>;
+        embedCode?: T | EmbedCodeBlockSelect<T>;
+        featureCards?: T | FeatureCardsBlockSelect<T>;
+        featureHighlights?: T | FeatureHighlightsBlockSelect<T>;
+        textSection?: T | TextSectionBlockSelect<T>;
+        imageContent?: T | ImageContentTypeSelect<T>;
+        faq?: T | FAQBlockSelect<T>;
+        faqGrid?: T | FAQGridBlockSelect<T>;
+        testimonial1?: T | Testimonial1BlockSelect<T>;
+        testimonial3?: T | Testimonial3TypeSelect<T>;
+        testimonial4?: T | Testimonial4TypeSelect<T>;
+        testimonialGrid?: T | TestimonialGridBlockSelect<T>;
+        pricing1?: T | Pricing1BlockSelect<T>;
       };
   meta?:
     | T
@@ -11195,8 +13659,8 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
       };
   publishedAt?: T;
+  generateSlug?: T;
   slug?: T;
-  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -11248,6 +13712,75 @@ export interface ContentBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaCardBlock_select".
+ */
+export interface CtaCardBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  ctaPrimary?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  ctaSecondary?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  variant?: T;
+  textAlignment?: T;
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaSectionBlock_select".
+ */
+export interface CtaSectionBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  ctaPrimary?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  ctaSecondary?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  textAlignment?: T;
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
   id?: T;
   blockName?: T;
 }
@@ -11445,6 +13978,298 @@ export interface ServiceCardBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EmbedCodeBlock_select".
+ */
+export interface EmbedCodeBlockSelect<T extends boolean = true> {
+  embedCode?: T;
+  widthMode?: T;
+  customWidth?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureCardsBlock_select".
+ */
+export interface FeatureCardsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  features?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureHighlightsBlock_select".
+ */
+export interface FeatureHighlightsBlockSelect<T extends boolean = true> {
+  badgeText?: T;
+  title?: T;
+  subtitle?: T;
+  features?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  image?: T;
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextSectionBlock_select".
+ */
+export interface TextSectionBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  textAlignment?: T;
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageContentType_select".
+ */
+export interface ImageContentTypeSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  image?: T;
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  textPlacement?: T;
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock_select".
+ */
+export interface FAQBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  faqItems?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  textAlignment?: T;
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQGridBlock_select".
+ */
+export interface FAQGridBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  faqItems?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Testimonial1Block_select".
+ */
+export interface Testimonial1BlockSelect<T extends boolean = true> {
+  quote?: T;
+  authorName?: T;
+  authorRole?: T;
+  authorCompany?: T;
+  authorImage?: T;
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Testimonial3Type_select".
+ */
+export interface Testimonial3TypeSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        authorName?: T;
+        authorRole?: T;
+        authorCompany?: T;
+        authorImage?: T;
+        id?: T;
+      };
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Testimonial4Type_select".
+ */
+export interface Testimonial4TypeSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        authorName?: T;
+        authorRole?: T;
+        authorCompany?: T;
+        authorImage?: T;
+        rating?: T;
+        id?: T;
+      };
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialGridBlock_select".
+ */
+export interface TestimonialGridBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        authorName?: T;
+        authorRole?: T;
+        authorCompany?: T;
+        authorImage?: T;
+        id?: T;
+      };
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Pricing1Block_select".
+ */
+export interface Pricing1BlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  plans?:
+    | T
+    | {
+        name?: T;
+        price?: T;
+        interval?: T;
+        description?: T;
+        features?:
+          | T
+          | {
+              feature?: T;
+              id?: T;
+            };
+        highlighted?: T;
+        cta?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -11468,8 +14293,8 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
+  generateSlug?: T;
   slug?: T;
-  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -11574,8 +14399,8 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
   slug?: T;
-  slugLock?: T;
   parent?: T;
   breadcrumbs?:
     | T
@@ -11594,6 +14419,8 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  avatar?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -11609,6 +14436,60 @@ export interface UsersSelect<T extends boolean = true> {
         id?: T;
         createdAt?: T;
         expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-avatar_select".
+ */
+export interface UserAvatarSelect<T extends boolean = true> {
+  alt?: T;
+  user?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        small?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        medium?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
       };
 }
 /**
@@ -11879,10 +14760,49 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
-  /**
-   * Choose the header layout and styling approach
-   */
-  headerStyle?: ('default' | 'modern' | 'minimal' | 'fullWidth') | null;
+  navItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  buttons?:
+    | {
+        type?: ('reference' | 'custom') | null;
+        reference?: {
+          relationTo: 'pages';
+          value: number | Page;
+        } | null;
+        url?: string | null;
+        label: string;
+        style?: ('default' | 'primary' | 'secondary' | 'outline' | 'link') | null;
+        /**
+         * Choose an icon to display in the button
+         */
+        icon?:
+          | ('none' | 'google' | 'email' | 'search' | 'user' | 'arrow-right' | 'external-link' | 'chevron-right')
+          | null;
+        /**
+         * Choose where to position the icon relative to the text
+         */
+        iconPosition?: ('before' | 'after' | 'only') | null;
+        id?: string | null;
+      }[]
+    | null;
   logo?: {
     /**
      * Check to use a different logo for the header instead of the global site logo
@@ -11900,6 +14820,47 @@ export interface Header {
      */
     height?: number | null;
   };
+  /**
+   * Choose the header layout and styling approach
+   */
+  headerStyle?: ('default' | 'modern' | 'minimal' | 'fullWidth') | null;
+  /**
+   * Enable to make the header stick to the top when scrolling
+   */
+  sticky?: boolean | null;
+  /**
+   * Choose the header background transparency level
+   */
+  backgroundType?: ('transparent' | 'semi-transparent' | 'solid') | null;
+  /**
+   * Hex color code (e.g., #000000) or CSS color name. Used for solid and semi-transparent backgrounds.
+   */
+  backgroundColor?: string | null;
+  /**
+   * Choose the text color scheme for the header navigation and content
+   */
+  textColor?: ('auto' | 'primary' | 'custom') | null;
+  /**
+   * Enter a hex color code (e.g., #FF0000) for custom text color
+   */
+  customTextColor?: string | null;
+  /**
+   * Choose where to position the navigation menu in the header
+   */
+  menuPosition?: ('left' | 'center' | 'right') | null;
+  /**
+   * Enable to show the search icon in the header navigation
+   */
+  showSearchBar?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
   navItems?:
     | {
         link: {
@@ -11920,68 +14881,6 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
-  settings?: {
-    /**
-     * Enable to make the header stick to the top when scrolling
-     */
-    sticky?: boolean | null;
-    /**
-     * Choose the header background transparency level
-     */
-    backgroundType?: ('transparent' | 'semi-transparent' | 'solid') | null;
-    /**
-     * Hex color code (e.g., #000000) or CSS color name. Used for solid and semi-transparent backgrounds.
-     */
-    backgroundColor?: string | null;
-    /**
-     * Choose the text color scheme for the header navigation and content
-     */
-    textColor?: ('auto' | 'primary' | 'custom') | null;
-    /**
-     * Enter a hex color code (e.g., #FF0000) for custom text color
-     */
-    customTextColor?: string | null;
-    /**
-     * Choose where to position the navigation menu in the header
-     */
-    menuPosition?: ('left' | 'center' | 'right') | null;
-    /**
-     * Enable to show the search icon in the header navigation
-     */
-    showSearchBar?: boolean | null;
-    buttons?:
-      | {
-          type?: ('reference' | 'custom') | null;
-          reference?: {
-            relationTo: 'pages';
-            value: number | Page;
-          } | null;
-          url?: string | null;
-          label: string;
-          style?: ('default' | 'primary' | 'secondary' | 'outline' | 'link') | null;
-          /**
-           * Choose an icon to display in the button
-           */
-          icon?:
-            | ('none' | 'google' | 'email' | 'search' | 'user' | 'arrow-right' | 'external-link' | 'chevron-right')
-            | null;
-          /**
-           * Choose where to position the icon relative to the text
-           */
-          iconPosition?: ('before' | 'after' | 'only') | null;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
- */
-export interface Footer {
-  id: number;
   logo?: {
     /**
      * Check to use a different logo for the footer instead of the global site logo
@@ -11999,26 +14898,6 @@ export interface Footer {
      */
     height?: number | null;
   };
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -12033,6 +14912,28 @@ export interface SiteSetting {
     phone?: string | null;
     address?: string | null;
   };
+  /**
+   * Add up to 6 legal/legislative policy links (e.g., Privacy, Terms, Cookies). These will be rendered in the footer and mobile menu. If there are more than 2, footer will show first 2 and an Other policies link.
+   */
+  legalPolicies?:
+    | {
+        name: string;
+        label?: string | null;
+        type: 'reference' | 'custom';
+        reference?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'posts';
+              value: number | Post;
+            } | null);
+        url?: string | null;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   branding: {
     /**
      * Used as fallback when logo is not available
@@ -12049,6 +14950,11 @@ export interface SiteSetting {
      * Upload your favicon (the small icon displayed in browser tabs). Recommended: 32x32px PNG or ICO file.
      */
     favicon?: (number | null) | Media;
+    useCustomAdminLogo?: boolean | null;
+    adminLogoMode?: ('simple' | 'lightDark') | null;
+    adminLogo?: (number | null) | Media;
+    adminLogoLight?: (number | null) | Media;
+    adminLogoDark?: (number | null) | Media;
   };
   themeSettings: {
     /**
@@ -12096,28 +15002,6 @@ export interface SiteSetting {
      */
     keywords?: string | null;
   };
-  /**
-   * Add up to 6 legal/legislative policy links (e.g., Privacy, Terms, Cookies). These will be rendered in the footer and mobile menu. If there are more than 2, footer will show first 2 and an Other policies link.
-   */
-  legalPolicies?:
-    | {
-        name: string;
-        label?: string | null;
-        type: 'reference' | 'custom';
-        reference?:
-          | ({
-              relationTo: 'pages';
-              value: number | Page;
-            } | null)
-          | ({
-              relationTo: 'posts';
-              value: number | Post;
-            } | null);
-        url?: string | null;
-        newTab?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -12126,17 +15010,6 @@ export interface SiteSetting {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  headerStyle?: T;
-  logo?:
-    | T
-    | {
-        overrideSiteLogo?: T;
-        logoMode?: T;
-        customLogo?: T;
-        customLogoLight?: T;
-        customLogoDark?: T;
-        height?: T;
-      };
   navItems?:
     | T
     | {
@@ -12151,29 +15024,36 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
-  settings?:
+  buttons?:
     | T
     | {
-        sticky?: T;
-        backgroundType?: T;
-        backgroundColor?: T;
-        textColor?: T;
-        customTextColor?: T;
-        menuPosition?: T;
-        showSearchBar?: T;
-        buttons?:
-          | T
-          | {
-              type?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              style?: T;
-              icon?: T;
-              iconPosition?: T;
-              id?: T;
-            };
+        type?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        style?: T;
+        icon?: T;
+        iconPosition?: T;
+        id?: T;
       };
+  logo?:
+    | T
+    | {
+        overrideSiteLogo?: T;
+        logoMode?: T;
+        customLogo?: T;
+        customLogoLight?: T;
+        customLogoDark?: T;
+        height?: T;
+      };
+  headerStyle?: T;
+  sticky?: T;
+  backgroundType?: T;
+  backgroundColor?: T;
+  textColor?: T;
+  customTextColor?: T;
+  menuPosition?: T;
+  showSearchBar?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -12183,16 +15063,6 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  logo?:
-    | T
-    | {
-        overrideSiteLogo?: T;
-        logoMode?: T;
-        customLogo?: T;
-        customLogoLight?: T;
-        customLogoDark?: T;
-        height?: T;
-      };
   navItems?:
     | T
     | {
@@ -12206,6 +15076,16 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  logo?:
+    | T
+    | {
+        overrideSiteLogo?: T;
+        logoMode?: T;
+        customLogo?: T;
+        customLogoLight?: T;
+        customLogoDark?: T;
+        height?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -12223,6 +15103,17 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         phone?: T;
         address?: T;
       };
+  legalPolicies?:
+    | T
+    | {
+        name?: T;
+        label?: T;
+        type?: T;
+        reference?: T;
+        url?: T;
+        newTab?: T;
+        id?: T;
+      };
   branding?:
     | T
     | {
@@ -12232,6 +15123,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         logoLight?: T;
         logoDark?: T;
         favicon?: T;
+        useCustomAdminLogo?: T;
+        adminLogoMode?: T;
+        adminLogo?: T;
+        adminLogoLight?: T;
+        adminLogoDark?: T;
       };
   themeSettings?:
     | T
@@ -12261,20 +15157,19 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         siteDescription?: T;
         keywords?: T;
       };
-  legalPolicies?:
-    | T
-    | {
-        name?: T;
-        label?: T;
-        type?: T;
-        reference?: T;
-        url?: T;
-        newTab?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

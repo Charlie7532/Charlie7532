@@ -89,6 +89,7 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
     limit: 1,
     overrideAccess: draft,
     pagination: false,
+    depth: 2, // Ensure relationships are populated (heroImage, categories, etc.)
     where: {
       slug: {
         equals: slug,

@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@/components/ui/button'
+import { Button } from '@heroui/react'
 import { CopyIcon } from '@payloadcms/ui/icons/Copy'
 import { useState } from 'react'
 
@@ -19,13 +19,14 @@ export function CopyButton({ code }: { code: string }) {
     <div className="flex justify-end align-middle">
       <Button
         className="flex gap-1"
-        variant={'secondary'}
-        onClick={async () => {
+        variant="secondary"
+        size="sm"
+        onPress={async () => {
           await navigator.clipboard.writeText(code)
           updateCopyStatus()
         }}
       >
-        <p>{text}</p>
+        {text}
         <CopyIcon />
       </Button>
     </div>

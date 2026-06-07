@@ -1,100 +1,138 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@heroui/styles';
+@import '../../styles/heroui-theme.css';
+
+@config '../../../tailwind.config.mjs';
+
+/* Custom variant for dark mode - supports both data-theme attribute and .dark class for HeroUI */
+@custom-variant dark (&:is([data-theme="dark"] *, .dark *));
+@custom-variant sm (@media (width >= theme(--breakpoint-sm)));
+@custom-variant md (@media (width >= theme(--breakpoint-md)));
+@custom-variant lg (@media (width >= theme(--breakpoint-lg)));
+@custom-variant xl (@media (width >= theme(--breakpoint-xl)));
+@custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
+
+/* Plugin imports for Tailwind v4 */
+@plugin "@tailwindcss/typography";
+
+/* Source paths - scan src files */
+@source '../../**/*.{ts,tsx}';
+
+/* Safelist for dynamically-generated classes */
+@source inline("lg:col-span-4");
+@source inline("lg:col-span-6");
+@source inline("lg:col-span-8");
+@source inline("lg:col-span-12");
+@source inline("border-border");
+@source inline("bg-card");
+@source inline("border-error");
+@source inline("bg-error/30");
+@source inline("border-success");
+@source inline("bg-success/30");
+@source inline("border-warning");
+@source inline("bg-warning/30");
+
+@theme {
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 86rem;
+  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans);
+}
+
+/* Accordion animations */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@layer utilities {
+  .animate-accordion-down {
+    animation: accordion-down 0.2s ease-out;
+  }
+  .animate-accordion-up {
+    animation: accordion-up 0.2s ease-out;
+  }
+}
 
 @layer base {
-
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-size: unset;
     font-weight: unset;
+    font-size: unset;
+  }
+}
+
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1rem;
   }
 
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 240 5% 96%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 202 98% 26%;
-    /* Default primary color: #015A86 */
-    /* Previous: 222.2 47.4% 11.2% */
-    /* Previous: #3E86B0 */
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 240 6% 80%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.2rem;
-
-    --success: 196 52% 74%;
-    --warning: 34 89% 85%;
-    --error: 10 100% 86%;
+  @variant sm {
+    .container {
+      max-width: var(--breakpoint-sm);
+    }
   }
 
-  [data-theme='dark'] {
-    --background: 0 0% 0%;
-    --foreground: 210 40% 98%;
+  @variant md {
+    .container {
+      max-width: var(--breakpoint-md);
+      padding-inline: 2rem;
+    }
+  }
 
-    --card: 0 0% 4%;
-    --card-foreground: 210 40% 98%;
+  @variant lg {
+    .container {
+      max-width: var(--breakpoint-lg);
+    }
+  }
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+  @variant xl {
+    .container {
+      max-width: var(--breakpoint-xl);
+    }
+  }
 
-    --primary: 202 85% 45%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 0, 0%, 15%, 0.8;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-
-    --success: 196 100% 14%;
-    --warning: 34 51% 25%;
-    --error: 10 39% 43%;
+  @variant 2xl {
+    .container {
+      max-width: var(--breakpoint-2xl);
+    }
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
 
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    background-color: var(--background);
+    color: var(--foreground);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -105,86 +143,6 @@ html {
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
-}
-
-/* Admin Bar and Header Integration */
-@layer base {
-  /* Ensure admin bar has maximum priority and proper spacing */
-  [data-payload-admin-bar] {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 999999 !important;
-    background: rgba(0, 0, 0, 0.9) !important;
-    backdrop-filter: blur(8px) !important;
-    min-height: 40px !important;
-  }
-
-  /* Add top padding to body when admin bar exists */
-  html:has([data-payload-admin-bar]) body,
-  body {
-    padding-top: var(--payload-admin-bar-height, 0px);
-  }
-}
-
-@layer utilities {
-  /* Header positioning that respects admin bar */
-  .header-with-admin-bar {
-    position: relative;
-    z-index: 10; /* Lower than admin bar */
-  }
-
-  .header-sticky {
-    position: sticky;
-    top: 0px; /* Start from top of viewport after body padding */
-    z-index: 10;
-  }
-
-  /* Content spacing utilities */
-  .main-content {
-    min-height: calc(100vh - var(--payload-admin-bar-height, 0px));
-  }
-}
-
-/* Admin Bar and Header Integration */
-@layer base {
-  /* Ensure admin bar has maximum priority and proper spacing */
-  [data-payload-admin-bar] {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 999999 !important;
-    background: rgba(0, 0, 0, 0.9) !important;
-    backdrop-filter: blur(8px) !important;
-    min-height: 40px !important;
-  }
-
-  /* Add top padding to body when admin bar exists */
-  html:has([data-payload-admin-bar]) body,
-  body {
-    padding-top: var(--payload-admin-bar-height, 0px);
-  }
-}
-
-@layer utilities {
-  /* Header positioning that respects admin bar */
-  .header-with-admin-bar {
-    position: relative;
-    z-index: 10; /* Lower than admin bar */
-  }
-
-  .header-sticky {
-    position: sticky;
-    top: 0px; /* Start from top of viewport after body padding */
-    z-index: 10;
-  }
-
-  /* Content spacing utilities */
-  .main-content {
-    min-height: calc(100vh - var(--payload-admin-bar-height, 0px));
-  }
 }
 
 /* Admin Bar and Header Integration */

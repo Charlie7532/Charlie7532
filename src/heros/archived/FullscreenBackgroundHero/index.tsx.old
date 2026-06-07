@@ -1,0 +1,111 @@
+"use client"
+
+import type React from 'react'
+import type { Page } from '@/payload-types'
+import { Media } from '@/components/Media'
+import { CMSLink } from '@/components/Link'
+import { cn } from '@/utilities/ui'
+import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { useEffect } from 'react'
+
+export const FullscreenBackgroundHero: React.FC<Page['hero']> = (props) => {
+  const {
+    fullscreenEyebrow,
+    fullscreenTitle,
+    fullscreenDescription,
+    fullscreenCtaPrimary,
+    fullscreenCtaSecondary,
+    fullscreenBackgroundImage,
+    fullscreenOverlay,
+    fullscreenContentAlignment,
+  } = props
+
+  const { setHeaderTheme } = useHeaderTheme()
+  const hasBgImage = fullscreenBackgroundImage && typeof fullscreenBackgroundImage === 'object'
+
+  useEffect(() => {
+    setHeaderTheme('dark')
+  }, [setHeaderTheme])
+
+  return (
+    <div
+      className='relative isolate overflow-hidden -mt-[10.4rem]'
+      data-theme="dark"
+    >
+      {hasBgImage && (
+        <>
+          <Media
+            resource={fullscreenBackgroundImage}
+            className='absolute inset-0 -z-20'
+            imgClassName='object-cover'
+            fill
+            priority
+          />
+          <div
+            className={cn('absolute inset-0 -z-10', {
+              'bg-transparent': fullscreenOverlay === 'none',
+              'bg-black/20': fullscreenOverlay === 'light',
+              'bg-black/40': !fullscreenOverlay || fullscreenOverlay === 'medium',
+              'bg-black/60': fullscreenOverlay === 'heavy',
+            })}
+          />
+        </>
+      )}
+
+      <div className='container relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-4xl mx-auto w-full'>
+          <div
+            className={cn('text-white space-y-6', {
+              'text-left': fullscreenContentAlignment === 'start',
+              'text-center': !fullscreenContentAlignment || fullscreenContentAlignment === 'center',
+              'text-right': fullscreenContentAlignment === 'end',
+            })}
+          >
+            {fullscreenEyebrow && (
+              <span className='text-white/80 text-sm uppercase tracking-wider font-semibold'>
+                {fullscreenEyebrow}
+              </span>
+            )}
+
+            {fullscreenTitle && (
+              <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-white'>
+                {fullscreenTitle}
+              </h1>
+            )}
+
+            {fullscreenDescription && (
+              <p className='text-lg sm:text-xl text-white/90 max-w-2xl mx-auto'>
+                {fullscreenDescription}
+              </p>
+            )}
+
+            {(fullscreenCtaPrimary?.label || fullscreenCtaSecondary?.label) && (
+              <div
+                className={cn('flex flex-wrap gap-4', {
+                  'justify-start': fullscreenContentAlignment === 'start',
+                  'justify-center': !fullscreenContentAlignment || fullscreenContentAlignment === 'center',
+                  'justify-end': fullscreenContentAlignment === 'end',
+                })}
+              >
+                {fullscreenCtaPrimary?.label && (
+                  <CMSLink
+                    {...fullscreenCtaPrimary}
+                    appearance={fullscreenCtaPrimary.appearance || 'default'}
+                    size='lg'
+                  />
+                )}
+                {fullscreenCtaSecondary?.label && (
+                  <CMSLink
+                    {...fullscreenCtaSecondary}
+                    appearance={fullscreenCtaSecondary.appearance || 'outline'}
+                    size='lg'
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

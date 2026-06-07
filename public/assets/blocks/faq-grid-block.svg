@@ -1,0 +1,53 @@
+<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="200" y="30" text-anchor="middle" fill="#1d1d1f" font-size="16" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem Ipsum Dolor</text>
+  
+  <!-- Description -->
+  <text x="200" y="50" text-anchor="middle" fill="#86868b" font-size="10" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor sit amet consectetur</text>
+  
+  <!-- FAQ Grid - Row 1 -->
+  <!-- Card 1 -->
+  <rect x="40" y="70" width="100" height="70" rx="6" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="50" y="90" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum?</text>
+  <text x="50" y="105" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">Dolor sit amet</text>
+  <text x="50" y="117" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">consectetur elit</text>
+  <text x="50" y="129" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">sed do eiusmod</text>
+  
+  <!-- Card 2 -->
+  <rect x="150" y="70" width="100" height="70" rx="6" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="160" y="90" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Consectetur?</text>
+  <text x="160" y="105" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">Tempor incididunt</text>
+  <text x="160" y="117" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">ut labore magna</text>
+  <text x="160" y="129" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">aliqua veniam</text>
+  
+  <!-- Card 3 -->
+  <rect x="260" y="70" width="100" height="70" rx="6" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="270" y="90" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Adipiscing?</text>
+  <text x="270" y="105" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">Quis nostrud</text>
+  <text x="270" y="117" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">exercitation qui</text>
+  <text x="270" y="129" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">officia deserunt</text>
+  
+  <!-- FAQ Grid - Row 2 -->
+  <!-- Card 4 -->
+  <rect x="40" y="150" width="100" height="70" rx="6" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="50" y="170" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Eiusmod?</text>
+  <text x="50" y="185" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">Ullamco laboris</text>
+  <text x="50" y="197" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">nisi aliquip ex ea</text>
+  <text x="50" y="209" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">commodo fugiat</text>
+  
+  <!-- Card 5 -->
+  <rect x="150" y="150" width="100" height="70" rx="6" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="160" y="170" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Tempor?</text>
+  <text x="160" y="185" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">Duis aute irure</text>
+  <text x="160" y="197" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">dolor reprehen</text>
+  <text x="160" y="209" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">derit voluptate</text>
+  
+  <!-- Card 6 -->
+  <rect x="260" y="150" width="100" height="70" rx="6" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="270" y="170" fill="#1d1d1f" font-size="10" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Incididunt?</text>
+  <text x="270" y="185" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">Excepteur sint</text>
+  <text x="270" y="197" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">occaecat cupidat</text>
+  <text x="270" y="209" fill="#86868b" font-size="8" font-family="-apple-system, Helvetica, sans-serif">non proident</text>
+</svg>

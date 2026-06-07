@@ -1,0 +1,42 @@
+<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#fafafa"/>
+  
+  <!-- Left Section - Header -->
+  <text x="30" y="45" fill="#86868b" font-size="8" font-weight="500" font-family="-apple-system, Helvetica, sans-serif" letter-spacing="1.5">TESTIMONIALS</text>
+  <text x="30" y="65" fill="#1d1d1f" font-size="15" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem Ipsum</text>
+  <text x="30" y="80" fill="#1d1d1f" font-size="15" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Dolor Sit</text>
+  <text x="30" y="102" fill="#86868b" font-size="9.5" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor sit</text>
+  <text x="30" y="115" fill="#86868b" font-size="9.5" font-family="-apple-system, Helvetica, sans-serif">amet, consectetur</text>
+  <text x="30" y="128" fill="#86868b" font-size="9.5" font-family="-apple-system, Helvetica, sans-serif">adipiscing elit.</text>
+  
+  <!-- Right Section - Testimonial Card -->
+  <rect x="180" y="30" width="190" height="160" rx="10" fill="#fff" stroke="#e8e8ed" stroke-width="1"/>
+  
+  <!-- Quote Text -->
+  <text x="195" y="55" fill="#1d1d1f" font-size="10" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">"Lorem ipsum dolor sit amet,</text>
+  <text x="195" y="68" fill="#1d1d1f" font-size="10" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">consectetur adipiscing elit,</text>
+  <text x="195" y="81" fill="#1d1d1f" font-size="10" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">sed do eiusmod tempor"</text>
+  
+  <!-- Author Section with Image -->
+  <rect x="195" y="100" width="60" height="60" rx="8" fill="#e8e8ed"/>
+  
+  <!-- Author Info -->
+  <text x="265" y="118" fill="#1d1d1f" font-size="9" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">John Doe</text>
+  <text x="265" y="130" fill="#86868b" font-size="7.5" font-family="-apple-system, Helvetica, sans-serif">CEO, Company</text>
+  
+  <!-- Navigation Controls -->
+  <g transform="translate(180, 205)">
+    <!-- Previous Button -->
+    <circle cx="12" cy="12" r="11" fill="#f5f5f7" stroke="#e8e8ed" stroke-width="1"/>
+    <text x="12" y="16" text-anchor="middle" fill="#86868b" font-size="12" font-family="-apple-system, Helvetica, sans-serif">‹</text>
+    
+    <!-- Next Button -->
+    <circle cx="38" cy="12" r="11" fill="#f5f5f7" stroke="#e8e8ed" stroke-width="1"/>
+    <text x="38" y="16" text-anchor="middle" fill="#86868b" font-size="12" font-family="-apple-system, Helvetica, sans-serif">›</text>
+    
+    <!-- Dots Indicator -->
+    <rect x="62" y="9" width="18" height="6" rx="3" fill="#1d1d1f"/>
+    <circle cx="86" cy="12" r="3" fill="#d2d2d7"/>
+    <circle cx="94" cy="12" r="3" fill="#d2d2d7"/>
+  </g>
+</svg>

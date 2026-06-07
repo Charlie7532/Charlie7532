@@ -3,6 +3,8 @@ import type { Block } from 'payload'
 export const Code: Block = {
   slug: 'code',
   interfaceName: 'CodeBlock',
+  imageURL: '/assets/blocks/code-block.svg',
+  imageAltText: 'A code snippet block with syntax highlighting',
   fields: [
     {
       name: 'language',

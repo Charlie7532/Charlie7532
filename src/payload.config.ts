@@ -1,6 +1,5 @@
 // storage-adapter-import-placeholder
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -12,29 +11,27 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
-import { Footer } from './Footer/config'
-import { Header } from './Header/config'
-import { SiteSettings } from './globals/SiteSettings/config'
+import { Footer } from './globals/Footer'
+import { Header } from './globals/Header'
+import { SiteSettings } from './globals/SiteSettings'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import brevoAdapter from './utilities/brevoAdapter'
+import { UserAvatar } from './collections/Users/avatar'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
+    avatar: { Component: '@/components/Admin/PayloadAdminAvatar', },
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
-      beforeLogin: ['@/components/BeforeLogin', '@/components/AdminFavicon'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: [
-        // '@/components/BeforeDashboard',
-        '@/components/AdminFavicon'
-      ],
+      providers: ['@/components/Admin/AdminHeroUIProvider'],
+      beforeNavLinks: ['@/components/SidebarHomeButton'],
+      // beforeLogin: ['@/components/BeforeLogin',],
+      // beforeDashboard: ['@/components/BeforeDashboard',],
+      logout: { Button: '@/components/Admin/EmptyLogoutButton', },
       graphics: {
         Logo: '@/components/Logo/AppLogoExpanded',
         Icon: '@/components/Logo/AppLogoCompact ',
@@ -42,10 +39,9 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: '- Main 12 Admin Panel',
+      icons: [{ rel: 'icon', url: '/admin-favicon.ico' }],
     },
-    importMap: {
-      baseDir: path.resolve(dirname),
-    },
+    importMap: { baseDir: path.resolve(dirname), },
     user: Users.slug,
     livePreview: {
       breakpoints: [
@@ -71,33 +67,15 @@ export default buildConfig({
     },
   },
   email: brevoAdapter(),
-  // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
-  db: vercelPostgresAdapter({
-    pool: {
-      connectionString: process.env.POSTGRES_URL || '',
-    },
-  }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  db: vercelPostgresAdapter({ pool: { connectionString: process.env.POSTGRES_URL || '', }, }),
+  collections: [Pages, Posts, Media, Categories, Users, UserAvatar],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SiteSettings],
-  plugins: [
-    ...plugins,
-    vercelBlobStorage({
-      collections: {
-        media: {
-          prefix: process.env.PROJECT_ID ? `${process.env.PROJECT_ID}/media` : 'media',
-        },
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    }),
-    // storage-adapter-placeholder
-  ],
-  secret: process.env.PAYLOAD_SECRET,
+  plugins,
   sharp,
-  typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
+  secret: process.env.PAYLOAD_SECRET,
+  typescript: { outputFile: path.resolve(dirname, 'payload-types.ts'), },
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {

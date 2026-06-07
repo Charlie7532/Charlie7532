@@ -1,13 +1,19 @@
 import React from 'react'
 
 import { HeaderThemeProvider } from './HeaderTheme'
-import { ThemeProvider } from './Theme'
+import { ThemeProvider, type ThemeProviderProps } from './Theme'
 
-export const Providers: React.FC<{
+export interface ProvidersProps extends Omit<ThemeProviderProps, 'children'> {
   children: React.ReactNode
-}> = ({ children }) => {
+}
+
+export const Providers: React.FC<ProvidersProps> = ({
+  children,
+  themeMode,
+  defaultTheme,
+}) => {
   return (
-    <ThemeProvider>
+    <ThemeProvider themeMode={themeMode} defaultTheme={defaultTheme}>
       <HeaderThemeProvider>{children}</HeaderThemeProvider>
     </ThemeProvider>
   )

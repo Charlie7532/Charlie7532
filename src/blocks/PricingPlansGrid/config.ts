@@ -5,7 +5,7 @@ import { FixedToolbarFeature, InlineToolbarFeature, lexicalEditor } from "@paylo
 export const PricingPlansGrid: Block = {
     slug: "pricingPlanGrid",
     interfaceName: "PricingPlanGrid",
-    imageURL: '/assets/blocks/pricing-plans-grid-block.png',
+    imageURL: '/assets/blocks/pricing-plans-grid-block.svg',
     fields: [
         {
             name: "heading",

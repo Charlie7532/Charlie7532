@@ -1,0 +1,1 @@
+export { FAQBlock } from './Component';

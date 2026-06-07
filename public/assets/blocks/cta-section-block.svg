@@ -1,0 +1,14 @@
+<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#fafafa"/>
+  <!-- Title -->
+  <text x="200" y="80" text-anchor="middle" fill="#1d1d1f" font-size="18" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem Ipsum Dolor Sit Amet</text>
+  <!-- Description -->
+  <text x="200" y="104" text-anchor="middle" fill="#86868b" font-size="10" font-family="-apple-system, Helvetica, sans-serif">Consectetur adipiscing elit, sed do eiusmod tempor.</text>
+  <text x="200" y="120" text-anchor="middle" fill="#86868b" font-size="10" font-family="-apple-system, Helvetica, sans-serif">Incididunt ut labore et dolore magna aliqua.</text>
+  <!-- Primary Button -->
+  <rect x="112" y="145" width="86" height="34" rx="17" fill="#1d1d1f"/>
+  <text x="155" y="167" text-anchor="middle" fill="#fff" font-size="10" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Get Started</text>
+  <!-- Secondary Button -->
+  <rect x="208" y="145" width="86" height="34" rx="17" fill="none" stroke="#48484a" stroke-width="1"/>
+  <text x="251" y="167" text-anchor="middle" fill="#86868b" font-size="10" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Learn More</text>
+</svg>

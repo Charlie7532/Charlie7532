@@ -1,6 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '../../access/authenticated'
+import { authenticated } from '@/access'
+import { usersLifecycle } from './lifecycle'
+import { usersFields } from './fields'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -12,15 +14,12 @@ export const Users: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Users',
     defaultColumns: ['name', 'email'],
     useAsTitle: 'name',
   },
   auth: true,
-  fields: [
-    {
-      name: 'name',
-      type: 'text',
-    },
-  ],
+  hooks: usersLifecycle,
+  fields: usersFields,
   timestamps: true,
 }

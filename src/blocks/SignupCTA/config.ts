@@ -2,7 +2,7 @@ import type { Block } from 'payload'
 
 export const SignupCTABlock: Block = {
   slug: 'signupCTA',
-  imageURL: '/assets/blocks/signup-cta.png',
+  imageURL: '/assets/blocks/signup-cta-block.svg',
   imageAltText: 'A signup call-to-action block with user avatars and buttons',
   labels: {
     singular: 'Signup CTA',

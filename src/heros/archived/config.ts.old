@@ -1,0 +1,443 @@
+import type { Field } from 'payload'
+
+import {
+  FixedToolbarFeature,
+  HeadingFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
+
+import { linkGroup } from '@/fields/linkGroup'
+import { link } from '@/fields/link'
+
+export const hero: Field = {
+  name: 'hero',
+  type: 'group',
+  fields: [
+    {
+      name: 'type',
+      type: 'select',
+      defaultValue: 'lowImpact',
+      label: 'Type',
+      options: [
+        {
+          label: 'None',
+          value: 'none',
+        },
+        {
+          label: 'High Impact',
+          value: 'highImpact',
+        },
+        {
+          label: 'Medium Impact',
+          value: 'mediumImpact',
+        },
+        {
+          label: 'Low Impact',
+          value: 'lowImpact',
+        },
+        {
+          label: 'Image & Text Hero',
+          value: 'imageText',
+        },
+        {
+          label: 'Video Hero',
+          value: 'videoHero',
+        },
+        {
+          label: 'Fullscreen Background Hero',
+          value: 'fullscreenBackground',
+        },
+      ],
+      required: true,
+    },
+    {
+      name: 'richText',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [
+            ...rootFeatures,
+            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+          ]
+        },
+      }),
+      label: false,
+    },
+    linkGroup({
+      overrides: {
+        maxRows: 2,
+      },
+    }),
+    {
+      name: 'media',
+      type: 'upload',
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+      },
+      relationTo: 'media',
+      required: true,
+    },
+    // Video Hero Fields
+    {
+      name: 'videoType',
+      label: 'Video Source',
+      type: 'select',
+      defaultValue: 'upload',
+      options: [
+        {
+          label: 'Upload Video',
+          value: 'upload',
+        },
+        {
+          label: 'External URL (YouTube, Vimeo, etc)',
+          value: 'url',
+        },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'videoHero',
+      },
+    },
+    {
+      name: 'videoFile',
+      label: 'Video File',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        condition: (_, { type, videoType } = {}) => type === 'videoHero' && videoType === 'upload',
+      },
+    },
+    {
+      name: 'videoUrl',
+      label: 'Video URL',
+      type: 'text',
+      admin: {
+        condition: (_, { type, videoType } = {}) => type === 'videoHero' && videoType === 'url',
+        description: 'YouTube, Vimeo, or direct video URL',
+      },
+    },
+    {
+      name: 'posterImage',
+      label: 'Poster Image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        condition: (_, { type } = {}) => type === 'videoHero',
+        description: 'Thumbnail shown before video loads',
+      },
+    },
+    {
+      name: 'videoSettings',
+      type: 'group',
+      admin: {
+        condition: (_, { type } = {}) => type === 'videoHero',
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'autoplay',
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                width: '33%',
+              },
+            },
+            {
+              name: 'loop',
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                width: '33%',
+              },
+            },
+            {
+              name: 'muted',
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                width: '34%',
+              },
+            },
+          ],
+        },
+        {
+          name: 'showControls',
+          type: 'checkbox',
+          defaultValue: false,
+        },
+      ],
+    },
+    {
+      name: 'overlaySettings',
+      type: 'group',
+      admin: {
+        condition: (_, { type } = {}) => type === 'videoHero',
+      },
+      fields: [
+        {
+          name: 'overlayOpacity',
+          type: 'number',
+          defaultValue: 50,
+          min: 0,
+          max: 100,
+          admin: {
+            description: 'Darkness overlay (0-100)',
+          },
+        },
+        {
+          name: 'overlayColor',
+          type: 'select',
+          defaultValue: 'black',
+          options: [
+            { label: 'Black', value: 'black' },
+            { label: 'Primary', value: 'primary' },
+            { label: 'Secondary', value: 'secondary' },
+            { label: 'None', value: 'none' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'heroHeight',
+      type: 'select',
+      defaultValue: 'large',
+      options: [
+        { label: 'Small (60vh)', value: 'small' },
+        { label: 'Medium (75vh)', value: 'medium' },
+        { label: 'Large (90vh)', value: 'large' },
+        { label: 'Full Screen (100vh)', value: 'full' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'videoHero',
+      },
+    },
+    {
+      name: 'contentAlignment',
+      type: 'select',
+      defaultValue: 'center',
+      options: [
+        { label: 'Start', value: 'start' },
+        { label: 'Center', value: 'center' },
+        { label: 'End', value: 'end' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'videoHero',
+      },
+    },
+    // Image & Text Hero Fields
+    {
+      name: 'eyebrow',
+      label: 'Eyebrow',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+        description: 'Small text above the title',
+      },
+    },
+    {
+      name: 'title',
+      label: 'Title',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+      },
+    },
+    {
+      name: 'subtitle',
+      label: 'Subtitle',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+        description: 'Short subtitle below the title',
+      },
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      type: 'textarea',
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+        description: 'Longer description text',
+      },
+    },
+    link({
+      overrides: {
+        name: 'ctaPrimary',
+        label: 'Primary CTA (Optional)',
+        admin: {
+          condition: (_, { type } = {}) => type === 'imageText',
+        },
+      },
+    }),
+    link({
+      overrides: {
+        name: 'ctaSecondary',
+        label: 'Secondary CTA (Optional)',
+        admin: {
+          condition: (_, { type } = {}) => type === 'imageText',
+        },
+      },
+    }),
+    {
+      name: 'image',
+      label: 'Hero Image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+        description: 'Main hero image',
+      },
+    },
+    {
+      name: 'textPlacement',
+      label: 'Text Placement',
+      type: 'radio',
+      defaultValue: 'top',
+      options: [
+        { label: 'Top', value: 'top' },
+        { label: 'Bottom', value: 'bottom' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+        layout: 'horizontal',
+        description: 'Position text above or below the image',
+      },
+    },
+    {
+      name: 'textAlignment',
+      label: 'Text Alignment',
+      type: 'radio',
+      defaultValue: 'center',
+      options: [
+        { label: 'Start', value: 'start' },
+        { label: 'Center', value: 'center' },
+        { label: 'End', value: 'end' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+        layout: 'horizontal',
+      },
+    },
+    {
+      name: 'spacingPreset',
+      label: 'Spacing',
+      type: 'select',
+      defaultValue: 'medium',
+      options: [
+        { label: 'None', value: 'none' },
+        { label: 'Small', value: 'small' },
+        { label: 'Medium', value: 'medium' },
+        { label: 'Large', value: 'large' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+      },
+    },
+    {
+      name: 'backgroundTheme',
+      label: 'Background Theme',
+      type: 'select',
+      defaultValue: 'default',
+      options: [
+        { label: 'Default', value: 'default' },
+        { label: 'Light', value: 'light' },
+        { label: 'Dark', value: 'dark' },
+        { label: 'Primary', value: 'primary' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'imageText',
+      },
+    },
+    // FullscreenBackgroundHero Fields
+    {
+      name: 'fullscreenEyebrow',
+      label: 'Eyebrow',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'fullscreenBackground',
+        description: 'Small text above the title',
+      },
+    },
+    {
+      name: 'fullscreenTitle',
+      label: 'Title',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'fullscreenBackground',
+      },
+    },
+    {
+      name: 'fullscreenDescription',
+      label: 'Description',
+      type: 'textarea',
+      admin: {
+        condition: (_, { type } = {}) => type === 'fullscreenBackground',
+        description: 'Description text below the title',
+      },
+    },
+    link({
+      overrides: {
+        name: 'fullscreenCtaPrimary',
+        label: 'Primary CTA (Optional)',
+        admin: {
+          condition: (_, { type } = {}) => type === 'fullscreenBackground',
+        },
+      },
+    }),
+    link({
+      overrides: {
+        name: 'fullscreenCtaSecondary',
+        label: 'Secondary CTA (Optional)',
+        admin: {
+          condition: (_, { type } = {}) => type === 'fullscreenBackground',
+        },
+      },
+    }),
+    {
+      name: 'fullscreenBackgroundImage',
+      label: 'Background Image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        condition: (_, { type } = {}) => type === 'fullscreenBackground',
+        description: 'Main background image',
+      },
+    },
+    {
+      name: 'fullscreenOverlay',
+      label: 'Overlay Opacity',
+      type: 'select',
+      defaultValue: 'medium',
+      options: [
+        { label: 'None', value: 'none' },
+        { label: 'Light', value: 'light' },
+        { label: 'Medium', value: 'medium' },
+        { label: 'Heavy', value: 'heavy' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'fullscreenBackground',
+        description: 'Dark overlay on the background image',
+      },
+    },
+    {
+      name: 'fullscreenContentAlignment',
+      label: 'Content Alignment',
+      type: 'radio',
+      defaultValue: 'center',
+      options: [
+        { label: 'Start', value: 'start' },
+        { label: 'Center', value: 'center' },
+        { label: 'End', value: 'end' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'fullscreenBackground',
+        layout: 'horizontal',
+      },
+    },
+  ],
+  label: false,
+}

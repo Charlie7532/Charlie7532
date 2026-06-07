@@ -1,0 +1,23 @@
+<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="200" y="35" text-anchor="middle" fill="#1d1d1f" font-size="16" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Frequently Asked Questions</text>
+  
+  <!-- FAQ Item 1 -->
+  <rect x="50" y="55" width="300" height="36" rx="4" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="65" y="75" fill="#1d1d1f" font-size="11" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Lorem ipsum dolor sit amet?</text>
+  <path d="M 325 72 L 328 75 L 331 72" stroke="#86868b" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- FAQ Item 2 (Expanded) -->
+  <rect x="50" y="100" width="300" height="70" rx="4" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="65" y="120" fill="#1d1d1f" font-size="11" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Consectetur adipiscing elit?</text>
+  <path d="M 325 117 L 328 114 L 331 117" stroke="#86868b" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="65" y="140" fill="#86868b" font-size="9" font-family="-apple-system, Helvetica, sans-serif">Sed do eiusmod tempor incididunt ut labore</text>
+  <text x="65" y="155" fill="#86868b" font-size="9" font-family="-apple-system, Helvetica, sans-serif">et dolore magna aliqua.</text>
+  
+  <!-- FAQ Item 3 -->
+  <rect x="50" y="179" width="300" height="36" rx="4" fill="#fff" stroke="#e5e5e7" stroke-width="1"/>
+  <text x="65" y="199" fill="#1d1d1f" font-size="11" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Ut enim ad minim veniam?</text>
+  <path d="M 325 196 L 328 199 L 331 196" stroke="#86868b" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -102,7 +102,7 @@ export const EnhancedConfigurableLogoClient: React.FC<EnhancedConfigurableLogoCl
                     className="object-contain dark:hidden max-w-none"
                     style={{
                         width: 'auto',
-                        height: height,
+                        height: 'auto',
                         maxHeight: height
                     }}
                     sizes={`(max-width: 768px) ${height * 2}px, ${height * 3}px`}
@@ -122,7 +122,7 @@ export const EnhancedConfigurableLogoClient: React.FC<EnhancedConfigurableLogoCl
                     className="object-contain hidden dark:block max-w-none"
                     style={{
                         width: 'auto',
-                        height: height,
+                        height: 'auto',
                         maxHeight: height
                     }}
                     sizes={`(max-width: 768px) ${height * 2}px, ${height * 3}px`}

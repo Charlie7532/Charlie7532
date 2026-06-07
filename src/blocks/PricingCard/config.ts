@@ -4,7 +4,7 @@ import * as lucideIcons from "lucide-react";
 export const PricingCard: Block = {
     slug: "pricingCard",
     interfaceName: "PricingCard",
-    imageURL: '/assets/blocks/pricing-card-block.png',
+    imageURL: '/assets/blocks/pricing-card-block.svg',
     fields: [
         {
             name: "icon",

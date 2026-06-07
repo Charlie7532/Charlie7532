@@ -9,8 +9,8 @@ import {
 
 export const TwoColumnTextImageBlock: Block = {
   slug: 'twoColumnTextImage',
-  imageURL: '/assets/blocks/two-column-text-image.png',
-  imageAltText: 'A nice thumbnail image to show what this block looks like',
+  imageURL: '/assets/blocks/two-column-text-image-block.svg',
+  imageAltText: 'A two-column layout with text and image',
   labels: {
     singular: 'Two Column Text Image',
     plural: 'Two Column Text Images',

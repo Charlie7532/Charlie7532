@@ -3,7 +3,8 @@
 import { cn } from "@/utilities/ui"
 import { motion } from "framer-motion"
 import React from "react"
-import { Card, CardBody, Button, Chip, Link } from "@heroui/react"
+import { Card, Button, Chip } from "@heroui/react"
+import NextLink from 'next/link'
 import * as LucideIcons from "lucide-react";
 import type { PricingCard as PricingCardProps } from "@/payload-types"
 
@@ -48,30 +49,26 @@ export const PricingCardClient: React.FC<Props> = ({ className, callToAction, de
 
     return <MotionWrapper key={title} className={cn(className)} {...motionProps}>
         <div className="relative">
-            {
-                highlight && highlightLabel && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                        <Chip
-                            // color="primary"
-                            variant="solid"
-                            size="sm"
-                            className="text-xs px-3 py-1 bg-[#C4A78A] text-white"
-                        >
-                            {highlightLabel}
-                        </Chip>
-                    </div>
-                )
-            }
+            {highlight && highlightLabel && (
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                    <Chip
+                        variant="primary"
+                        size="sm"
+                        className="text-xs px-3 py-1 bg-[#C4A78A] text-white"
+                    >
+                        {highlightLabel}
+                    </Chip>
+                </div>
+            )}
             <Card className={cn("h-full mt-4 rounded-xl", { "ring-2 ring-[#C4A78A] shadow-xl": highlight, "shadow-lg ring-1 ring-gray-200": !highlight })}>
-                <CardBody className="p-6 text-center flex flex-col h-full">
+                <Card.Content className="p-6 text-center flex flex-col h-full">
                     <div className="flex-grow">
                         <div className="mb-4">
-                            <div className="w-16 h-16 mx-auto bg-primary-100 rounded-full flex items-center justify-center mb-4">
+                            <div className="w-16 h-16 mx-auto bg-accent-soft rounded-full flex items-center justify-center mb-4">
                                 {Icon && <Icon className="text-[#C4A78A]" size={32} />}
                             </div>
                             <Chip
-                                // color={highlight ? "primary" : "default"}
-                                variant="solid"
+                                variant="primary"
                                 size="lg"
                                 className={cn("text-base mb-3", { "bg-[#C4A78A] text-white": highlight, "bg-gray-300": !highlight })}
                             >
@@ -85,18 +82,16 @@ export const PricingCardClient: React.FC<Props> = ({ className, callToAction, de
                     </div>
 
                     <div className="mt-auto">
-                        <Button
-                            // color={highlight ? "primary" : "default"}
-                            variant={highlight ? "solid" : "flat"}
-                            // size="sm"
-                            className={cn("w-full rounded-xl text-xs transition-colors ease-in", { "bg-[#C4A78A] text-white hover:bg-[#DFCBB4]": highlight, "bg-gray-100 hover:text-gray-500": !highlight })}
-                            as={Link}
-                            href={callToAction.link}
-                        >
-                            {callToAction.text}
-                        </Button>
+                        <NextLink href={callToAction.link} className="block">
+                            <Button
+                                variant={highlight ? "primary" : "tertiary"}
+                                className={cn("w-full rounded-xl text-xs transition-colors ease-in", { "bg-[#C4A78A] text-white hover:bg-[#DFCBB4]": highlight, "bg-gray-100 hover:text-gray-500": !highlight })}
+                            >
+                                {callToAction.text}
+                            </Button>
+                        </NextLink>
                     </div>
-                </CardBody>
+                </Card.Content>
             </Card>
         </div>
     </MotionWrapper>

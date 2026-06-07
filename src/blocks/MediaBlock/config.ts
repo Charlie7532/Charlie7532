@@ -2,7 +2,7 @@ import type { Block } from 'payload'
 
 export const MediaBlock: Block = {
   slug: 'mediaBlock',
-  imageURL: '/assets/blocks/media-block.png',
+  imageURL: '/assets/blocks/media-block.svg',
   imageAltText: 'A media block for displaying images with various settings',
   interfaceName: 'MediaBlock',
   fields: [

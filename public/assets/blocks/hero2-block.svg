@@ -1,0 +1,32 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#F3F4F6"/>
+  
+  <!-- Content Section (Top) -->
+  <rect x="50" y="40" width="300" height="80" rx="8" fill="white"/>
+  
+  <!-- Eyebrow -->
+  <rect x="150" y="52" width="100" height="8" rx="4" fill="#9CA3AF"/>
+  
+  <!-- Title -->
+  <rect x="80" y="70" width="240" height="16" rx="4" fill="#111827"/>
+  
+  <!-- Subtitle -->
+  <rect x="120" y="96" width="160" height="10" rx="4" fill="#6B7280"/>
+  
+  <!-- CTA Buttons -->
+  <rect x="130" y="115" width="60" height="20" rx="4" fill="#3B82F6"/>
+  <rect x="200" y="115" width="60" height="20" rx="4" fill="none" stroke="#3B82F6" stroke-width="2"/>
+  
+  <!-- Image Section (Bottom) -->
+  <rect x="50" y="140" width="300" height="140" rx="8" fill="white"/>
+  <rect x="60" y="150" width="280" height="120" rx="4" fill="#E5E7EB"/>
+  
+  <!-- Image Icon -->
+  <circle cx="200" cy="210" r="20" fill="#9CA3AF"/>
+  <path d="M190 210L200 200L210 210" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="185" y="210" width="30" height="15" rx="2" fill="white"/>
+  
+  <!-- Label -->
+  <text x="200" y="290" font-family="Arial, sans-serif" font-size="12" fill="#6B7280" text-anchor="middle">Hero 2 Block</text>
+</svg>

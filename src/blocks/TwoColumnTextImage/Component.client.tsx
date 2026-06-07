@@ -5,7 +5,6 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import type { Media } from "@/payload-types"
 import RichText from "@/components/RichText"
-import { CMSLink } from "@/components/Link"
 import { Button } from "@/components/ui/button"
 import { DefaultTypedEditorState } from "@payloadcms/richtext-lexical"
 
@@ -139,18 +138,15 @@ export const AnimatedTwoColumn: React.FC<AnimatedTwoColumnProps> = ({
                         variants={textElementVariants}
                     >
                         {links.map((link, i: number) => {
-                            // Determine button variant
-                            let variant: "default" | "secondary" | "outline" | "link" = "default"
+                            // Determine href
+                            const href = link.type === 'reference' && link.reference?.value
+                                ? typeof link.reference.value === 'object' && 'slug' in link.reference.value
+                                    ? `/${link.reference.value.slug}`
+                                    : '#'
+                                : link.url || '#'
 
-                            if (link.appearance === 'default' || link.appearance === 'primary') {
-                                variant = "default"
-                            } else if (link.appearance === 'secondary') {
-                                variant = "secondary"
-                            } else if (link.appearance === 'outline') {
-                                variant = "outline"
-                            } else if (link.appearance === 'link') {
-                                variant = "link"
-                            }
+                            // Map appearance to our button variant
+                            const variant = link.appearance === 'default' ? 'primary' : (link.appearance || 'primary')
 
                             return (
                                 <motion.div
@@ -159,19 +155,14 @@ export const AnimatedTwoColumn: React.FC<AnimatedTwoColumnProps> = ({
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
-                                    <CMSLink
-                                        type={link.type}
-                                        reference={link.reference}
-                                        url={link.url}
+                                    <Button
+                                        href={href}
+                                        variant={variant}
+                                        size="lg"
+                                        className="text-base"
                                     >
-                                        <Button
-                                            variant={variant}
-                                            size="lg"
-                                            className="text-base"
-                                        >
-                                            {link.label}
-                                        </Button>
-                                    </CMSLink>
+                                        {link.label}
+                                    </Button>
                                 </motion.div>
                             )
                         })}

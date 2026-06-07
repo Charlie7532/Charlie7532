@@ -3,7 +3,7 @@ import { Block } from "payload";
 export const ServiceCardBlock: Block = {
     slug: "serviceCard",
     interfaceName: "ServiceCardBlock",
-    imageURL: '/assets/blocks/service-card-block.png',
+    imageURL: '/assets/blocks/service-card-block.svg',
     fields: [
         {
             name: "title",

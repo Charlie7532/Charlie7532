@@ -108,10 +108,12 @@ export const seed = async ({
   const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
     payload.create({
       collection: 'users',
+      draft: false,
       data: {
         name: 'Demo Author',
         email: 'demo-author@example.com',
         password: 'password',
+        role: 'user',
       },
     }),
     payload.create({
@@ -137,8 +139,10 @@ export const seed = async ({
 
     payload.create({
       collection: 'categories',
+      draft: false,
       data: {
         title: 'Technology',
+        slug: 'technology',
         breadcrumbs: [
           {
             label: 'Technology',
@@ -150,8 +154,10 @@ export const seed = async ({
 
     payload.create({
       collection: 'categories',
+      draft: false,
       data: {
         title: 'News',
+        slug: 'news',
         breadcrumbs: [
           {
             label: 'News',
@@ -163,8 +169,10 @@ export const seed = async ({
 
     payload.create({
       collection: 'categories',
+      draft: false,
       data: {
         title: 'Finance',
+        slug: 'finance',
         breadcrumbs: [
           {
             label: 'Finance',
@@ -175,8 +183,10 @@ export const seed = async ({
     }),
     payload.create({
       collection: 'categories',
+      draft: false,
       data: {
         title: 'Design',
+        slug: 'design',
         breadcrumbs: [
           {
             label: 'Design',
@@ -188,8 +198,10 @@ export const seed = async ({
 
     payload.create({
       collection: 'categories',
+      draft: false,
       data: {
         title: 'Software',
+        slug: 'software',
         breadcrumbs: [
           {
             label: 'Software',
@@ -201,8 +213,10 @@ export const seed = async ({
 
     payload.create({
       collection: 'categories',
+      draft: false,
       data: {
         title: 'Engineering',
+        slug: 'engineering',
         breadcrumbs: [
           {
             label: 'Engineering',
@@ -219,6 +233,7 @@ export const seed = async ({
   // This way we can sort them by `createdAt` or `publishedAt` and they will be in the expected order
   const post1Doc = await payload.create({
     collection: 'posts',
+    draft: false,
     depth: 0,
     context: {
       disableRevalidate: true,
@@ -228,6 +243,7 @@ export const seed = async ({
 
   const post2Doc = await payload.create({
     collection: 'posts',
+    draft: false,
     depth: 0,
     context: {
       disableRevalidate: true,
@@ -237,6 +253,7 @@ export const seed = async ({
 
   const post3Doc = await payload.create({
     collection: 'posts',
+    draft: false,
     depth: 0,
     context: {
       disableRevalidate: true,
@@ -280,11 +297,13 @@ export const seed = async ({
   const [_, contactPage] = await Promise.all([
     payload.create({
       collection: 'pages',
+      draft: false,
       depth: 0,
       data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
     }),
     payload.create({
       collection: 'pages',
+      draft: false,
       depth: 0,
       data: contactPageData({ contactForm: contactForm }),
     }),
@@ -333,7 +352,7 @@ export const seed = async ({
               type: 'custom',
               label: 'Source Code',
               newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
+              url: 'https://github.com/MAIN-12/main12-web-template',
             },
           },
           {

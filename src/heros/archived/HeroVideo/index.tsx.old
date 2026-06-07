@@ -1,0 +1,257 @@
+'use client';
+
+import type { Page } from '@/payload-types';
+import { cn } from '@/utilities/ui';
+import { CMSLink } from '@/components/Link';
+import { Media } from '@/components/Media';
+import RichText from '@/components/RichText';
+import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { useHeaderTheme } from '@/providers/HeaderTheme';
+import React from 'react';
+
+const heightClasses = {
+    small: 'min-h-[60vh]',
+    medium: 'min-h-[75vh]',
+    large: 'min-h-[90vh]',
+    full: 'min-h-screen',
+};
+
+const overlayColorClasses = {
+    black: 'bg-black',
+    primary: 'bg-primary',
+    secondary: 'bg-secondary',
+    none: '',
+};
+
+const alignmentClasses = {
+    start: 'items-start text-left',
+    center: 'items-center text-center',
+    end: 'items-end text-right',
+};
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.2,
+            delayChildren: 0.3,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.6,
+            ease: [0.6, -0.05, 0.01, 0.99] as const,
+        },
+    },
+};
+
+export const VideoHero: React.FC<Page['hero']> = (props) => {
+    const {
+        richText,
+        links,
+        videoType,
+        videoFile,
+        videoUrl,
+        posterImage,
+        videoSettings,
+        overlaySettings,
+        heroHeight,
+        contentAlignment,
+    } = props;
+
+    const { setHeaderTheme } = useHeaderTheme();
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+    useEffect(() => {
+        setHeaderTheme('dark');
+    }, [setHeaderTheme]);
+
+    useEffect(() => {
+        if (videoRef.current && videoSettings?.autoplay) {
+            const playPromise = videoRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.catch((error) => {
+                    console.log('Autoplay prevented:', error);
+                });
+            }
+        }
+    }, [videoSettings?.autoplay]);
+
+    const renderVideo = () => {
+        const autoplay = videoSettings?.autoplay ?? true;
+        const loop = videoSettings?.loop ?? true;
+        const muted = videoSettings?.muted ?? true;
+        const showControls = videoSettings?.showControls ?? false;
+
+        if (videoType === 'upload' && videoFile) {
+            const videoSrc = typeof videoFile === 'object'
+                ? (videoFile.url ? String(videoFile.url) : undefined)
+                : (videoFile ? String(videoFile) : undefined);
+            const posterSrc = posterImage && typeof posterImage === 'object' ? posterImage.url ?? undefined : undefined;
+
+            return (
+                <video
+                    ref={videoRef}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    autoPlay={autoplay}
+                    loop={loop}
+                    muted={muted}
+                    playsInline
+                    controls={showControls}
+                    poster={posterSrc}
+                    onLoadedData={() => setIsVideoLoaded(true)}
+                    onCanPlay={() => setIsVideoLoaded(true)}
+                >
+                    <source src={videoSrc} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            );
+        }
+
+        if (videoType === 'url' && videoUrl) {
+            if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+                const videoId = extractYouTubeId(videoUrl);
+                return (
+                    <iframe
+                        className="absolute inset-0 h-full w-full"
+                        src={`https://www.youtube.com/embed/${videoId}?autoplay=${autoplay ? 1 : 0}&loop=${loop ? 1 : 0}&mute=${muted ? 1 : 0}&controls=${showControls ? 1 : 0}&playsinline=1`}
+                        allow="autoplay; fullscreen"
+                        allowFullScreen
+                        onLoad={() => setIsVideoLoaded(true)}
+                    />
+                );
+            }
+
+            if (videoUrl.includes('vimeo.com')) {
+                const videoId = extractVimeoId(videoUrl);
+                return (
+                    <iframe
+                        className="absolute inset-0 h-full w-full"
+                        src={`https://player.vimeo.com/video/${videoId}?autoplay=${autoplay ? 1 : 0}&loop=${loop ? 1 : 0}&muted=${muted ? 1 : 0}&controls=${showControls ? 1 : 0}`}
+                        allow="autoplay; fullscreen"
+                        allowFullScreen
+                        onLoad={() => setIsVideoLoaded(true)}
+                    />
+                );
+            }
+
+            return (
+                <video
+                    ref={videoRef}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    autoPlay={autoplay}
+                    loop={loop}
+                    muted={muted}
+                    playsInline
+                    controls={showControls}
+                    src={videoUrl}
+                    onLoadedData={() => setIsVideoLoaded(true)}
+                    onCanPlay={() => setIsVideoLoaded(true)}
+                >
+                    Your browser does not support the video tag.
+                </video>
+            );
+        }
+
+        return null;
+    };
+
+    const overlayOpacityValue = (overlaySettings?.overlayOpacity ?? 50) / 100;
+    const overlayColor = overlaySettings?.overlayColor ?? 'black';
+    const height = heroHeight ?? 'large';
+    const alignment = contentAlignment ?? 'center';
+
+    return (
+        <section className="relative -mt-[10.4rem] overflow-hidden text-white" data-theme="dark">
+            <div
+                className={cn(
+                    'relative flex justify-center',
+                    heightClasses[height],
+                    alignmentClasses[alignment],
+                )}
+            >
+                {/* Video Background */}
+                <div className="absolute inset-0 z-0">
+                    {renderVideo()}
+
+                    {/* Poster Image fallback solo para iframes sin poster nativo */}
+                    {posterImage && !isVideoLoaded && videoType === 'url' && (videoUrl?.includes('youtube.com') || videoUrl?.includes('youtu.be') || videoUrl?.includes('vimeo.com')) && (
+                        <Media
+                            resource={posterImage}
+                            className="absolute inset-0"
+                            imgClassName="object-cover"
+                            fill
+                            priority
+                        />
+                    )}
+                </div>
+
+                {/* Overlay */}
+                {overlayColor !== 'none' && (
+                    <div
+                        className={cn('absolute inset-0 z-10', overlayColorClasses[overlayColor])}
+                        style={{ opacity: overlayOpacityValue }}
+                    />
+                )}
+
+                {/* Content */}
+                <motion.div
+                    className="container relative z-20 w-full px-4 py-20 sm:px-6 lg:px-8"
+                    initial="hidden"
+                    animate="visible"
+                    variants={containerVariants}
+                >
+                    <div className="mx-auto max-w-4xl">
+                        {richText && (
+                            <motion.div variants={itemVariants}>
+                                <RichText
+                                    data={richText}
+                                    enableGutter={false}
+                                    className="text-white **:text-white"
+                                />
+                            </motion.div>
+                        )}
+
+                        {links && links.length > 0 && (
+                            <motion.div variants={itemVariants} className="mt-8 flex flex-wrap gap-4">
+                                {links.map((link, i) => {
+                                    return (
+                                        <CMSLink
+                                            key={i}
+                                            {...link.link}
+                                            appearance={i === 0 ? 'primary' : 'outline'}
+                                            size="lg"
+                                            className="shadow-lg"
+                                        />
+                                    );
+                                })}
+                            </motion.div>
+                        )}
+                    </div>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
+// Helper functions
+function extractYouTubeId(url: string): string {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2] && match[2].length === 11 ? match[2] : '';
+}
+
+function extractVimeoId(url: string): string {
+    const regExp = /vimeo.*\/(\d+)/i;
+    const match = url.match(regExp);
+    return match && match[1] ? match[1] : '';
+}

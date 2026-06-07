@@ -5,7 +5,6 @@ import { ServiceCardBlock } from '@/payload-types'
 import { CardBody, CardContainer, CardItem } from '@/components/ui/3d-card'
 import { Media } from '@/components/Media'
 import Link from 'next/link'
-import { Button } from '@heroui/react'
 import { cn } from '@/utilities/ui'
 
 type ServiceCardBlockProps = {

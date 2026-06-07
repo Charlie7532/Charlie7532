@@ -1,0 +1,13 @@
+<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="250" fill="#fafafa"/>
+  <!-- Eyebrow -->
+  <text x="200" y="50" text-anchor="middle" fill="#86868b" font-size="9" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">LOREM IPSUM</text>
+  <!-- Title -->
+  <text x="200" y="80" text-anchor="middle" fill="#1d1d1f" font-size="18" font-weight="600" font-family="-apple-system, Helvetica, sans-serif">Lorem Ipsum Dolor Sit</text>
+  <!-- Description -->
+  <text x="200" y="104" text-anchor="middle" fill="#86868b" font-size="10" font-family="-apple-system, Helvetica, sans-serif">Consectetur adipiscing elit, sed do eiusmod tempor.</text>
+  <text x="200" y="120" text-anchor="middle" fill="#86868b" font-size="10" font-family="-apple-system, Helvetica, sans-serif">Incididunt ut labore et dolore magna aliqua.</text>
+  <!-- CTA Button -->
+  <rect x="155" y="145" width="90" height="34" rx="17" fill="#1d1d1f"/>
+  <text x="200" y="167" text-anchor="middle" fill="#fff" font-size="11" font-weight="500" font-family="-apple-system, Helvetica, sans-serif">Learn More</text>
+</svg>
