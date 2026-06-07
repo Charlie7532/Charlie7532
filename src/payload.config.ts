@@ -68,7 +68,7 @@ export default buildConfig({
   },
   email: brevoAdapter(),
   editor: defaultLexical,
-  db: vercelPostgresAdapter({ pool: { connectionString: process.env.POSTGRES_URL || '', }, }),
+  db: vercelPostgresAdapter({ pool: { connectionString: process.env.DATABASE_URL || '', }, }),
   collections: [Pages, Posts, Media, Categories, Users, UserAvatar],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SiteSettings],

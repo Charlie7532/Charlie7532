@@ -37,7 +37,7 @@ const MoonIcon = () => (
     </svg>
 )
 
-export const IconThemeSwitch: React.FC = () => {
+export const IconThemeSwitch: React.FC<{ className?: string }> = ({ className }) => {
     const { theme, setTheme, resolvedTheme } = useTheme()
     const [mounted, setMounted] = React.useState(false)
 
@@ -54,7 +54,7 @@ export const IconThemeSwitch: React.FC = () => {
     if (!mounted) {
         return (
             <button
-                className="group w-9 h-9 rounded-full border border-gray-300 flex justify-center items-center dark:border-gray-600"
+                className={`group w-9 h-9 rounded-full border border-gray-300 flex justify-center items-center dark:border-gray-600 ${className ?? ''}`}
                 aria-label="Toggle theme"
                 data-theme-switch
                 disabled
@@ -69,7 +69,7 @@ export const IconThemeSwitch: React.FC = () => {
     return (
         <button
             onClick={toggleTheme}
-            className="group w-9 h-9 rounded-full border border-gray-300 flex justify-center items-center transition-all duration-500 hover:text-secondary-500 hover:border-secondary-500 dark:border-gray-600 dark:hover:border-secondary-400"
+            className={`group w-9 h-9 rounded-full border border-gray-300 flex justify-center items-center transition-all duration-500 hover:text-secondary-500 hover:border-secondary-500 dark:border-gray-600 dark:hover:border-secondary-400 ${className ?? ''}`}
             aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
             data-theme-switch
         >

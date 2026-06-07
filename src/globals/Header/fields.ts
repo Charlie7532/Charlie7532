@@ -312,13 +312,62 @@ const settingsFields: Field[] = [
     },
   },
   {
+    type: 'row',
+    admin: {
+      condition: (data) => data.headerStyle === 'modern',
+    },
+    fields: [
+      {
+        name: 'pillPaddingTop',
+        type: 'number',
+        label: 'Pill Padding Top (px)',
+        defaultValue: 10,
+        min: 0,
+        max: 60,
+        admin: { width: '25%' },
+      },
+      {
+        name: 'pillPaddingBottom',
+        type: 'number',
+        label: 'Pill Padding Bottom (px)',
+        defaultValue: 10,
+        min: 0,
+        max: 60,
+        admin: { width: '25%' },
+      },
+      {
+        name: 'pillPaddingLeft',
+        type: 'number',
+        label: 'Pill Padding Left (px)',
+        defaultValue: 10,
+        min: 0,
+        max: 60,
+        admin: { width: '25%' },
+      },
+      {
+        name: 'pillPaddingRight',
+        type: 'number',
+        label: 'Pill Padding Right (px)',
+        defaultValue: 10,
+        min: 0,
+        max: 60,
+        admin: { width: '25%' },
+      },
+    ],
+  },
+  {
     name: 'backgroundColor',
     type: 'text',
     label: 'Background Color',
     admin: {
-      description: 'Hex color code (e.g., #000000) or CSS color name. Used for solid and semi-transparent backgrounds.',
+      description: 'Color used for solid and semi-transparent backgrounds.',
       placeholder: '#ffffff',
       condition: (data) => data.backgroundType !== 'transparent',
+      components: {
+        Field: {
+          path: '@/components/fields/ColorPicker',
+        },
+      },
     },
   },
   {

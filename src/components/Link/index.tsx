@@ -11,6 +11,7 @@ type CMSLinkType = {
   appearance?: 'inline' | 'default' | 'primary' | 'secondary' | 'outline' | 'link' | 'destructive' | 'ghost' | null
   children?: React.ReactNode
   className?: string
+  style?: React.CSSProperties
   label?: string | null
   newTab?: boolean | null
   reference?: {
@@ -35,6 +36,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     appearance: appearanceFromProps,
     children,
     className,
+    style,
     label,
     newTab,
     reference,
@@ -58,7 +60,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   /* Ensure we don't break any styles set by richText */
   if (appearance === 'inline') {
     return (
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
+      <Link className={cn(className)} style={style} href={href || url || ''} {...newTabProps}>
         {label && label}
         {children && children}
       </Link>
@@ -74,6 +76,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
       as={Link}
       href={href || url || ''}
       className={className}
+      style={style}
       size={size}
       variant={variant}
       {...(newTabProps as any)}

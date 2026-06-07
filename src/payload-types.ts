@@ -14832,8 +14832,12 @@ export interface Header {
    * Choose the header background transparency level
    */
   backgroundType?: ('transparent' | 'semi-transparent' | 'solid') | null;
+  pillPaddingTop?: number | null;
+  pillPaddingBottom?: number | null;
+  pillPaddingLeft?: number | null;
+  pillPaddingRight?: number | null;
   /**
-   * Hex color code (e.g., #000000) or CSS color name. Used for solid and semi-transparent backgrounds.
+   * Color used for solid and semi-transparent backgrounds.
    */
   backgroundColor?: string | null;
   /**
@@ -15049,6 +15053,10 @@ export interface HeaderSelect<T extends boolean = true> {
   headerStyle?: T;
   sticky?: T;
   backgroundType?: T;
+  pillPaddingTop?: T;
+  pillPaddingBottom?: T;
+  pillPaddingLeft?: T;
+  pillPaddingRight?: T;
   backgroundColor?: T;
   textColor?: T;
   customTextColor?: T;

@@ -71,6 +71,7 @@ export interface ButtonProps
   startContent?: React.ReactNode
   endContent?: React.ReactNode
   href?: string
+  style?: React.CSSProperties
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -86,6 +87,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   onClick,
   type,
+  style,
   ...props
 }) => {
   const heroVariant = variantMap[(variant as OurVariant) || 'default']
@@ -99,6 +101,7 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <HeroLink
         href={href}
+        style={style}
         className={cn(
           heroButtonVariants({ variant: heroVariant, size: heroSize }),
           size === 'icon' && 'button--icon-only',
@@ -118,6 +121,7 @@ const Button: React.FC<ButtonProps> = ({
     <HeroButton
       ref={ref}
       className={cn(linkClasses, className)}
+      style={style}
       variant={heroVariant}
       size={heroSize}
       isIconOnly={size === 'icon'}

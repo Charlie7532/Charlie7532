@@ -48,35 +48,36 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data }) => {
     let textClasses = ''
     let linkClasses = ''
     const style: React.CSSProperties = {}
+    const linkStyle: React.CSSProperties = {}
 
     switch (textColor) {
       case 'primary':
         textClasses = 'text-primary'
-        linkClasses = 'text-primary hover:text-primary/80'
+        linkClasses = 'hover:opacity-70'
         break
       case 'custom':
         const customColor = (data as any)?.customTextColor
         if (customColor) {
           style.color = customColor
+          linkStyle.color = customColor
           textClasses = ''
-          linkClasses = `hover:opacity-80`
+          linkClasses = 'hover:opacity-70'
         } else {
           textClasses = 'text-gray-900 dark:text-white'
-          linkClasses = 'text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-200'
+          linkClasses = 'hover:opacity-70'
         }
         break
       case 'auto':
       default:
-        // Auto should be black in light theme, white in dark theme
         textClasses = 'text-gray-900 dark:text-white'
-        linkClasses = 'text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-200'
+        linkClasses = 'hover:opacity-70'
         break
     }
 
-    return { textClasses, linkClasses, style }
+    return { textClasses, linkClasses, style, linkStyle }
   }
 
-  const { textClasses, linkClasses, style: textStyle } = getTextColorStyles()
+  const { textClasses, linkClasses, style: textStyle, linkStyle } = getTextColorStyles()
 
   // Get icon component based on icon type
   const getIcon = (iconType: string) => {
@@ -133,7 +134,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data }) => {
     <nav className={`${layoutClasses.container} ${textClasses}`} style={textStyle}>
       <div id="menu" className={layoutClasses.menuSection}>
         {navItems.map(({ link }, i) => {
-          return <CMSLink key={i} {...link} appearance="link" className={`transition-all duration-200 ${linkClasses}`} />
+          return <CMSLink key={i} {...link} appearance="inline" className={`relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-[width] after:duration-300 hover:after:w-full transition-opacity duration-200 ${linkClasses}`} style={linkStyle} />
         })}
       </div>
       <div id="widgets" className={layoutClasses.widgetsSection}>

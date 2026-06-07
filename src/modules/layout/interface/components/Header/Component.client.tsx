@@ -112,6 +112,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, siteSettings }
     // Set high z-index for header
     style.zIndex = 99999
 
+    // For modern style, the pill handles its own background — keep the wrapper transparent
+    if (headerStyle === 'modern') {
+      return {
+        className: `w-full header-with-admin-bar bg-transparent ${textClasses} ${stickyClasses}`,
+        style: { zIndex: 99999 }
+      }
+    }
+
     return {
       className: `w-full header-with-admin-bar ${backgroundClasses} ${textClasses} ${stickyClasses}`,
       style
