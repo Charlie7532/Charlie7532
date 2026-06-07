@@ -279,26 +279,6 @@ Other        1 hr 30 mins    █░░░░░░░░░░░░░░░░
 
 <div align="center">
 
-### 🤝 Let's Connect
-
-<a href="https://linkedin.com/in/yourprofile" title="Connect on LinkedIn">
-  <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-</a>
-&nbsp;
-<a href="https://twitter.com/yourprofile" title="Follow on Twitter">
-  <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter" />
-</a>
-&nbsp;
-<a href="mailto:your@email.com" title="Send me an email">
-  <img src="https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
-</a>
-
-</div>
-
----
-
-<div align="center">
-
 ### 💭 Quote of the Day
 
 <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight" alt="Random Dev Quote" />
