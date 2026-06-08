@@ -69,8 +69,12 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    projects: Project;
     media: Media;
     categories: Category;
+    clients: Client;
+    institutes: Institute;
+    technologies: Technology;
     users: User;
     'user-avatar': UserAvatar;
     redirects: Redirect;
@@ -87,8 +91,12 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
+    institutes: InstitutesSelect<false> | InstitutesSelect<true>;
+    technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'user-avatar': UserAvatarSelect<false> | UserAvatarSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -296,6 +304,7 @@ export interface Page {
     | Testimonial4Type
     | TestimonialGridBlock
     | Pricing1Block
+    | LogoCarouselBlock
   )[];
   meta?: {
     title?: string | null;
@@ -846,18 +855,154 @@ export interface ArchiveBlock {
     [k: string]: unknown;
   } | null;
   populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
+  relationTo?: ('posts' | 'projects') | null;
   categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
+    | (
+        | {
+            relationTo: 'posts';
+            value: number | Post;
+          }
+        | {
+            relationTo: 'projects';
+            value: number | Project;
+          }
+      )[]
     | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  heroImage?: (number | null) | Media;
+  /**
+   * One or two sentences shown on project cards and the archive page.
+   */
+  summary?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  role?: string | null;
+  liveUrl?: string | null;
+  repoUrl?: string | null;
+  /**
+   * Link one or more clients/brands this project was built for
+   */
+  clients?: (number | Client)[] | null;
+  /**
+   * Link the technologies / tools used in this project
+   */
+  technologies?: (number | Technology)[] | null;
+  categories?: (number | Category)[] | null;
+  /**
+   * Show this project in the Featured Projects block
+   */
+  featured?: boolean | null;
+  completedAt?: string | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  name: string;
+  logo?: (number | null) | Media;
+  /**
+   * Optional alternate logo for dark backgrounds
+   */
+  logoDark?: (number | null) | Media;
+  website?: string | null;
+  industry?: string | null;
+  description?: string | null;
+  /**
+   * Include this client in the featured clients carousel block
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies".
+ */
+export interface Technology {
+  id: number;
+  name: string;
+  logo?: (number | null) | Media;
+  /**
+   * Optional alternate logo for dark backgrounds
+   */
+  logoDark?: (number | null) | Media;
+  website?: string | null;
+  category?:
+    | (
+        | 'frontend-framework'
+        | 'backend-runtime'
+        | 'language'
+        | 'database'
+        | 'cloud'
+        | 'web-services'
+        | 'dev-tools'
+        | 'scripting'
+        | 'ui-ux'
+        | 'graphic-design'
+        | 'cad'
+        | 'microcontroller'
+        | 'sbc'
+        | 'embedded'
+        | 'electronics-design'
+        | 'iot'
+        | 'protocol'
+        | 'wireless'
+        | '3d-printing'
+        | 'cnc'
+        | 'manufacturing'
+        | 'material'
+        | 'other'
+      )
+    | null;
+  /**
+   * Include in featured tech stack carousels
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -13287,6 +13432,73 @@ export interface Pricing1Block {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoCarouselBlock".
+ */
+export interface LogoCarouselBlock {
+  /**
+   * Optional label above the carousel (e.g. "Technologies I use")
+   */
+  heading?: string | null;
+  populateBy?: ('collection' | 'selection') | null;
+  /**
+   * Pull all items marked as "featured" from this collection
+   */
+  collectionType?: ('clients' | 'institutes' | 'technologies') | null;
+  /**
+   * Pick individual logos to show
+   */
+  selectedItems?:
+    | (
+        | {
+            relationTo: 'clients';
+            value: number | Client;
+          }
+        | {
+            relationTo: 'institutes';
+            value: number | Institute;
+          }
+        | {
+            relationTo: 'technologies';
+            value: number | Technology;
+          }
+      )[]
+    | null;
+  limit?: number | null;
+  autoplay?: boolean | null;
+  /**
+   * Milliseconds between slides (default 3000)
+   */
+  speed?: number | null;
+  logoSize?: ('sm' | 'md' | 'lg') | null;
+  grayscale?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'logoCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "institutes".
+ */
+export interface Institute {
+  id: number;
+  name: string;
+  logo?: (number | null) | Media;
+  /**
+   * Optional alternate logo for dark backgrounds
+   */
+  logoDark?: (number | null) | Media;
+  website?: string | null;
+  type?: ('university' | 'certification' | 'bootcamp' | 'other') | null;
+  credential?: string | null;
+  /**
+   * Include this institute in logo carousels
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -13483,12 +13695,28 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'institutes';
+        value: number | Institute;
+      } | null)
+    | ({
+        relationTo: 'technologies';
+        value: number | Technology;
       } | null)
     | ({
         relationTo: 'users';
@@ -13650,6 +13878,7 @@ export interface PagesSelect<T extends boolean = true> {
         testimonial4?: T | Testimonial4TypeSelect<T>;
         testimonialGrid?: T | TestimonialGridBlockSelect<T>;
         pricing1?: T | Pricing1BlockSelect<T>;
+        logoCarousel?: T | LogoCarouselBlockSelect<T>;
       };
   meta?:
     | T
@@ -14270,6 +14499,23 @@ export interface Pricing1BlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoCarouselBlock_select".
+ */
+export interface LogoCarouselBlockSelect<T extends boolean = true> {
+  heading?: T;
+  populateBy?: T;
+  collectionType?: T;
+  selectedItems?: T;
+  limit?: T;
+  autoplay?: T;
+  speed?: T;
+  logoSize?: T;
+  grayscale?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -14292,6 +14538,36 @@ export interface PostsSelect<T extends boolean = true> {
     | {
         id?: T;
         name?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  heroImage?: T;
+  summary?: T;
+  content?: T;
+  role?: T;
+  liveUrl?: T;
+  repoUrl?: T;
+  clients?: T;
+  technologies?: T;
+  categories?: T;
+  featured?: T;
+  completedAt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
       };
   generateSlug?: T;
   slug?: T;
@@ -14410,6 +14686,50 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  logoDark?: T;
+  website?: T;
+  industry?: T;
+  description?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "institutes_select".
+ */
+export interface InstitutesSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  logoDark?: T;
+  website?: T;
+  type?: T;
+  credential?: T;
+  featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies_select".
+ */
+export interface TechnologiesSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  logoDark?: T;
+  website?: T;
+  category?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -15195,6 +15515,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

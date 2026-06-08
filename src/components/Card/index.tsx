@@ -4,17 +4,19 @@ import useClickableCard from '@/utilities/useClickableCard'
 import Link from 'next/link'
 import React, { Fragment } from 'react'
 
-import type { Post } from '@/payload-types'
+import type { Post, Project } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
 export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
+export type CardProjectData = Pick<Project, 'slug' | 'categories' | 'meta' | 'title' | 'summary'>
+export type CardDoc = CardPostData | CardProjectData
 
 export const Card: React.FC<{
   alignItems?: 'center'
   className?: string
-  doc?: CardPostData
-  relationTo?: 'posts'
+  doc?: CardDoc
+  relationTo?: 'posts' | 'projects'
   showCategories?: boolean
   title?: string
 }> = (props) => {
@@ -22,11 +24,12 @@ export const Card: React.FC<{
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
   const { slug, categories, meta, title } = doc || {}
+  const summary = (doc as CardProjectData)?.summary
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
-  const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
+  const displayDescription = description?.replace(/\s/g, ' ') || summary
   const href = `/${relationTo}/${slug}`
 
   return (
@@ -88,7 +91,7 @@ export const Card: React.FC<{
             </h3>
           </div>
         )}
-        {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {displayDescription && <div className="mt-2"><p>{displayDescription}</p></div>}
       </div>
     </article>
   )

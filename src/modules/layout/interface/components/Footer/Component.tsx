@@ -58,7 +58,7 @@ export async function Footer() {
               <SocialMediaLinks
                 socialMediaItems={socialMediaPlatforms}
                 className="flex space-x-4"
-                iconClassName="w-4 h-4 text-gray-700 transition-all duration-500 group-hover:text-secondary-500"
+                iconClassName="w-4 h-4 transition-all duration-500"
               />
             )}
 

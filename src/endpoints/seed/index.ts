@@ -9,6 +9,9 @@ import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { seedTechnologies } from './technologies-seed'
+import { seedInstitutes } from './institutes-seed'
+import { seedClients } from './clients-seed'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -367,6 +370,16 @@ export const seed = async ({
       },
     }),
   ])
+
+  await seedTechnologies(payload, req).catch((e) =>
+    payload.logger.error({ err: e, message: 'Error seeding technologies' }),
+  )
+  await seedInstitutes(payload, req).catch((e) =>
+    payload.logger.error({ err: e, message: 'Error seeding institutes' }),
+  )
+  await seedClients(payload, req).catch((e) =>
+    payload.logger.error({ err: e, message: 'Error seeding clients' }),
+  )
 
   payload.logger.info('Seeded database successfully!')
 }

@@ -106,7 +106,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, siteSettings }
 
     // Sticky positioning - safe for admin bar
     if (isSticky) {
-      stickyClasses = 'header-sticky border-b border-gray-200/20 dark:border-gray-700/20'
+      stickyClasses = 'header-sticky'
     }
 
     // Set high z-index for header

@@ -35,6 +35,7 @@ import { Testimonial3 } from '@/blocks/Testimonial3/config'
 import { Testimonial4 } from '@/blocks/Testimonial4/config'
 import { TestimonialGrid } from '@/blocks/TestimonialGrid/config'
 import { Pricing1 } from '@/blocks/Pricing1/config'
+import { LogoCarousel } from '@/blocks/LogoCarousel/config'
 
 export const pagesFields: Field[] = [
   {
@@ -81,6 +82,7 @@ export const pagesFields: Field[] = [
               Testimonial4,
               TestimonialGrid,
               Pricing1,
+              LogoCarousel,
             ],
             required: true,
             admin: {

@@ -7,9 +7,13 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Clients } from './collections/Clients'
+import { Institutes } from './collections/Institutes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Projects } from './collections/Projects'
+import { Technologies } from './collections/Technologies'
 import { Users } from './collections/Users'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
@@ -30,7 +34,7 @@ export default buildConfig({
       providers: ['@/components/Admin/AdminHeroUIProvider'],
       beforeNavLinks: ['@/components/SidebarHomeButton'],
       // beforeLogin: ['@/components/BeforeLogin',],
-      // beforeDashboard: ['@/components/BeforeDashboard',],
+      beforeDashboard: ['@/components/BeforeDashboard',],
       logout: { Button: '@/components/Admin/EmptyLogoutButton', },
       graphics: {
         Logo: '@/components/Logo/AppLogoExpanded',
@@ -69,7 +73,7 @@ export default buildConfig({
   email: brevoAdapter(),
   editor: defaultLexical,
   db: vercelPostgresAdapter({ pool: { connectionString: process.env.DATABASE_URL || '', }, }),
-  collections: [Pages, Posts, Media, Categories, Users, UserAvatar],
+  collections: [Pages, Posts, Projects, Media, Categories, Clients, Institutes, Technologies, Users, UserAvatar],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SiteSettings],
   plugins,
