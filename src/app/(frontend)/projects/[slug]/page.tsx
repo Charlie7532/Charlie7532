@@ -64,7 +64,7 @@ const queryProjectBySlug = cache(async ({ slug }: { slug: string }) => {
         limit: 1,
         overrideAccess: draft,
         pagination: false,
-        depth: 2,
+        depth: 3,
         where: { slug: { equals: slug } },
     })
 

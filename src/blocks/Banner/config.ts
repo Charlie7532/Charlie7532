@@ -20,6 +20,7 @@ export const Banner: Block = {
         { label: 'Warning', value: 'warning' },
         { label: 'Error', value: 'error' },
         { label: 'Success', value: 'success' },
+        { label: 'Callout (centered card)', value: 'callout' },
       ],
       required: true,
     },

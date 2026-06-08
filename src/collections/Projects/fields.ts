@@ -12,6 +12,9 @@ import {
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { IconGridBlock } from '../../blocks/IconGrid/config'
+import { TechStackBlock } from '../../blocks/TechStack/config'
+import { TwoColumnTextImageBlock } from '../../blocks/TwoColumnTextImage/config'
 
 import {
     MetaDescriptionField,
@@ -55,7 +58,7 @@ export const projectsFields: Field[] = [
                             features: ({ rootFeatures }) => [
                                 ...rootFeatures,
                                 HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                                BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
+                                BlocksFeature({ blocks: [Banner, Code, MediaBlock, IconGridBlock, TechStackBlock, TwoColumnTextImageBlock] }),
                                 FixedToolbarFeature(),
                                 InlineToolbarFeature(),
                                 HorizontalRuleFeature(),
@@ -71,6 +74,44 @@ export const projectsFields: Field[] = [
                         type: 'row',
                         fields: [
                             {
+                                name: 'startDate',
+                                type: 'date',
+                                label: 'Start Date',
+                                admin: {
+                                    width: '50%',
+                                    date: { pickerAppearance: 'dayOnly' },
+                                    description: 'When did this project start?',
+                                },
+                            },
+                            {
+                                name: 'duration',
+                                type: 'text',
+                                label: 'Duration',
+                                admin: {
+                                    placeholder: 'e.g. 6 months, 1.5 Years',
+                                    width: '50%',
+                                    description: 'How long did the project take?',
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        type: 'row',
+                        fields: [
+                            {
+                                name: 'difficulty',
+                                type: 'select',
+                                label: 'Difficulty',
+                                admin: { width: '50%' },
+                                options: [
+                                    { label: '1/5 – Very Easy', value: '1' },
+                                    { label: '2/5 – Easy', value: '2' },
+                                    { label: '3/5 – Moderate', value: '3' },
+                                    { label: '4/5 – Hard', value: '4' },
+                                    { label: '5/5 – Expert', value: '5' },
+                                ],
+                            },
+                            {
                                 name: 'role',
                                 type: 'text',
                                 label: 'My Role',
@@ -79,6 +120,11 @@ export const projectsFields: Field[] = [
                                     width: '50%',
                                 },
                             },
+                        ],
+                    },
+                    {
+                        type: 'row',
+                        fields: [
                             {
                                 name: 'liveUrl',
                                 type: 'text',
