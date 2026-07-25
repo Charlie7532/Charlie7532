@@ -12,6 +12,7 @@ type AnimatedTwoColumnProps = {
     richText: DefaultTypedEditorState
     media: number | Media
     imagePosition?: ("left" | "right") | null
+    imageStyle?: ("cover" | "contain") | null
     links?:
     | {
         type?: ("reference" | "custom") | null
@@ -32,8 +33,10 @@ export const AnimatedTwoColumn: React.FC<AnimatedTwoColumnProps> = ({
     richText,
     media,
     imagePosition = "right",
+    imageStyle = "cover",
 }) => {
     const isImageLeft = imagePosition === "left"
+    const isContain = imageStyle === "contain"
 
     // Animation variants
     const containerVariants = {
@@ -176,22 +179,39 @@ export const AnimatedTwoColumn: React.FC<AnimatedTwoColumnProps> = ({
             >
                 <div className="relative">
                     {media && typeof media === "object" && media.url ? (
-                        <motion.div
-                            className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-100 shadow-2xl"
-                            whileHover={{ scale: 1.02 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <Image
-                                src={media.url}
-                                alt={media.alt || "Content image"}
-                                fill
-                                className="object-cover transition-transform duration-300 hover:scale-105"
-                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
-                                priority={false}
-                            />
-                            {/* Subtle overlay for better text contrast if needed */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent" />
-                        </motion.div>
+                        isContain ? (
+                            <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Image
+                                    src={media.url}
+                                    alt={media.alt || "Content image"}
+                                    width={media.width ?? 800}
+                                    height={media.height ?? 600}
+                                    className="w-full h-auto"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                                    priority={false}
+                                />
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-100 shadow-2xl"
+                                whileHover={{ scale: 1.02 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Image
+                                    src={media.url}
+                                    alt={media.alt || "Content image"}
+                                    fill
+                                    className="object-cover transition-transform duration-300 hover:scale-105"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                                    priority={false}
+                                />
+                                {/* Subtle overlay for better text contrast if needed */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent" />
+                            </motion.div>
+                        )
                     ) : (
                         <motion.div
                             className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-2xl flex items-center justify-center"

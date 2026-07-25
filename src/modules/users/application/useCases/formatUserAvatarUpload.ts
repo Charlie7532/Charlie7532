@@ -8,7 +8,7 @@ export function formatUserAvatarUpload(data: any, req: PayloadRequest, operation
 
   // Auto-generate alt text if not provided
   if (!data.alt) {
-    const user = req?.user
+    const user = req?.user as any
     const userName = user?.name || user?.email || 'user'
     data.alt = `${userName} - avatar`
   }

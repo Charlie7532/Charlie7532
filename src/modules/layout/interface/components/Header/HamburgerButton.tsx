@@ -28,7 +28,7 @@ export const HamburgerButton: React.FC<HamburgerButtonProps> = ({
         >
             {/* Top line */}
             <span
-                className={`block w-6 h-0.5 bg-gray-700 dark:bg-gray-300 transition-all duration-300 ease-in-out transform origin-center ${isOpen
+                className={`block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out transform origin-center ${isOpen
                     ? 'rotate-45 translate-y-1.5'
                     : 'rotate-0 translate-y-0'
                     }`}
@@ -36,13 +36,13 @@ export const HamburgerButton: React.FC<HamburgerButtonProps> = ({
 
             {/* Middle line */}
             <span
-                className={`block w-6 h-0.5 bg-gray-700 dark:bg-gray-300 transition-all duration-300 ease-in-out ${isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+                className={`block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out ${isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
                     }`}
             />
 
             {/* Bottom line */}
             <span
-                className={`block w-6 h-0.5 bg-gray-700 dark:bg-gray-300 transition-all duration-300 ease-in-out transform origin-center ${isOpen
+                className={`block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out transform origin-center ${isOpen
                     ? '-rotate-45 -translate-y-1.5'
                     : 'rotate-0 translate-y-0'
                     }`}

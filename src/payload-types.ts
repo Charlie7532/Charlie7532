@@ -64,6 +64,8 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    'payload-mcp-api-keys': PayloadMcpApiKeyAuthOperations;
+    'payload-mcp-public-api-keys': PayloadMcpPublicApiKeyAuthOperations;
   };
   blocks: {};
   collections: {
@@ -81,6 +83,8 @@ export interface Config {
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
+    'payload-mcp-api-keys': PayloadMcpApiKey;
+    'payload-mcp-public-api-keys': PayloadMcpPublicApiKey;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -103,6 +107,8 @@ export interface Config {
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
+    'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
+    'payload-mcp-public-api-keys': PayloadMcpPublicApiKeysSelect<false> | PayloadMcpPublicApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -127,7 +133,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | PayloadMcpApiKey | PayloadMcpPublicApiKey;
   jobs: {
     tasks: {
       schedulePublish: TaskSchedulePublish;
@@ -140,6 +146,42 @@ export interface Config {
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface PayloadMcpApiKeyAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface PayloadMcpPublicApiKeyAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -270,6 +312,10 @@ export interface Page {
          * Choose whether the image appears on the left or right side of the text
          */
         imagePosition?: ('left' | 'right') | null;
+        /**
+         * Cover crops/fills the container. Contain shows the full image without cropping (no shadow or border).
+         */
+        imageStyle?: ('cover' | 'contain') | null;
         links?:
           | {
               type?: ('reference' | 'custom') | null;
@@ -901,6 +947,15 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * When did this project start?
+   */
+  startDate?: string | null;
+  /**
+   * How long did the project take?
+   */
+  duration?: string | null;
+  difficulty?: ('1' | '2' | '3' | '4' | '5') | null;
   role?: string | null;
   liveUrl?: string | null;
   repoUrl?: string | null;
@@ -13571,6 +13626,168 @@ export interface Search {
   createdAt: string;
 }
 /**
+ * Bearer tokens used to authenticate MCP clients (Claude, Copilot, internal agents) against the /api/mcp endpoint.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys".
+ */
+export interface PayloadMcpApiKey {
+  id: number;
+  /**
+   * The user that the API key is associated with.
+   */
+  user: number | User;
+  /**
+   * A useful label for the API key.
+   */
+  label?: string | null;
+  /**
+   * The purpose of the API key.
+   */
+  description?: string | null;
+  projects?: {
+    /**
+     * Allow clients to find projects.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create projects.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update projects.
+     */
+    update?: boolean | null;
+  };
+  posts?: {
+    /**
+     * Allow clients to find posts.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create posts.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update posts.
+     */
+    update?: boolean | null;
+  };
+  pages?: {
+    /**
+     * Allow clients to find pages.
+     */
+    find?: boolean | null;
+  };
+  technologies?: {
+    /**
+     * Allow clients to find technologies.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create technologies.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update technologies.
+     */
+    update?: boolean | null;
+  };
+  categories?: {
+    /**
+     * Allow clients to find categories.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create categories.
+     */
+    create?: boolean | null;
+  };
+  clients?: {
+    /**
+     * Allow clients to find clients.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create clients.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update clients.
+     */
+    update?: boolean | null;
+  };
+  media?: {
+    /**
+     * Allow clients to find media.
+     */
+    find?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  collection: 'payload-mcp-api-keys';
+}
+/**
+ * Unused — the public MCP endpoint is anonymous. This collection exists only to satisfy the plugin internals.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-public-api-keys".
+ */
+export interface PayloadMcpPublicApiKey {
+  id: number;
+  /**
+   * The user that the API key is associated with.
+   */
+  user: number | User;
+  /**
+   * A useful label for the API key.
+   */
+  label?: string | null;
+  /**
+   * The purpose of the API key.
+   */
+  description?: string | null;
+  projects?: {
+    /**
+     * Allow clients to find projects.
+     */
+    find?: boolean | null;
+  };
+  technologies?: {
+    /**
+     * Allow clients to find technologies.
+     */
+    find?: boolean | null;
+  };
+  categories?: {
+    /**
+     * Allow clients to find categories.
+     */
+    find?: boolean | null;
+  };
+  clients?: {
+    /**
+     * Allow clients to find clients.
+     */
+    find?: boolean | null;
+  };
+  posts?: {
+    /**
+     * Allow clients to find posts.
+     */
+    find?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  collection: 'payload-mcp-public-api-keys';
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -13741,12 +13958,29 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'search';
         value: number | Search;
+      } | null)
+    | ({
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      } | null)
+    | ({
+        relationTo: 'payload-mcp-public-api-keys';
+        value: number | PayloadMcpPublicApiKey;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      }
+    | {
+        relationTo: 'payload-mcp-public-api-keys';
+        value: number | PayloadMcpPublicApiKey;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -13756,10 +13990,19 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      }
+    | {
+        relationTo: 'payload-mcp-public-api-keys';
+        value: number | PayloadMcpPublicApiKey;
+      };
   key?: string | null;
   value?:
     | {
@@ -13848,6 +14091,7 @@ export interface PagesSelect<T extends boolean = true> {
               richText?: T;
               media?: T;
               imagePosition?: T;
+              imageStyle?: T;
               links?:
                 | T
                 | {
@@ -14554,6 +14798,9 @@ export interface ProjectsSelect<T extends boolean = true> {
   heroImage?: T;
   summary?: T;
   content?: T;
+  startDate?: T;
+  duration?: T;
+  difficulty?: T;
   role?: T;
   liveUrl?: T;
   repoUrl?: T;
@@ -15002,6 +15249,103 @@ export interface SearchSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys_select".
+ */
+export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
+  user?: T;
+  label?: T;
+  description?: T;
+  projects?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  posts?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  pages?:
+    | T
+    | {
+        find?: T;
+      };
+  technologies?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  categories?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+      };
+  clients?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  media?:
+    | T
+    | {
+        find?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-public-api-keys_select".
+ */
+export interface PayloadMcpPublicApiKeysSelect<T extends boolean = true> {
+  user?: T;
+  label?: T;
+  description?: T;
+  projects?:
+    | T
+    | {
+        find?: T;
+      };
+  technologies?:
+    | T
+    | {
+        find?: T;
+      };
+  categories?:
+    | T
+    | {
+        find?: T;
+      };
+  clients?:
+    | T
+    | {
+        find?: T;
+      };
+  posts?:
+    | T
+    | {
+        find?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -15530,7 +15874,7 @@ export interface TaskSchedulePublish {
  * via the `definition` "BannerBlock".
  */
 export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
+  style: 'info' | 'warning' | 'error' | 'success' | 'callout';
   content: {
     root: {
       type: string;
@@ -15560,6 +15904,116 @@ export interface CodeBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IconGridBlock".
+ */
+export interface IconGridBlock {
+  /**
+   * Optional heading above the grid (e.g. "Operational Benefits")
+   */
+  sectionHeading?: string | null;
+  columns?: ('2' | '3' | '4') | null;
+  style?: ('boxed' | 'plain') | null;
+  items: {
+    icon:
+      | 'users'
+      | 'user'
+      | 'message-circle'
+      | 'mail'
+      | 'phone'
+      | 'bell'
+      | 'target'
+      | 'trending-up'
+      | 'bar-chart-2'
+      | 'pie-chart'
+      | 'bookmark'
+      | 'flag'
+      | 'star'
+      | 'gift'
+      | 'tag'
+      | 'pencil'
+      | 'paintbrush'
+      | 'layers'
+      | 'image'
+      | 'camera'
+      | 'video'
+      | 'laptop'
+      | 'monitor'
+      | 'smartphone'
+      | 'cpu'
+      | 'server'
+      | 'database'
+      | 'cloud'
+      | 'wifi'
+      | 'code'
+      | 'globe'
+      | 'link'
+      | 'search'
+      | 'filter'
+      | 'settings'
+      | 'shield'
+      | 'lock'
+      | 'key'
+      | 'eye'
+      | 'check-circle-2'
+      | 'calendar'
+      | 'clock'
+      | 'map-pin'
+      | 'home'
+      | 'folder'
+      | 'wrench'
+      | 'scissors'
+      | 'package'
+      | 'truck'
+      | 'zap'
+      | 'droplet'
+      | 'thermometer'
+      | 'layout-grid'
+      | 'heart'
+      | 'play'
+      | 'globe-2'
+      | 'award'
+      | 'handshake'
+      | 'lightbulb'
+      | 'rocket'
+      | 'sparkles';
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'iconGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TechStackBlock".
+ */
+export interface TechStackBlock {
+  /**
+   * e.g. "Technologies Used"
+   */
+  sectionHeading?: string | null;
+  /**
+   * Organise technologies into named groups (e.g. "Design", "Software"). Use a single group with no label for a flat list.
+   */
+  groups: {
+    /**
+     * Optional category heading (e.g. "Design", "Software")
+     */
+    groupLabel?: string | null;
+    /**
+     * Optional introductory paragraph shown before the logos in this group
+     */
+    description?: string | null;
+    technologies: (number | Technology)[];
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'techStack';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

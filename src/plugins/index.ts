@@ -15,6 +15,8 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
+import { mcp, mcpPublic } from './mcp'
+
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Main 12 web Template` : 'Main 12 web Template'
 }
@@ -117,4 +119,6 @@ export const plugins: Plugin[] = [
     token: process.env.BLOB_READ_WRITE_TOKEN,
   }),
   payloadCloudPlugin(),
+  mcp,
+  mcpPublic,
 ]

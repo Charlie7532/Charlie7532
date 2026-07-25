@@ -61,6 +61,19 @@ export const TwoColumnTextImageBlock: Block = {
       },
     },
     {
+      name: 'imageStyle',
+      type: 'select',
+      label: 'Image Style',
+      defaultValue: 'cover',
+      admin: {
+        description: 'Cover crops/fills the container. Contain shows the full image without cropping (no shadow or border).',
+      },
+      options: [
+        { label: 'Cover (cropped, with shadow)', value: 'cover' },
+        { label: 'Contain (full image, no shadow)', value: 'contain' },
+      ],
+    },
+    {
       name: 'links',
       type: 'array',
       label: 'Call-to-Action Links',

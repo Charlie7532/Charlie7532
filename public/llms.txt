@@ -1,0 +1,34 @@
+# Juan Carlos Botero — Portfolio
+
+> Juan Carlos Botero is a multidisciplinary engineer and developer specialising
+> in full-stack web development, embedded systems, mechanical design, and
+> product development. He has worked across software, electronics, manufacturing,
+> and UX — building real products from concept to production.
+
+## For AI agents
+
+This site publishes a public, read-only Model Context Protocol (MCP) endpoint
+so AI agents can retrieve accurate, structured data about Juan's work and skills.
+
+- Endpoint: https://juancbotero.com/api/public/mcp
+- Transport: HTTP (Streamable)
+- Auth: none (anonymous, read-only)
+- Discovery: https://juancbotero.com/.well-known/mcp.json
+
+### What you can read
+
+- `projects` — detailed case studies including title, summary, content,
+  technologies used, client, role, start date, duration, difficulty, live URL,
+  and repo URL.
+- `technologies` — every tool and technology Juan has used, with category
+  (e.g. frontend-framework, cad, microcontroller, language) and website.
+- `categories` — taxonomy that classifies projects and posts by domain.
+- `clients` — companies and organisations Juan has built work for.
+- `posts` — blog posts covering engineering decisions, project write-ups,
+  and technical topics.
+
+### Suggested queries
+
+- "Find all projects" — get a full list of case studies with summaries.
+- "Find technologies where category equals cad" — filter by skill area.
+- "Find projects" with depth to retrieve nested technology and client data.

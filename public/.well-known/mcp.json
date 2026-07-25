@@ -1,0 +1,22 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp-discovery.json",
+  "name": "Juan C Botero — Portfolio MCP",
+  "version": "1.0.0",
+  "description": "Public, read-only MCP server for Juan Carlos Botero's engineering portfolio. Exposes structured data about projects, technologies, clients, categories, and blog posts so AI agents can accurately answer questions about his work and skills.",
+  "publisher": {
+    "name": "Juan Carlos Botero",
+    "url": "https://juancbotero.com"
+  },
+  "endpoints": [
+    {
+      "url": "https://juancbotero.com/api/public/mcp",
+      "transport": "http",
+      "auth": "none"
+    }
+  ],
+  "capabilities": {
+    "tools": ["Find projects", "Find technologies", "Find categories", "Find clients", "Find posts"]
+  },
+  "writeAccess": false,
+  "contact": "jcarlosbotero@gmail.com"
+}
