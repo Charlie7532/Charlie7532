@@ -1042,6 +1042,10 @@ export interface Client {
 export interface Technology {
   id: number;
   name: string;
+  /**
+   * Brief intro shown on the technology page and search results
+   */
+  description?: string | null;
   logo?: (number | null) | Media;
   /**
    * Optional alternate logo for dark backgrounds
@@ -15060,6 +15064,7 @@ export interface InstitutesSelect<T extends boolean = true> {
  */
 export interface TechnologiesSelect<T extends boolean = true> {
   name?: T;
+  description?: T;
   logo?: T;
   logoDark?: T;
   website?: T;
