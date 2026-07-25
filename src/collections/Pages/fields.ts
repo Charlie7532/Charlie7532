@@ -43,6 +43,7 @@ export const pagesFields: Field[] = [
     name: 'title',
     type: 'text',
     required: true,
+    localized: true,
   },
   {
     type: 'tabs',
@@ -50,6 +51,7 @@ export const pagesFields: Field[] = [
       {
         fields: [hero],
         label: 'Hero',
+        localized: true,
       },
       {
         fields: [
@@ -93,10 +95,12 @@ export const pagesFields: Field[] = [
           },
         ],
         label: 'Content',
+        localized: true,
       },
       {
         name: 'meta',
         label: 'SEO',
+        localized: true,
         fields: [
           OverviewField({
             titlePath: 'meta.title',

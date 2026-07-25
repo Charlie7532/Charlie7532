@@ -1,5 +1,12 @@
 {
   "servers": {
+    "payload-localhost": {
+      "type": "http",
+      "url": "http://localhost:3000/api/mcp",
+      "headers": {
+        "Authorization": "Bearer cd9b2835-3b4b-4da3-93c5-30b46160c0c4"
+      }
+    },
     "next-devtools": {
       "command": "npx",
       "args": ["-y", "next-devtools-mcp@latest"]

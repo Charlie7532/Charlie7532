@@ -23,7 +23,7 @@ export const mcpCollections: NonNullable<MCPPluginConfig['collections']> = {
             'Blog post records. Agents can search, create, and update posts including title, content, categories, and SEO metadata.',
     },
     pages: {
-        enabled: { find: true },
+        enabled: { find: true, create: true, update: true },
         description: 'Static page records. Read-only for agents.',
     },
 
@@ -42,7 +42,7 @@ export const mcpCollections: NonNullable<MCPPluginConfig['collections']> = {
         description: 'Client/company records linked to projects.',
     },
     media: {
-        enabled: { find: true },
+        enabled: { find: true, create: true, update: true },
         description: 'Media library records (images, files). Read-only — uploads must go through the admin UI.',
     },
 }

@@ -118,7 +118,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'es') | ('en' | 'es')[];
   globals: {
     header: Header;
     footer: Footer;
@@ -129,7 +129,7 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'es';
   widgets: {
     'cloudflare-traffic': CloudflareTrafficWidget;
     'cloudflare-bandwidth': CloudflareBandwidthWidget;
@@ -13735,6 +13735,14 @@ export interface PayloadMcpApiKey {
      * Allow clients to find pages.
      */
     find?: boolean | null;
+    /**
+     * Allow clients to create pages.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update pages.
+     */
+    update?: boolean | null;
   };
   technologies?: {
     /**
@@ -13779,6 +13787,14 @@ export interface PayloadMcpApiKey {
      * Allow clients to find media.
      */
     find?: boolean | null;
+    /**
+     * Allow clients to create media.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update media.
+     */
+    update?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -15369,6 +15385,8 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
     | T
     | {
         find?: T;
+        create?: T;
+        update?: T;
       };
   technologies?:
     | T
@@ -15394,6 +15412,8 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
     | T
     | {
         find?: T;
+        create?: T;
+        update?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -16169,6 +16189,19 @@ export interface IconGridBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'iconGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectTechStackBlock".
+ */
+export interface ProjectTechStackBlock {
+  /**
+   * When unchecked, all technologies are shown in a single flat grid.
+   */
+  groupByCategory?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectTechStack';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

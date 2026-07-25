@@ -74,6 +74,11 @@ export default buildConfig({
   },
   email: brevoAdapter(),
   editor: defaultLexical,
+  localization: {
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   db: vercelPostgresAdapter({ pool: { connectionString: process.env.DATABASE_URL || '', }, }),
   collections: [Pages, Posts, Projects, Media, Categories, Clients, Institutes, Technologies, Users, UserAvatar],
   cors: [getServerSideURL()].filter(Boolean),

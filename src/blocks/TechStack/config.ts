@@ -3,8 +3,8 @@ import type { Block } from 'payload'
 export const TechStackBlock: Block = {
     slug: 'techStack',
     interfaceName: 'TechStackBlock',
-    imageURL: '/assets/blocks/tech-stack-block.svg',
-    imageAltText: 'Technology logos arranged in a grid with optional category groups',
+    // imageURL: '/assets/blocks/tech-stack-block.svg',
+    // imageAltText: 'Technology logos arranged in a grid with optional category groups',
     labels: {
         singular: 'Tech Stack',
         plural: 'Tech Stacks',

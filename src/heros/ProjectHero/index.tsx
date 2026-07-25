@@ -9,10 +9,9 @@ export const ProjectHero: React.FC<{ project: any }> = ({ project }) => {
     return (
         <div className={`relative flex items-end ${hasHeroImage ? '-mt-[10.4rem]' : 'pt-16 pb-4'}`}>
             <div
-                className={`container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] pb-8 ${hasHeroImage ? 'text-white' : ''
-                    }`}
+                className={`container z-10 relative pb-8 ${hasHeroImage ? 'text-white' : ''}`}
             >
-                <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
+                <div className="max-w-[64rem] mx-auto">
                     {categories && categories.length > 0 && (
                         <div className="uppercase text-sm mb-6">
                             {categories.map((cat: any, i: number) => {
