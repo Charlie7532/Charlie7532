@@ -131,6 +131,15 @@ export interface Config {
   };
   locale: null;
   widgets: {
+    'cloudflare-traffic': CloudflareTrafficWidget;
+    'cloudflare-bandwidth': CloudflareBandwidthWidget;
+    'cloudflare-cache-rate': CloudflareCacheRateWidget;
+    'cloudflare-devices': CloudflareDevicesWidget;
+    'cloudflare-protocol': CloudflareProtocolWidget;
+    'cloudflare-status-codes': CloudflareStatusCodesWidget;
+    'cloudflare-threats': CloudflareThreatsWidget;
+    'cloudflare-top-paths': CloudflareTopPathsWidget;
+    'cloudflare-world-map': CloudflareWorldMapWidget;
     collections: CollectionsWidget;
   };
   user: User | PayloadMcpApiKey | PayloadMcpPublicApiKey;
@@ -15911,6 +15920,96 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-traffic_widget".
+ */
+export interface CloudflareTrafficWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-bandwidth_widget".
+ */
+export interface CloudflareBandwidthWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-cache-rate_widget".
+ */
+export interface CloudflareCacheRateWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-devices_widget".
+ */
+export interface CloudflareDevicesWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-protocol_widget".
+ */
+export interface CloudflareProtocolWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-status-codes_widget".
+ */
+export interface CloudflareStatusCodesWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-threats_widget".
+ */
+export interface CloudflareThreatsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-top-paths_widget".
+ */
+export interface CloudflareTopPathsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-world-map_widget".
+ */
+export interface CloudflareWorldMapWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

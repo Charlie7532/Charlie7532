@@ -27,6 +27,7 @@
   "dependencies": {
     "@heroui/react": "^3.2.2",
     "@heroui/styles": "^3.2.2",
+    "@main12/payload-cloudflare-widgets": "^0.1.1",
     "@payloadcms/admin-bar": "3.86.0",
     "@payloadcms/db-vercel-postgres": "3.86.0",
     "@payloadcms/live-preview-react": "3.86.0",

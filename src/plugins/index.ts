@@ -1,3 +1,4 @@
+import { cloudflareWidgetsPlugin } from '@main12/payload-cloudflare-widgets'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
@@ -121,4 +122,5 @@ export const plugins: Plugin[] = [
   payloadCloudPlugin(),
   mcp,
   mcpPublic,
+  cloudflareWidgetsPlugin(),
 ]

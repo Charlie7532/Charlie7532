@@ -29,10 +29,18 @@ import { default as default_f8aac8edd5dde803bbebb1dadcc3c472 } from '@/component
 import { default as default_b071f7683a0bf61183f98194697e6e39 } from '@/components/Admin/EmptyLogoutButton'
 import { default as default_94a6a70cbadb7fb6025ad84852bbcc14 } from '@/components/Logo/AppLogoCompact '
 import { default as default_b8eccbc6e976e9f5be666a1b4a18a98c } from '@/components/Logo/AppLogoExpanded'
-import { default as default_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
 import { default as default_57542a803be6bc6602169e617924d624 } from '@/components/SidebarHomeButton'
 import { default as default_fe6522ffb7de26dad8c594d3f8d9234a } from '@/components/Admin/AdminHeroUIProvider'
 import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
+import { default as default_aa51342d8e3d93595ea6a4083dad5a3d } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-traffic'
+import { default as default_dee344074dace1ad221c276abb7cb4dd } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-bandwidth'
+import { default as default_b56d523abf55f9a797a965618c9d596a } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-cache-rate'
+import { default as default_649872f9c184e5adf2d0051b24a615a8 } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-devices'
+import { default as default_865a3f0dd9cd22631340ac2ce38da83e } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-protocol'
+import { default as default_c2ce354b7ab152d5156c75143e744c09 } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-status-codes'
+import { default as default_211073a85f980c93b65fc5b05df16104 } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-threats'
+import { default as default_4d5701bf391c6668d0b83f90c0bf89e0 } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-top-paths'
+import { default as default_8664884f9cf3a8e74ae379acb82a8fc1 } from '@main12/payload-cloudflare-widgets/widgets/cloudflare-world-map'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -68,9 +76,17 @@ export const importMap = {
   "@/components/Admin/EmptyLogoutButton#default": default_b071f7683a0bf61183f98194697e6e39,
   "@/components/Logo/AppLogoCompact #default": default_94a6a70cbadb7fb6025ad84852bbcc14,
   "@/components/Logo/AppLogoExpanded#default": default_b8eccbc6e976e9f5be666a1b4a18a98c,
-  "@/components/BeforeDashboard#default": default_1a7510af427896d367a49dbf838d2de6,
   "@/components/SidebarHomeButton#default": default_57542a803be6bc6602169e617924d624,
   "@/components/Admin/AdminHeroUIProvider#default": default_fe6522ffb7de26dad8c594d3f8d9234a,
   "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-traffic#default": default_aa51342d8e3d93595ea6a4083dad5a3d,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-bandwidth#default": default_dee344074dace1ad221c276abb7cb4dd,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-cache-rate#default": default_b56d523abf55f9a797a965618c9d596a,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-devices#default": default_649872f9c184e5adf2d0051b24a615a8,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-protocol#default": default_865a3f0dd9cd22631340ac2ce38da83e,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-status-codes#default": default_c2ce354b7ab152d5156c75143e744c09,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-threats#default": default_211073a85f980c93b65fc5b05df16104,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-top-paths#default": default_4d5701bf391c6668d0b83f90c0bf89e0,
+  "@main12/payload-cloudflare-widgets/widgets/cloudflare-world-map#default": default_8664884f9cf3a8e74ae379acb82a8fc1,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

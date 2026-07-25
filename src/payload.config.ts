@@ -23,18 +23,20 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import brevoAdapter from './utilities/brevoAdapter'
 import { UserAvatar } from './collections/Users/avatar'
+import { dashboard } from './widgets'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
+    dashboard,
     avatar: { Component: '@/components/Admin/PayloadAdminAvatar', },
     components: {
       providers: ['@/components/Admin/AdminHeroUIProvider'],
       beforeNavLinks: ['@/components/SidebarHomeButton'],
       // beforeLogin: ['@/components/BeforeLogin',],
-      beforeDashboard: ['@/components/BeforeDashboard',],
+      // beforeDashboard: ['@/components/BeforeDashboard',],
       logout: { Button: '@/components/Admin/EmptyLogoutButton', },
       graphics: {
         Logo: '@/components/Logo/AppLogoExpanded',
