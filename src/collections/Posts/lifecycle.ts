@@ -1,13 +1,12 @@
 import { handleAfterChangeHook, handleAfterDeleteHook, handleAfterReadHook } from '@/shared/handlers'
 
-import type { Post } from '../../payload-types'
-import { NextCacheRevalidator } from '../../shared/infrastructure/next/NextCacheRevalidator'
-import { PayloadUserRepository } from '../../modules/posts/infrastructure/payload/PayloadUserRepository'
-import { populatePublicAuthors } from '../../modules/posts/application/useCases/populatePublicAuthors'
-import { 
-  revalidatePostStateOnUpdate, 
-  revalidatePostStateOnDelete 
-} from '../../modules/posts/application/useCases/revalidatePostState'
+import { NextCacheRevalidator } from '@/shared/infrastructure/next/NextCacheRevalidator'
+import { PayloadUserRepository } from './infrastructure/payload/PayloadUserRepository'
+import { populatePublicAuthors } from './application/useCases/populatePublicAuthors'
+import {
+    revalidatePostStateOnUpdate,
+    revalidatePostStateOnDelete
+} from './application/useCases/revalidatePostState'
 
 const populateAuthorsAdapter = handleAfterReadHook({
   name: 'Posts',

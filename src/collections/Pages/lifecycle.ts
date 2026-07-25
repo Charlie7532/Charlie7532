@@ -1,11 +1,10 @@
 import { handleAfterChangeHook, handleAfterDeleteHook } from '@/shared/handlers'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
-import type { Page } from '../../payload-types'
-import { NextCacheRevalidator } from '../../shared/infrastructure/next/NextCacheRevalidator'
-import { 
-  revalidatePageStateOnUpdate, 
-  revalidatePageStateOnDelete 
-} from '../../modules/pages/application/useCases/revalidatePageState'
+import { NextCacheRevalidator } from '@/shared/infrastructure/next/NextCacheRevalidator'
+import {
+    revalidatePageStateOnUpdate,
+    revalidatePageStateOnDelete
+} from './application/useCases/revalidatePageState'
 
 const revalidatePageAdapter = handleAfterChangeHook({
   name: 'Pages',

@@ -155,6 +155,27 @@ export const projectsFields: Field[] = [
                         },
                     },
                     {
+                        name: 'populatedClients',
+                        type: 'array',
+                        access: {
+                            update: () => false,
+                        },
+                        admin: {
+                            disabled: true,
+                            readOnly: true,
+                        },
+                        fields: [
+                            {
+                                name: 'id',
+                                type: 'text',
+                            },
+                            {
+                                name: 'name',
+                                type: 'text',
+                            },
+                        ],
+                    },
+                    {
                         name: 'technologies',
                         type: 'relationship',
                         label: 'Technologies Used',
@@ -163,6 +184,31 @@ export const projectsFields: Field[] = [
                         admin: {
                             description: 'Link the technologies / tools used in this project',
                         },
+                    },
+                    {
+                        name: 'populatedTechnologies',
+                        type: 'array',
+                        access: {
+                            update: () => false,
+                        },
+                        admin: {
+                            disabled: true,
+                            readOnly: true,
+                        },
+                        fields: [
+                            {
+                                name: 'id',
+                                type: 'text',
+                            },
+                            {
+                                name: 'name',
+                                type: 'text',
+                            },
+                            {
+                                name: 'category',
+                                type: 'text',
+                            },
+                        ],
                     },
                     {
                         name: 'categories',

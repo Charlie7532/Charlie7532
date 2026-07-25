@@ -1,6 +1,6 @@
 import { handleBeforeChangeHook } from '@/shared/handlers'
-import { assignInitialAdminRole } from '../../modules/users/application/useCases/assignInitialAdminRole'
-import { formatUserAvatarUpload } from '../../modules/users/application/useCases/formatUserAvatarUpload'
+import { assignInitialAdminRole } from './application/useCases/assignInitialAdminRole'
+import { formatUserAvatarUpload } from './application/useCases/formatUserAvatarUpload'
 
 const ensureFirstUserIsSuperAdmin = handleBeforeChangeHook({
   name: 'Users',

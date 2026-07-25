@@ -350,6 +350,7 @@ export interface Page {
     | Testimonial4Type
     | TestimonialGridBlock
     | Pricing1Block
+    | Stats1Block
     | LogoCarouselBlock
   )[];
   meta?: {
@@ -963,10 +964,23 @@ export interface Project {
    * Link one or more clients/brands this project was built for
    */
   clients?: (number | Client)[] | null;
+  populatedClients?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
   /**
    * Link the technologies / tools used in this project
    */
   technologies?: (number | Technology)[] | null;
+  populatedTechnologies?:
+    | {
+        id?: string | null;
+        name?: string | null;
+        category?: string | null;
+      }[]
+    | null;
   categories?: (number | Category)[] | null;
   /**
    * Show this project in the Featured Projects block
@@ -1202,9 +1216,6 @@ export interface Form {
       )[]
     | null;
   submitButtonLabel?: string | null;
-  /**
-   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
-   */
   confirmationType?: ('message' | 'redirect') | null;
   confirmationMessage?: {
     root: {
@@ -1224,9 +1235,6 @@ export interface Form {
   redirect?: {
     url: string;
   };
-  /**
-   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
-   */
   emails?:
     | {
         emailTo?: string | null;
@@ -1235,9 +1243,6 @@ export interface Form {
         replyTo?: string | null;
         emailFrom?: string | null;
         subject: string;
-        /**
-         * Enter the message that should be sent in this email.
-         */
         message?: {
           root: {
             type: string;
@@ -7085,7 +7090,8 @@ export interface PricingCard {
     | 'ZoomOutIcon'
     | 'createLucideIcon'
     | 'default'
-    | 'icons';
+    | 'icons'
+    | 'module.exports';
   price: number;
   title: string;
   subtitle?: string | null;
@@ -12867,6 +12873,7 @@ export interface SectionHeroWithBadge {
           | 'createLucideIcon'
           | 'default'
           | 'icons'
+          | 'module.exports'
         )
       | null;
   };
@@ -13484,6 +13491,43 @@ export interface Pricing1Block {
   id?: string | null;
   blockName?: string | null;
   blockType: 'pricing1';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Stats1Block".
+ */
+export interface Stats1Block {
+  /**
+   * Small label above the title
+   */
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  stats?:
+    | {
+        /**
+         * e.g. "10K+", "99%", "$2M"
+         */
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stats1';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -14122,6 +14166,7 @@ export interface PagesSelect<T extends boolean = true> {
         testimonial4?: T | Testimonial4TypeSelect<T>;
         testimonialGrid?: T | TestimonialGridBlockSelect<T>;
         pricing1?: T | Pricing1BlockSelect<T>;
+        stats1?: T | Stats1BlockSelect<T>;
         logoCarousel?: T | LogoCarouselBlockSelect<T>;
       };
   meta?:
@@ -14743,6 +14788,27 @@ export interface Pricing1BlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Stats1Block_select".
+ */
+export interface Stats1BlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "LogoCarouselBlock_select".
  */
 export interface LogoCarouselBlockSelect<T extends boolean = true> {
@@ -14805,7 +14871,20 @@ export interface ProjectsSelect<T extends boolean = true> {
   liveUrl?: T;
   repoUrl?: T;
   clients?: T;
+  populatedClients?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
   technologies?: T;
+  populatedTechnologies?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+        category?: T;
+      };
   categories?: T;
   featured?: T;
   completedAt?: T;

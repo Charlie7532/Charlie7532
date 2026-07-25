@@ -29,7 +29,7 @@ export const usersFields: Field[] = [
     admin: {
       position: 'sidebar',
       components: {
-        Cell: '@/collections/Users/components/UserAvatarCell#UserAvatarCell',
+        Cell: '@/collections/Users/interface/components/UserAvatarCell#UserAvatarCell',
       },
     },
   },

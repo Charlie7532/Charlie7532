@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { createLivePreview, createPreviewURL } from '../../utilities/createPreview'
+import { createLivePreview, createPreviewURL } from '@/shared/infrastructure/payload/preview/createPreview'
 import { postsFields } from './fields'
 import { postsLifecycle } from './lifecycle'
 
