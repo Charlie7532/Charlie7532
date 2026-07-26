@@ -323,7 +323,7 @@ export async function run({ payload }: { payload: Payload }) {
             duration: '2 Years',
             difficulty: '5',
             role: 'Battery design · Logistics management',
-            content,
+content: content as any,
         },
     })
 

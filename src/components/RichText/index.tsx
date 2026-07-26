@@ -1,4 +1,10 @@
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { TwoColumnTextImage } from '@/blocks/TwoColumnTextImage/Component'
+import { IconGridBlock } from '@/blocks/IconGrid/Component'
+import { TechStackBlock } from '@/blocks/TechStack/Component'
+import { ImageContentBlock } from '@/blocks/ImageContent/Component'
+import { TextSectionBlock } from '@/blocks/TextSection/Component'
+import { EmbedCodeBlock } from '@/blocks/EmbedCode/Component'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
@@ -35,24 +41,32 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   return relationTo === 'posts' ? `/posts/${slug}` : `/${slug}`
 }
 
+const baseBlockConverters = {
+  banner: ({ node }: { node: SerializedBlockNode<any> }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
+  mediaBlock: ({ node }: { node: SerializedBlockNode<any> }) => (
+    <MediaBlock
+      className="col-start-1 col-span-3"
+      imgClassName="m-0"
+      {...node.fields}
+      captionClassName="mx-auto max-w-[48rem]"
+      enableGutter={false}
+      disableInnerContainer={true}
+    />
+  ),
+  code: ({ node }: { node: SerializedBlockNode<any> }) => <CodeBlock className="col-start-2" {...node.fields} />,
+  cta: ({ node }: { node: SerializedBlockNode<any> }) => <CallToActionBlock {...node.fields} />,
+  twoColumnTextImage: ({ node }: { node: SerializedBlockNode<any> }) => <TwoColumnTextImage {...node.fields} />,
+  iconGrid: ({ node }: { node: SerializedBlockNode<any> }) => <IconGridBlock {...node.fields} />,
+  techStack: ({ node }: { node: SerializedBlockNode<any> }) => <TechStackBlock {...node.fields} />,
+  imageContent: ({ node }: { node: SerializedBlockNode<any> }) => <ImageContentBlock {...node.fields} />,
+  textSection: ({ node }: { node: SerializedBlockNode<any> }) => <TextSectionBlock {...node.fields} />,
+  embedCode: ({ node }: { node: SerializedBlockNode<any> }) => <EmbedCodeBlock {...node.fields} />,
+}
+
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
-  blocks: {
-    banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
-    mediaBlock: ({ node }) => (
-      <MediaBlock
-        className="col-start-1 col-span-3"
-        imgClassName="m-0"
-        {...node.fields}
-        captionClassName="mx-auto max-w-[48rem]"
-        enableGutter={false}
-        disableInnerContainer={true}
-      />
-    ),
-    code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
-    cta: ({ node }) => <CallToActionBlock {...node.fields} />,
-  },
+  blocks: baseBlockConverters,
 })
 
 type Props = {
@@ -69,22 +83,7 @@ export default function RichText(props: Props) {
     ? ({ defaultConverters }) => ({
       ...defaultConverters,
       ...LinkJSXConverter({ internalDocToHref }),
-      blocks: {
-        banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
-        mediaBlock: ({ node }) => (
-          <MediaBlock
-            className="col-start-1 col-span-3"
-            imgClassName="m-0"
-            {...node.fields}
-            captionClassName="mx-auto max-w-[48rem]"
-            enableGutter={false}
-            disableInnerContainer={true}
-          />
-        ),
-        code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
-        cta: ({ node }) => <CallToActionBlock {...node.fields} />,
-        ...extraBlockConverters,
-      },
+      blocks: { ...baseBlockConverters, ...extraBlockConverters },
     })
     : jsxConverters
 

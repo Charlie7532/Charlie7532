@@ -35,16 +35,16 @@ export const ProjectHero: React.FC<{ project: any }> = ({ project }) => {
                                 <p>{client}</p>
                             </div>
                         )}
-                        {role && (
-                            <div className="flex flex-col gap-1">
-                                <p className="text-sm opacity-70">Role</p>
-                                <p>{role}</p>
-                            </div>
-                        )}
                         {completedAt && (
                             <div className="flex flex-col gap-1">
                                 <p className="text-sm opacity-70">Completed</p>
                                 <time dateTime={completedAt}>{formatDateTime(completedAt)}</time>
+                            </div>
+                        )}
+                        {role && (
+                            <div className="flex flex-col gap-1">
+                                <p className="text-sm opacity-70">Role</p>
+                                <p>{role}</p>
                             </div>
                         )}
                     </div>

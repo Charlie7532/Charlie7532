@@ -51,7 +51,6 @@ export const pagesFields: Field[] = [
       {
         fields: [hero],
         label: 'Hero',
-        localized: true,
       },
       {
         fields: [
@@ -95,7 +94,6 @@ export const pagesFields: Field[] = [
           },
         ],
         label: 'Content',
-        localized: true,
       },
       {
         name: 'meta',
