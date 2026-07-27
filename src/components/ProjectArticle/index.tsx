@@ -3,7 +3,7 @@
 import React from 'react'
 import RichText from '@/components/RichText'
 import TableOfContents from '@/components/TableOfContents'
-import { ProjectTechStackComponent } from '@/blocks/ProjectTechStack/Component'
+import { TechStackBlock } from '@/blocks/TechStack/Component'
 import { ExternalLink, Github } from 'lucide-react'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { cn } from '@/utilities/ui'
@@ -80,9 +80,9 @@ export function ProjectArticle({ project }: ProjectArticleProps) {
                                 data={content}
                                 enableGutter={false}
                                 extraBlockConverters={{
-                                    projectTechStack: ({ node }) => (
-                                        <ProjectTechStackComponent
-                                            technologies={project.technologies}
+                                    techStack: ({ node }) => (
+                                        <TechStackBlock
+                                            projectTechnologies={project.technologies}
                                             {...node.fields}
                                         />
                                     ),

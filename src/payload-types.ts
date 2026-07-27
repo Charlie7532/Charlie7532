@@ -16192,41 +16192,18 @@ export interface IconGridBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ProjectTechStackBlock".
- */
-export interface ProjectTechStackBlock {
-  /**
-   * When unchecked, all technologies are shown in a single flat grid.
-   */
-  groupByCategory?: boolean | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'projectTechStack';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TechStackBlock".
  */
 export interface TechStackBlock {
   /**
-   * e.g. "Technologies Used"
+   * Choose technologies manually or inherit from the project.
    */
-  sectionHeading?: string | null;
+  source: 'manual' | 'project';
+  technologies?: (number | Technology)[] | null;
   /**
-   * Organise technologies into named groups (e.g. "Design", "Software"). Use a single group with no label for a flat list.
+   * When unchecked, all technologies are shown in a single flat grid.
    */
-  groups: {
-    /**
-     * Optional category heading (e.g. "Design", "Software")
-     */
-    groupLabel?: string | null;
-    /**
-     * Optional introductory paragraph shown before the logos in this group
-     */
-    description?: string | null;
-    technologies: (number | Technology)[];
-    id?: string | null;
-  }[];
+  groupByCategory?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'techStack';
