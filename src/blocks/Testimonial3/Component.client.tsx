@@ -128,10 +128,10 @@ export const Testimonial3Client: React.FC<Props> = ({
                                         <Quote className="absolute -left-3 -top-3 z-10 h-10 w-10 text-muted-foreground/20" />
                                         <div className="relative aspect-square overflow-hidden rounded-xl">
                                             <Media
-                                                resource={
-                                                    testimonial.authorImage as Testimonial3Type['testimonials'][number]['authorImage'] &
-                                                    object
-                                                }
+                                                // `authorImage` is typed as `(number | null) | Media`, which
+                                                // is compatible with the `resource` prop on `Media`, so we can
+                                                // pass it directly without extra type gymnastics.
+                                                resource={testimonial.authorImage ?? undefined}
                                                 imgClassName="object-cover"
                                                 fill
                                             />
