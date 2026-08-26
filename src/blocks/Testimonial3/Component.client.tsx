@@ -27,9 +27,14 @@ export const Testimonial3Client: React.FC<Props> = ({
     if (!testimonials || testimonials.length === 0) return null
 
     const testimonial = testimonials[current]
-    if (!testimonial) return null
 
-    const hasImage = testimonial.authorImage && typeof testimonial.authorImage === 'object'
+    // `testimonials` is typed as `(number | Testimonial)[]` in `Testimonial3Type`,
+    // so we need to guard against the numeric ID variant before accessing fields.
+    if (!testimonial || typeof testimonial === 'number') return null
+
+    const hasImage =
+        testimonial.authorImage &&
+        typeof testimonial.authorImage === 'object'
 
     function next() {
         setCurrent((prev) => (prev + 1) % testimonials.length)
