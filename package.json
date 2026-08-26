@@ -66,7 +66,8 @@
     "react-dom": "19.2.7",
     "react-hook-form": "7.81.0",
     "sharp": "0.34.2",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.6",

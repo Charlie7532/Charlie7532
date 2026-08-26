@@ -5,6 +5,7 @@ import { TechStackBlock } from '@/blocks/TechStack/Component'
 import { ImageContentBlock } from '@/blocks/ImageContent/Component'
 import { TextSectionBlock } from '@/blocks/TextSection/Component'
 import { EmbedCodeBlock } from '@/blocks/EmbedCode/Component'
+import { ImageGalleryBlock } from '@/blocks/ImageGallery/Component'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
@@ -61,6 +62,7 @@ const baseBlockConverters = {
   imageContent: ({ node }: { node: SerializedBlockNode<any> }) => <ImageContentBlock {...node.fields} />,
   textSection: ({ node }: { node: SerializedBlockNode<any> }) => <TextSectionBlock {...node.fields} />,
   embedCode: ({ node }: { node: SerializedBlockNode<any> }) => <EmbedCodeBlock {...node.fields} />,
+  imageGallery: ({ node }: { node: SerializedBlockNode<any> }) => <ImageGalleryBlock {...node.fields} />,
 }
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({

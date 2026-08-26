@@ -13796,6 +13796,12 @@ export interface PayloadMcpApiKey {
      */
     update?: boolean | null;
   };
+  'payload-mcp-tool'?: {
+    /**
+     * Download an image from a public URL and upload it to the Payload media library. Returns the new media record ID and URL. Use this to import images from external sources (e.g. WordPress blogs) without needing a local file or multipart upload.
+     */
+    importMediaFromUrl?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -15415,6 +15421,11 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
         create?: T;
         update?: T;
       };
+  'payload-mcp-tool'?:
+    | T
+    | {
+        importMediaFromUrl?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   enableAPIKey?: T;
@@ -16107,6 +16118,30 @@ export interface CodeBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageGalleryBlock".
+ */
+export interface ImageGalleryBlock {
+  /**
+   * Add a subtle border around each image cell to emphasise the mosaic grid structure.
+   */
+  showBorder?: boolean | null;
+  /**
+   * Add images for this mosaic group. Use multiple Image Gallery blocks for separate visual sections.
+   */
+  images: {
+    image: number | Media;
+    /**
+     * Optional caption shown in the lightbox
+     */
+    caption?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageGallery';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
