@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { headers } from 'next/headers'
+import type { Page } from '@/payload-types'
 
 export const maxDuration = 300
 
@@ -104,7 +105,7 @@ export async function GET(): Promise<Response> {
                         "I'm Juan Carlos Botero, also known as Charlie. I thrive on being proactive, passionate, and meticulously detail-oriented. When it comes to taking on new projects, I possess a remarkable ability to autonomously learn and adapt swiftly to various subjects. My expertise lies in product design, automation, and manufacturing, where I consistently deliver exceptional performance.",
                     ),
                 ]),
-                media: profilePhoto.id,
+                media: profilePhoto?.id,
                 mediaDisplayAlignment: 'right',
             },
 
@@ -118,7 +119,7 @@ export async function GET(): Promise<Response> {
                         'I possess comprehensive knowledge of the product development lifecycle, spanning from initial conceptualization to successful market integration. This expertise extends beyond physical products to encompass digital realms, emphasizing a holistic approach centered on enhancing user experience. Yes, I also design web applications and AI-based concepts.',
                     ),
                 ]),
-                media: lifecycleImage.id,
+                media: lifecycleImage?.id,
                 imagePosition: 'right',
                 imageStyle: 'contain',
                 populateBy: 'collection',
@@ -138,42 +139,42 @@ export async function GET(): Promise<Response> {
                         authorName: 'Jorge Andrés Barrera',
                         authorRole: 'CTO',
                         authorCompany: 'Ellin US LLC',
-                        authorImage: jorgeImage.id,
+                        authorImage: jorgeImage?.id,
                     },
                     {
                         quote: 'Juan Carlos is a very attentive, dedicated, and highly initiative-driven person. He has a great passion for engineering and the ability to learn quickly. He has a positive attitude and is capable of solving problems easily when they arise. He possesses skills in computer programming and is a pleasant individual with good energy.',
                         authorName: 'Veronica Botero',
                         authorRole: 'MBA Fashion Designer',
                         authorCompany: 'Brand Management, Social Media Expert',
-                        authorImage: veronicaImage.id,
+                        authorImage: veronicaImage?.id,
                     },
                     {
                         quote: 'I have had the privilege of consulting and working with Juan Carlos for an extended period, and I continue to be impressed by the consistently outstanding results he delivers. Juan\'s reliability and commitment to exceeding expectations make him a valuable collaborator. His insights into engineering challenges are truly insightful, and I have full confidence in his ability to tackle complex tasks.',
                         authorName: 'Paulina Ferrer',
                         authorRole: 'Creative Marketing Specialist',
                         authorCompany: 'Meni LLC',
-                        authorImage: paulinaImage.id,
+                        authorImage: paulinaImage?.id,
                     },
                     {
                         quote: 'I have had the pleasure of working closely with Juan on numerous engineering projects, and I can confidently attest to his exceptional skills and attention to detail. Juan is not only a natural talent in engineering but also someone who goes above and beyond his responsibilities. His commitment to delivering high-quality results is truly commendable.',
                         authorName: 'Andres Garcia',
                         authorRole: 'R&D Analyst',
                         authorCompany: 'Prominerales S.A.S',
-                        authorImage: andresGarciaImage.id,
+                        authorImage: andresGarciaImage?.id,
                     },
                     {
                         quote: 'Juan Carlos has consistently demonstrated a strong work ethic and dedication to his role. His initiative-driven approach sets him apart, and he\'s always willing to take on additional responsibilities. Juan has a passion for engineering that is contagious, and he has a remarkable ability to learn quickly and adapt to new challenges.',
                         authorName: 'Andres Goez',
                         authorRole: 'CEO',
                         authorCompany: 'Firefly Creative Group',
-                        authorImage: andresGoezImage.id,
+                        authorImage: andresGoezImage?.id,
                     },
                     {
                         quote: 'I have had the pleasure of mentoring Juan in his engineering endeavors, and I can confidently say that he is a gifted individual with a keen eye for detail. Juan\'s commitment to excellence and his continuous pursuit of knowledge make him stand out. His programming skills are top-notch, and he consistently brings fresh insights to the table.',
                         authorName: 'Alejandro Mafla',
                         authorRole: 'R&D Director',
                         authorCompany: 'Mitsubishi Electric',
-                        authorImage: alejandroImage.id,
+                        authorImage: alejandroImage?.id,
                     },
                 ],
             },
@@ -234,8 +235,8 @@ export async function GET(): Promise<Response> {
                 title: 'Home',
                 hero: {
                     type: 'none',
-                    media: profilePhoto.id,
-                },
+                    ...(profilePhoto ? { media: profilePhoto.id as number } : {}),
+                } as Page['hero'],
                 layout,
             },
         })

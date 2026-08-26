@@ -76,8 +76,8 @@ export const iconOptions = [
 export const IconGridBlock: Block = {
     slug: 'iconGrid',
     interfaceName: 'IconGridBlock',
-    imageURL: '/assets/blocks/icon-grid-block.svg',
-    imageAltText: 'Grid of icon cards with titles and descriptions',
+    // imageURL: '/assets/blocks/icon-grid-block.svg',
+    // imageAltText: 'Grid of icon cards with titles and descriptions',
     labels: {
         singular: 'Icon Grid',
         plural: 'Icon Grids',

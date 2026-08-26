@@ -28,6 +28,7 @@ import { Testimonial3Block } from '@/blocks/Testimonial3/Component'
 import { Testimonial4Block } from '@/blocks/Testimonial4/Component'
 import { TestimonialGridBlock } from '@/blocks/TestimonialGrid/Component'
 import { Pricing1Block } from '@/blocks/Pricing1/Component'
+import { Stats1Block } from '@/blocks/Stats1/Component'
 import { LogoCarouselBlock } from '@/blocks/LogoCarousel/Component'
 import { IconGridBlock } from '@/blocks/IconGrid/Component'
 import { TechStackBlock } from '@/blocks/TechStack/Component'
@@ -60,6 +61,7 @@ const blockComponents = {
   testimonial4: Testimonial4Block,
   testimonialGrid: TestimonialGridBlock,
   pricing1: Pricing1Block,
+  stats1: Stats1Block,
   logoCarousel: LogoCarouselBlock,
   iconGrid: IconGridBlock,
   techStack: TechStackBlock,

@@ -118,7 +118,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'es') | ('en' | 'es')[];
   globals: {
     header: Header;
     footer: Footer;
@@ -129,8 +129,17 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'es';
   widgets: {
+    'cloudflare-traffic': CloudflareTrafficWidget;
+    'cloudflare-bandwidth': CloudflareBandwidthWidget;
+    'cloudflare-cache-rate': CloudflareCacheRateWidget;
+    'cloudflare-devices': CloudflareDevicesWidget;
+    'cloudflare-protocol': CloudflareProtocolWidget;
+    'cloudflare-status-codes': CloudflareStatusCodesWidget;
+    'cloudflare-threats': CloudflareThreatsWidget;
+    'cloudflare-top-paths': CloudflareTopPathsWidget;
+    'cloudflare-world-map': CloudflareWorldMapWidget;
     collections: CollectionsWidget;
   };
   user: User | PayloadMcpApiKey | PayloadMcpPublicApiKey;
@@ -350,6 +359,7 @@ export interface Page {
     | Testimonial4Type
     | TestimonialGridBlock
     | Pricing1Block
+    | Stats1Block
     | LogoCarouselBlock
   )[];
   meta?: {
@@ -963,10 +973,23 @@ export interface Project {
    * Link one or more clients/brands this project was built for
    */
   clients?: (number | Client)[] | null;
+  populatedClients?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
   /**
    * Link the technologies / tools used in this project
    */
   technologies?: (number | Technology)[] | null;
+  populatedTechnologies?:
+    | {
+        id?: string | null;
+        name?: string | null;
+        category?: string | null;
+      }[]
+    | null;
   categories?: (number | Category)[] | null;
   /**
    * Show this project in the Featured Projects block
@@ -1019,6 +1042,10 @@ export interface Client {
 export interface Technology {
   id: number;
   name: string;
+  /**
+   * Brief intro shown on the technology page and search results
+   */
+  description?: string | null;
   logo?: (number | null) | Media;
   /**
    * Optional alternate logo for dark backgrounds
@@ -1202,9 +1229,6 @@ export interface Form {
       )[]
     | null;
   submitButtonLabel?: string | null;
-  /**
-   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
-   */
   confirmationType?: ('message' | 'redirect') | null;
   confirmationMessage?: {
     root: {
@@ -1224,9 +1248,6 @@ export interface Form {
   redirect?: {
     url: string;
   };
-  /**
-   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
-   */
   emails?:
     | {
         emailTo?: string | null;
@@ -1235,9 +1256,6 @@ export interface Form {
         replyTo?: string | null;
         emailFrom?: string | null;
         subject: string;
-        /**
-         * Enter the message that should be sent in this email.
-         */
         message?: {
           root: {
             type: string;
@@ -7085,7 +7103,8 @@ export interface PricingCard {
     | 'ZoomOutIcon'
     | 'createLucideIcon'
     | 'default'
-    | 'icons';
+    | 'icons'
+    | 'module.exports';
   price: number;
   title: string;
   subtitle?: string | null;
@@ -12867,6 +12886,7 @@ export interface SectionHeroWithBadge {
           | 'createLucideIcon'
           | 'default'
           | 'icons'
+          | 'module.exports'
         )
       | null;
   };
@@ -13487,6 +13507,43 @@ export interface Pricing1Block {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Stats1Block".
+ */
+export interface Stats1Block {
+  /**
+   * Small label above the title
+   */
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  stats?:
+    | {
+        /**
+         * e.g. "10K+", "99%", "$2M"
+         */
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Vertical spacing around the section
+   */
+  spacingPreset?: ('none' | 'small' | 'medium' | 'large') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundTheme?: ('default' | 'light' | 'dark' | 'primary') | null;
+  /**
+   * Horizontal alignment of text content
+   */
+  contentAlignment?: ('start' | 'center' | 'end') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stats1';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "LogoCarouselBlock".
  */
 export interface LogoCarouselBlock {
@@ -13678,6 +13735,14 @@ export interface PayloadMcpApiKey {
      * Allow clients to find pages.
      */
     find?: boolean | null;
+    /**
+     * Allow clients to create pages.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update pages.
+     */
+    update?: boolean | null;
   };
   technologies?: {
     /**
@@ -13722,6 +13787,20 @@ export interface PayloadMcpApiKey {
      * Allow clients to find media.
      */
     find?: boolean | null;
+    /**
+     * Allow clients to create media.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update media.
+     */
+    update?: boolean | null;
+  };
+  'payload-mcp-tool'?: {
+    /**
+     * Download an image from a public URL and upload it to the Payload media library. Returns the new media record ID and URL. Use this to import images from external sources (e.g. WordPress blogs) without needing a local file or multipart upload.
+     */
+    importMediaFromUrl?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -14122,6 +14201,7 @@ export interface PagesSelect<T extends boolean = true> {
         testimonial4?: T | Testimonial4TypeSelect<T>;
         testimonialGrid?: T | TestimonialGridBlockSelect<T>;
         pricing1?: T | Pricing1BlockSelect<T>;
+        stats1?: T | Stats1BlockSelect<T>;
         logoCarousel?: T | LogoCarouselBlockSelect<T>;
       };
   meta?:
@@ -14743,6 +14823,27 @@ export interface Pricing1BlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Stats1Block_select".
+ */
+export interface Stats1BlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  spacingPreset?: T;
+  backgroundTheme?: T;
+  contentAlignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "LogoCarouselBlock_select".
  */
 export interface LogoCarouselBlockSelect<T extends boolean = true> {
@@ -14805,7 +14906,20 @@ export interface ProjectsSelect<T extends boolean = true> {
   liveUrl?: T;
   repoUrl?: T;
   clients?: T;
+  populatedClients?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
   technologies?: T;
+  populatedTechnologies?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+        category?: T;
+      };
   categories?: T;
   featured?: T;
   completedAt?: T;
@@ -14972,6 +15086,7 @@ export interface InstitutesSelect<T extends boolean = true> {
  */
 export interface TechnologiesSelect<T extends boolean = true> {
   name?: T;
+  description?: T;
   logo?: T;
   logoDark?: T;
   website?: T;
@@ -15276,6 +15391,8 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
     | T
     | {
         find?: T;
+        create?: T;
+        update?: T;
       };
   technologies?:
     | T
@@ -15301,6 +15418,13 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
     | T
     | {
         find?: T;
+        create?: T;
+        update?: T;
+      };
+  'payload-mcp-tool'?:
+    | T
+    | {
+        importMediaFromUrl?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -15835,6 +15959,96 @@ export interface SiteSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-traffic_widget".
+ */
+export interface CloudflareTrafficWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-bandwidth_widget".
+ */
+export interface CloudflareBandwidthWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-cache-rate_widget".
+ */
+export interface CloudflareCacheRateWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-devices_widget".
+ */
+export interface CloudflareDevicesWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-protocol_widget".
+ */
+export interface CloudflareProtocolWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-status-codes_widget".
+ */
+export interface CloudflareStatusCodesWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-threats_widget".
+ */
+export interface CloudflareThreatsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-top-paths_widget".
+ */
+export interface CloudflareTopPathsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'small' | 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cloudflare-world-map_widget".
+ */
+export interface CloudflareWorldMapWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'medium' | 'large' | 'x-large' | 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -15904,6 +16118,30 @@ export interface CodeBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageGalleryBlock".
+ */
+export interface ImageGalleryBlock {
+  /**
+   * Add a subtle border around each image cell to emphasise the mosaic grid structure.
+   */
+  showBorder?: boolean | null;
+  /**
+   * Add images for this mosaic group. Use multiple Image Gallery blocks for separate visual sections.
+   */
+  images: {
+    image: number | Media;
+    /**
+     * Optional caption shown in the lightbox
+     */
+    caption?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageGallery';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -15993,24 +16231,14 @@ export interface IconGridBlock {
  */
 export interface TechStackBlock {
   /**
-   * e.g. "Technologies Used"
+   * Choose technologies manually or inherit from the project.
    */
-  sectionHeading?: string | null;
+  source: 'manual' | 'project';
+  technologies?: (number | Technology)[] | null;
   /**
-   * Organise technologies into named groups (e.g. "Design", "Software"). Use a single group with no label for a flat list.
+   * When unchecked, all technologies are shown in a single flat grid.
    */
-  groups: {
-    /**
-     * Optional category heading (e.g. "Design", "Software")
-     */
-    groupLabel?: string | null;
-    /**
-     * Optional introductory paragraph shown before the logos in this group
-     */
-    description?: string | null;
-    technologies: (number | Technology)[];
-    id?: string | null;
-  }[];
+  groupByCategory?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'techStack';

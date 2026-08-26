@@ -21,6 +21,7 @@ export default async function ProjectsPage() {
         depth: 1,
         limit: 12,
         overrideAccess: false,
+        sort: '-createdAt',
         select: {
             title: true,
             slug: true,
@@ -42,14 +43,14 @@ export default async function ProjectsPage() {
                 </div>
             </div>
 
-            <div className="container mb-8">
+            {/* <div className="container mb-8">
                 <PageRange
                     collection="projects"
                     currentPage={projects.page}
                     limit={12}
                     totalDocs={projects.totalDocs}
                 />
-            </div>
+            </div> */}
 
             <div className="container">
                 <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-y-4 gap-x-4 lg:gap-y-8 lg:gap-x-8">

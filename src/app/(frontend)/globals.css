@@ -3,8 +3,6 @@
 @import '@heroui/styles';
 @import '../../styles/heroui-theme.css';
 
-@config '../../../tailwind.config.mjs';
-
 /* Custom variant for dark mode - supports both data-theme attribute and .dark class for HeroUI */
 @custom-variant dark (&:is([data-theme="dark"] *, .dark *));
 @custom-variant sm (@media (width >= theme(--breakpoint-sm)));
@@ -15,6 +13,29 @@
 
 /* Plugin imports for Tailwind v4 */
 @plugin "@tailwindcss/typography";
+
+/* Typography overrides — Tailwind v4 CSS-first */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+
+  & h1 {
+    font-weight: normal;
+    margin-bottom: 0.25em;
+  }
+}
+
+/* prose-base: default prose size customizations */
+.prose-base {
+  & h1 { font-size: 2.5rem; }
+  & h2 { font-size: 1.25rem; font-weight: 600; }
+}
+
+/* prose-md: custom larger size modifier */
+.prose-md {
+  & h1 { font-size: 3.5rem; }
+  & h2 { font-size: 1.5rem; }
+}
 
 /* Source paths - scan src files */
 @source '../../**/*.{ts,tsx}';

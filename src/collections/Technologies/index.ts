@@ -22,6 +22,14 @@ export const Technologies: CollectionConfig<'technologies'> = {
             required: true,
         },
         {
+            name: 'description',
+            type: 'textarea',
+            label: 'Description',
+            admin: {
+                description: 'Brief intro shown on the technology page and search results',
+            },
+        },
+        {
             name: 'logo',
             type: 'upload',
             relationTo: 'media',

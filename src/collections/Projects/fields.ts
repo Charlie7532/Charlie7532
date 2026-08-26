@@ -11,9 +11,14 @@ import {
 
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { Content } from '../../blocks/Content/config'
+import { EmbedCode } from '../../blocks/EmbedCode/config'
 import { IconGridBlock } from '../../blocks/IconGrid/config'
+import { ImageContentBlock } from '../../blocks/ImageContent/config'
+import { ImageGalleryBlock } from '../../blocks/ImageGallery/config'
+import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { TechStackBlock } from '../../blocks/TechStack/config'
+import { TextSection } from '../../blocks/TextSection/config'
 import { TwoColumnTextImageBlock } from '../../blocks/TwoColumnTextImage/config'
 
 import {
@@ -29,6 +34,7 @@ export const projectsFields: Field[] = [
         name: 'title',
         type: 'text',
         required: true,
+        localized: true,
     },
     {
         type: 'tabs',
@@ -46,6 +52,7 @@ export const projectsFields: Field[] = [
                         name: 'summary',
                         type: 'textarea',
                         label: 'Short Summary',
+                        localized: true,
                         admin: {
                             description: 'One or two sentences shown on project cards and the archive page.',
                         },
@@ -54,11 +61,12 @@ export const projectsFields: Field[] = [
                         name: 'content',
                         type: 'richText',
                         label: 'Case Study Body',
+                        localized: true,
                         editor: lexicalEditor({
                             features: ({ rootFeatures }) => [
                                 ...rootFeatures,
                                 HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                                BlocksFeature({ blocks: [Banner, Code, MediaBlock, IconGridBlock, TechStackBlock, TwoColumnTextImageBlock] }),
+                                BlocksFeature({ blocks: [Banner, Code, Content, EmbedCode, ImageContentBlock, ImageGalleryBlock, MediaBlock, IconGridBlock, TechStackBlock, TextSection, TwoColumnTextImageBlock] }),
                                 FixedToolbarFeature(),
                                 InlineToolbarFeature(),
                                 HorizontalRuleFeature(),
@@ -115,6 +123,7 @@ export const projectsFields: Field[] = [
                                 name: 'role',
                                 type: 'text',
                                 label: 'My Role',
+                                localized: true,
                                 admin: {
                                     placeholder: 'e.g. Lead Designer & Developer',
                                     width: '50%',
@@ -155,6 +164,27 @@ export const projectsFields: Field[] = [
                         },
                     },
                     {
+                        name: 'populatedClients',
+                        type: 'array',
+                        access: {
+                            update: () => false,
+                        },
+                        admin: {
+                            disabled: true,
+                            readOnly: true,
+                        },
+                        fields: [
+                            {
+                                name: 'id',
+                                type: 'text',
+                            },
+                            {
+                                name: 'name',
+                                type: 'text',
+                            },
+                        ],
+                    },
+                    {
                         name: 'technologies',
                         type: 'relationship',
                         label: 'Technologies Used',
@@ -163,6 +193,31 @@ export const projectsFields: Field[] = [
                         admin: {
                             description: 'Link the technologies / tools used in this project',
                         },
+                    },
+                    {
+                        name: 'populatedTechnologies',
+                        type: 'array',
+                        access: {
+                            update: () => false,
+                        },
+                        admin: {
+                            disabled: true,
+                            readOnly: true,
+                        },
+                        fields: [
+                            {
+                                name: 'id',
+                                type: 'text',
+                            },
+                            {
+                                name: 'name',
+                                type: 'text',
+                            },
+                            {
+                                name: 'category',
+                                type: 'text',
+                            },
+                        ],
                     },
                     {
                         name: 'categories',
@@ -197,6 +252,7 @@ export const projectsFields: Field[] = [
             {
                 name: 'meta',
                 label: 'SEO',
+                localized: true,
                 fields: [
                     OverviewField({
                         titlePath: 'meta.title',
