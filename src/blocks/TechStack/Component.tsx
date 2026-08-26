@@ -12,15 +12,12 @@ type TechStackBlockProps = {
     className?: string
 }
 
-const categoryLabels: Record<string, string> = {
-    cad: 'Design & CAD',
-    manufacturing: 'Manufacturing',
-    '3d-printing': '3D Printing',
-    material: 'Materials',
-    software: 'Software',
-    firmware: 'Firmware',
-    hardware: 'Hardware',
-    other: 'Other',
+/** First populated tech category's label, or 'Other' when unassigned/unpopulated */
+function getCategoryLabel(tech: Technology): string {
+    const categories = tech.techCategories
+    if (!categories || categories.length === 0) return 'Other'
+    const first = categories[0]
+    return typeof first === 'object' && first !== null ? first.label : 'Other'
 }
 
 const TechGrid = ({ techs }: { techs: Technology[] }) => (
@@ -67,15 +64,13 @@ export const TechStackBlock: React.FC<TechStackBlockProps> = ({
                     {(() => {
                         const groups: Record<string, Technology[]> = {}
                         for (const tech of resolved) {
-                            const key = tech.category ?? 'other'
+                            const key = getCategoryLabel(tech)
                             if (!groups[key]) groups[key] = []
                             groups[key]!.push(tech)
                         }
-                        return Object.entries(groups).map(([cat, techs]) => (
-                            <div key={cat} className="flex flex-col gap-4">
-                                <h3 className="text-lg font-semibold italic">
-                                    {categoryLabels[cat] ?? cat}:
-                                </h3>
+                        return Object.entries(groups).map(([label, techs]) => (
+                            <div key={label} className="flex flex-col gap-4">
+                                <h3 className="text-lg font-semibold italic">{label}:</h3>
                                 <TechGrid techs={techs} />
                             </div>
                         ))

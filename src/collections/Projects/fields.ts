@@ -213,10 +213,6 @@ export const projectsFields: Field[] = [
                                 name: 'name',
                                 type: 'text',
                             },
-                            {
-                                name: 'category',
-                                type: 'text',
-                            },
                         ],
                     },
                     {

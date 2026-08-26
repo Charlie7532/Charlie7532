@@ -37,7 +37,13 @@ const MoonIcon = () => (
     </svg>
 )
 
-export const IconThemeSwitch: React.FC<{ className?: string }> = ({ className }) => {
+interface IconThemeSwitchProps {
+    className?: string
+    /** 'neu' renders the raised neumorphic dial used alongside neu-* surfaces */
+    variant?: 'default' | 'neu'
+}
+
+export const IconThemeSwitch: React.FC<IconThemeSwitchProps> = ({ className, variant = 'default' }) => {
     const { theme, setTheme, resolvedTheme } = useTheme()
     const [mounted, setMounted] = React.useState(false)
 
@@ -50,11 +56,16 @@ export const IconThemeSwitch: React.FC<{ className?: string }> = ({ className })
         setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
     }
 
+    const baseClasses =
+        variant === 'neu'
+            ? 'group h-9 w-9 rounded-full neu-button flex justify-center items-center text-foreground'
+            : 'group w-9 h-9 rounded-full border border-current flex justify-center items-center transition-opacity duration-300 hover:opacity-60'
+
     // Show placeholder during SSR to avoid hydration mismatch
     if (!mounted) {
         return (
             <button
-                className={`group w-9 h-9 rounded-full border border-current flex justify-center items-center ${className ?? ''}`}
+                className={`${baseClasses} ${className ?? ''}`}
                 aria-label="Toggle theme"
                 data-theme-switch
                 disabled
@@ -69,7 +80,7 @@ export const IconThemeSwitch: React.FC<{ className?: string }> = ({ className })
     return (
         <button
             onClick={toggleTheme}
-            className={`group w-9 h-9 rounded-full border border-current flex justify-center items-center transition-opacity duration-300 hover:opacity-60 ${className ?? ''}`}
+            className={`${baseClasses} ${className ?? ''}`}
             aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
             data-theme-switch
         >

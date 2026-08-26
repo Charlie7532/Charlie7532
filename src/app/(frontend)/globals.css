@@ -92,6 +92,184 @@
   }
 }
 
+/* ============================================================
+   Neumorphic (soft-UI) design system — landing page
+   True neumorphism: elements share the page background and get
+   depth ONLY from a paired light + dark shadow. No hard borders.
+   Adapts to light/dark via theme tokens.
+   ============================================================ */
+:root,
+.light,
+[data-theme='light'] {
+  /* Extruded elements share the page background */
+  --neu-bg: var(--background);
+  --neu-light: oklch(100% 0 0 / 0.95);
+  --neu-shadow: oklch(62% 0.035 238.89 / 0.42);
+  --neu-shadow-soft: oklch(62% 0.035 238.89 / 0.22);
+}
+
+.dark,
+[data-theme='dark'] {
+  --neu-bg: var(--background);
+  /* Tuned for graphite (~22%) background: light shadow clearly brighter, dark clearly deeper */
+  --neu-light: oklch(34% 0.02 238.89 / 0.9);
+  --neu-shadow: oklch(8% 0.015 238.89 / 0.9);
+  --neu-shadow-soft: oklch(8% 0.015 238.89 / 0.6);
+}
+
+@layer utilities {
+  /* Raised surface — the default neumorphic card */
+  .neu-raised {
+    background: var(--neu-bg);
+    box-shadow:
+      8px 8px 18px var(--neu-shadow-soft),
+      -8px -8px 18px var(--neu-light);
+  }
+
+  /* Pressed / inset surface — wells, inputs, tracks */
+  .neu-inset {
+    background: var(--neu-bg);
+    box-shadow:
+      inset 5px 5px 12px var(--neu-shadow-soft),
+      inset -5px -5px 12px var(--neu-light);
+  }
+
+  /* Flat-to-raised: appears flush, lifts on hover */
+  .neu-flat {
+    background: var(--neu-bg);
+    box-shadow:
+      0 0 0 transparent,
+      0 0 0 transparent;
+    transition: box-shadow 250ms ease;
+  }
+  .neu-flat:hover {
+    box-shadow:
+      8px 8px 18px var(--neu-shadow-soft),
+      -8px -8px 18px var(--neu-light);
+  }
+
+  /* Interactive raised element with press feedback */
+  .neu-button {
+    background: var(--neu-bg);
+    box-shadow:
+      5px 5px 12px var(--neu-shadow-soft),
+      -5px -5px 12px var(--neu-light);
+    transition:
+      box-shadow 200ms ease,
+      transform 200ms ease;
+  }
+  .neu-button:hover {
+    box-shadow:
+      7px 7px 16px var(--neu-shadow-soft),
+      -7px -7px 16px var(--neu-light);
+    transform: translateY(-2px);
+  }
+  .neu-button:active {
+    box-shadow:
+      inset 4px 4px 10px var(--neu-shadow-soft),
+      inset -4px -4px 10px var(--neu-light);
+    transform: translateY(0);
+  }
+
+  /* Accent-colored raised button (colored elements keep soft dual shadows) */
+  .neu-button-accent {
+    background: linear-gradient(
+      145deg,
+      oklch(from var(--accent) calc(l + 0.05) c h),
+      oklch(from var(--accent) calc(l - 0.04) c h)
+    );
+    color: var(--accent-foreground);
+    box-shadow:
+      5px 5px 14px var(--neu-shadow),
+      -5px -5px 14px var(--neu-light);
+    transition:
+      box-shadow 200ms ease,
+      transform 200ms ease,
+      filter 200ms ease;
+  }
+  .neu-button-accent:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+  }
+  .neu-button-accent:active {
+    transform: translateY(0);
+    filter: brightness(0.95);
+    box-shadow: inset 3px 3px 8px oklch(0% 0 0 / 0.3);
+  }
+
+  /* Circular raised dial / badge */
+  .neu-dial {
+    background: var(--neu-bg);
+    box-shadow:
+      6px 6px 14px var(--neu-shadow-soft),
+      -6px -6px 14px var(--neu-light);
+    border-radius: 9999px;
+  }
+
+  /* Knob — deep raised circle like an audio dial (ref: knob panel) */
+  .neu-knob {
+    border-radius: 9999px;
+    background: radial-gradient(circle at 32% 28%, var(--neu-bg), var(--surface-tertiary) 75%);
+    box-shadow:
+      10px 12px 26px var(--neu-shadow),
+      -8px -8px 20px var(--neu-light),
+      inset 0 2px 3px var(--neu-light),
+      inset 0 -4px 8px var(--neu-shadow-soft);
+  }
+
+  /* Inset track (slider groove) */
+  .neu-track {
+    border-radius: 9999px;
+    background: var(--neu-bg);
+    box-shadow:
+      inset 3px 3px 7px var(--neu-shadow-soft),
+      inset -3px -3px 7px var(--neu-light);
+  }
+
+  /* Small raised pill chip */
+  .neu-chip {
+    border-radius: 9999px;
+    background: var(--neu-bg);
+    box-shadow:
+      3px 3px 8px var(--neu-shadow-soft),
+      -3px -3px 8px var(--neu-light);
+  }
+
+  /* Subtle etched divider line */
+  .neu-etched {
+    height: 2px;
+    border: none;
+    background: linear-gradient(90deg, transparent, var(--neu-shadow-soft), transparent);
+    box-shadow: 0 1px 0 var(--neu-light);
+  }
+
+  /* Vertical etched divider — e.g. between the footer knob and nav links */
+  .neu-etched-vertical {
+    width: 2px;
+    border: none;
+    background: linear-gradient(180deg, transparent, var(--neu-shadow-soft), transparent);
+    box-shadow: 1px 0 0 var(--neu-light);
+  }
+
+  /* Icon fill for engraved marks — blends into the neu-bg so only the relief shadow reveals the shape.
+     A matching stroke fattens the thin path bands so the carved line reads clearly at small sizes. */
+  .neu-icon-mark {
+    fill: var(--neu-bg);
+    stroke: var(--neu-bg);
+    stroke-width: 1.1px;
+    stroke-linejoin: round;
+  }
+
+  /* Engraved (carved-in) relief for vector logos/icons sitting on a neu-knob or neu-raised surface.
+     Dark shadow sits on the light-source side (top-left) and the highlight on the opposite side,
+     inverted from a raised bevel, so the mark reads as pressed into the surface. Kept subtle/clean. */
+  .neu-icon-relief {
+    filter:
+      drop-shadow(0.5px 0.75px 0.4px rgba(255, 255, 255, 0.35))
+      drop-shadow(-0.5px -0.75px 0.4px rgba(0, 0, 0, 0.4));
+  }
+}
+
 @layer base {
   h1,
   h2,

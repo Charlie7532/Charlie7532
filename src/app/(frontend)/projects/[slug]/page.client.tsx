@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 const PageClient: React.FC = () => {
     const { setHeaderTheme } = useHeaderTheme()
     useEffect(() => {
-        setHeaderTheme('dark')
+        setHeaderTheme(null)
     }, [setHeaderTheme])
     return <React.Fragment />
 }

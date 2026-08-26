@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" width="640" height="800">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a2e2a"/>
+      <stop offset="1" stop-color="#101c22"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#223a46"/>
+      <stop offset="1" stop-color="#182a34"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="800" fill="url(#bg3)"/>
+
+  <!-- dashboard frame -->
+  <rect x="70" y="130" width="500" height="360" rx="24" fill="url(#screen)" stroke="#57808f" stroke-width="4"/>
+  <!-- title bar dots -->
+  <circle cx="110" cy="166" r="8" fill="#e06c60"/>
+  <circle cx="138" cy="166" r="8" fill="#e0b060"/>
+  <circle cx="166" cy="166" r="8" fill="#69c77e"/>
+
+  <!-- metric chart line -->
+  <polyline points="110,420 170,390 230,400 290,340 350,350 410,290 470,300 530,240"
+    fill="none" stroke="#69c77e" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#69c77e">
+    <circle cx="290" cy="340" r="8"/>
+    <circle cx="410" cy="290" r="8"/>
+    <circle cx="530" cy="240" r="10"/>
+  </g>
+
+  <!-- status rows -->
+  <g font-family="ui-monospace, monospace" font-size="20">
+    <g transform="translate(100 540)">
+      <rect width="440" height="54" rx="14" fill="#16262e" stroke="#2e4855" stroke-width="2"/>
+      <circle cx="30" cy="27" r="8" fill="#69c77e"/>
+      <text x="54" y="34" fill="#a9cddd">deploy · green</text>
+      <text x="400" y="34" fill="#69c77e" text-anchor="end">✓</text>
+    </g>
+    <g transform="translate(100 610)">
+      <rect width="440" height="54" rx="14" fill="#16262e" stroke="#2e4855" stroke-width="2"/>
+      <circle cx="30" cy="27" r="8" fill="#69c77e"/>
+      <text x="54" y="34" fill="#a9cddd">evals · passing</text>
+      <text x="400" y="34" fill="#69c77e" text-anchor="end">✓</text>
+    </g>
+    <g transform="translate(100 680)">
+      <rect width="440" height="54" rx="14" fill="#16262e" stroke="#2e4855" stroke-width="2"/>
+      <circle cx="30" cy="27" r="8" fill="#69c77e"/>
+      <text x="54" y="34" fill="#a9cddd">users · converting</text>
+      <text x="400" y="34" fill="#69c77e" text-anchor="end">✓</text>
+    </g>
+  </g>
+
+  <!-- uptime badge -->
+  <g transform="translate(478 96)">
+    <rect x="-88" y="-26" width="176" height="52" rx="26" fill="#14322a" stroke="#69c77e" stroke-width="3"/>
+    <circle cx="-62" cy="0" r="7" fill="#69c77e"/>
+    <text x="12" y="7" font-family="ui-monospace, monospace" font-size="20" fill="#9fdcae" text-anchor="middle">live · 99.9%</text>
+  </g>
+</svg>

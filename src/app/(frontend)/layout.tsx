@@ -33,7 +33,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
-        <InitTheme />
         {/* Dynamic color styles from site settings */}
         <DynamicColors siteSettings={siteSettings} />
         {/* Use custom favicon from site settings or fallback to defaults */}
@@ -47,15 +46,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
       </head>
       <body>
+        {/* Theme init script — runs before paint; must live in body since it renders a wrapper element */}
+        <InitTheme />
         <Providers
           themeMode={themeMode as 'light-only' | 'dark-only' | 'both'}
           defaultTheme={defaultTheme as 'light' | 'dark' | 'system'}
         >
-          <AdminBar
+          {/* <AdminBar
             adminBarProps={{
               preview: isEnabled,
             }}
-          />
+          /> */}
 
           <Header />
           {children}

@@ -13,7 +13,9 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
+import { TechCategories } from './collections/TechCategories'
 import { Technologies } from './collections/Technologies'
+import { Testimonials } from './collections/Testimonials'
 import { Users } from './collections/Users'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
@@ -80,7 +82,7 @@ export default buildConfig({
     fallback: true,
   },
   db: vercelPostgresAdapter({ pool: { connectionString: process.env.DATABASE_URL || '', }, }),
-  collections: [Pages, Posts, Projects, Media, Categories, Clients, Institutes, Technologies, Users, UserAvatar],
+  collections: [Pages, Posts, Projects, Media, Categories, Clients, Institutes, TechCategories, Technologies, Testimonials, Users, UserAvatar],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SiteSettings],
   plugins,

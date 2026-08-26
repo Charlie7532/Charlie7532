@@ -44,7 +44,7 @@ export const FeatureCardsClient: React.FC<Props> = ({
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
-                                className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-4"
+                                className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground mb-4"
                             >
                                 {title}
                             </motion.h2>
@@ -55,7 +55,7 @@ export const FeatureCardsClient: React.FC<Props> = ({
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.4 }}
-                                className="text-lg text-gray-600 max-w-2xl mx-auto"
+                                className="text-lg text-muted-foreground max-w-2xl mx-auto"
                             >
                                 {description}
                             </motion.p>
@@ -71,10 +71,10 @@ export const FeatureCardsClient: React.FC<Props> = ({
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.3 }}
                                 transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                                className="flex flex-col overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300"
+                                className="neu-raised flex flex-col overflow-hidden rounded-2xl"
                             >
                                 {feature.image && (
-                                    <div className="relative aspect-3/2 w-full overflow-hidden">
+                                    <div className="relative aspect-3/2 w-full overflow-hidden rounded-t-2xl">
                                         <Media
                                             resource={feature.image}
                                             imgClassName="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
@@ -83,12 +83,12 @@ export const FeatureCardsClient: React.FC<Props> = ({
                                 )}
                                 <div className="flex flex-col gap-2 p-6">
                                     {feature.title && (
-                                        <h3 className="text-lg font-semibold text-gray-900">
+                                        <h3 className="text-base font-semibold text-foreground">
                                             {feature.title}
                                         </h3>
                                     )}
                                     {feature.description && (
-                                        <p className="text-sm leading-6 text-gray-600">
+                                        <p className="text-sm leading-6 text-muted-foreground">
                                             {feature.description}
                                         </p>
                                     )}

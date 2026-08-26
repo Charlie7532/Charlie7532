@@ -18,8 +18,8 @@ export const HighImpactHero: React.FC<Page["hero"]> = ({ links, media, richText 
   const contentY = useTransform(scrollY, [0, 500], [0, -50])
 
   useEffect(() => {
-    setHeaderTheme("dark")
-  })
+    setHeaderTheme(null)
+  }, [setHeaderTheme])
 
   return (
     <div

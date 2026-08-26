@@ -20,7 +20,6 @@ export class PayloadTechnologyRepository implements TechnologyRepository {
             return {
                 id: doc.id,
                 name: doc.name as string,
-                category: doc.category as string | undefined | null,
             }
         } catch {
             return null

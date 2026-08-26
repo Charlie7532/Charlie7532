@@ -1,5 +1,6 @@
 import React from 'react'
 import { Media } from '@/components/Media'
+import { NeuChip, NeuDivider } from '@/components/ui/neu'
 import { formatDateTime } from '@/utilities/formatDateTime'
 
 export const ProjectHero: React.FC<{ project: any }> = ({ project }) => {
@@ -7,69 +8,76 @@ export const ProjectHero: React.FC<{ project: any }> = ({ project }) => {
     const hasHeroImage = heroImage && typeof heroImage !== 'string'
 
     return (
-        <div className={`relative flex items-end ${hasHeroImage ? '-mt-[10.4rem]' : 'pt-16 pb-4'}`}>
-            <div
-                className={`container z-10 relative pb-8 ${hasHeroImage ? 'text-white' : ''}`}
-            >
-                <div className="max-w-[64rem] mx-auto">
-                    {categories && categories.length > 0 && (
-                        <div className="uppercase text-sm mb-6">
-                            {categories.map((cat: any, i: number) => {
-                                if (typeof cat !== 'object') return null
-                                return (
-                                    <React.Fragment key={i}>
-                                        {cat.title}
-                                        {i < categories.length - 1 && <React.Fragment>, &nbsp;</React.Fragment>}
-                                    </React.Fragment>
-                                )
-                            })}
-                        </div>
-                    )}
-
-                    <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl">{title}</h1>
-
-                    <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-                        {client && (
-                            <div className="flex flex-col gap-1">
-                                <p className="text-sm opacity-70">Client</p>
-                                <p>{client}</p>
-                            </div>
-                        )}
-                        {completedAt && (
-                            <div className="flex flex-col gap-1">
-                                <p className="text-sm opacity-70">Completed</p>
-                                <time dateTime={completedAt}>{formatDateTime(completedAt)}</time>
-                            </div>
-                        )}
-                        {role && (
-                            <div className="flex flex-col gap-1">
-                                <p className="text-sm opacity-70">Role</p>
-                                <p>{role}</p>
-                            </div>
-                        )}
+        <div className="container pt-20 pb-8">
+            <div className="max-w-[64rem] mx-auto flex flex-col gap-8">
+                {/* Category chips */}
+                {categories && categories.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {categories.map((cat: any, i: number) => {
+                            if (typeof cat !== 'object') return null
+                            return (
+                                <NeuChip key={i} mono size="sm">
+                                    {cat.title}
+                                </NeuChip>
+                            )
+                        })}
                     </div>
+                )}
 
-                    {techStack && techStack.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-6">
-                            {techStack.map((tech: string) => (
-                                <span
-                                    key={tech}
-                                    className="text-xs bg-white/20 border border-white/30 px-3 py-1 rounded-full backdrop-blur-sm"
-                                >
-                                    {tech}
-                                </span>
-                            ))}
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">{title}</h1>
+
+                {/* Meta row */}
+                <div className="flex flex-wrap gap-4">
+                    {client && (
+                        <div className="neu-raised flex flex-col gap-1 rounded-2xl px-5 py-3">
+                            <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+                                Client
+                            </p>
+                            <p className="text-sm font-semibold">{client}</p>
+                        </div>
+                    )}
+                    {completedAt && (
+                        <div className="neu-raised flex flex-col gap-1 rounded-2xl px-5 py-3">
+                            <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+                                Completed
+                            </p>
+                            <time dateTime={completedAt} className="text-sm font-semibold">
+                                {formatDateTime(completedAt)}
+                            </time>
+                        </div>
+                    )}
+                    {role && (
+                        <div className="neu-raised flex flex-col gap-1 rounded-2xl px-5 py-3">
+                            <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+                                Role
+                            </p>
+                            <p className="text-sm font-semibold">{role}</p>
                         </div>
                     )}
                 </div>
-            </div>
 
-            {hasHeroImage && (
-                <div className="min-h-[80vh] select-none">
-                    <Media fill priority imgClassName="-z-10 object-cover" resource={heroImage} />
-                    <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-linear-to-t from-black to-transparent" />
-                </div>
-            )}
+                {/* Tech stack chips */}
+                {techStack && techStack.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {techStack.map((tech: string) => (
+                            <NeuChip key={tech} size="sm">
+                                {tech}
+                            </NeuChip>
+                        ))}
+                    </div>
+                )}
+
+                <NeuDivider />
+
+                {/* Hero image in neumorphic frame */}
+                {hasHeroImage && (
+                    <div className="neu-raised rounded-[2.5rem] p-4">
+                        <div className="neu-inset relative aspect-[16/9] overflow-hidden rounded-[2rem]">
+                            <Media fill priority imgClassName="object-cover" resource={heroImage} />
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

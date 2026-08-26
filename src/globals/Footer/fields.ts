@@ -7,10 +7,31 @@ const logo: Field = {
   label: 'Footer Logo Settings',
   fields: [
     {
+      name: 'logoSource',
+      type: 'select',
+      label: 'Footer Logo Source',
+      defaultValue: 'upload',
+      options: [
+        {
+          label: 'Default Brand Mark (built-in, neumorphic relief)',
+          value: 'default',
+        },
+        {
+          label: 'Uploaded Image',
+          value: 'upload',
+        },
+      ],
+      admin: {
+        description:
+          'Use the built-in vector brand mark (rendered with a relief/emboss effect on the footer knob) or an uploaded logo image.',
+      },
+    },
+    {
       name: 'overrideSiteLogo',
       type: 'checkbox',
       label: 'Override Site Logo',
       admin: {
+        condition: (data) => (data.logo?.logoSource ?? 'upload') === 'upload',
         description: 'Check to use a different logo for the footer instead of the global site logo',
       },
     },
@@ -31,7 +52,7 @@ const logo: Field = {
         },
       ],
       admin: {
-        condition: (data) => data.logo?.overrideSiteLogo,
+        condition: (data) => (data.logo?.logoSource ?? 'upload') === 'upload' && data.logo?.overrideSiteLogo,
         description: 'Choose how you want to configure your footer logos',
       },
     },
@@ -41,7 +62,10 @@ const logo: Field = {
       relationTo: 'media',
       label: 'Custom Footer Logo',
       admin: {
-        condition: (data) => data.logo?.overrideSiteLogo && data.logo?.logoMode === 'simple',
+        condition: (data) =>
+          (data.logo?.logoSource ?? 'upload') === 'upload' &&
+          data.logo?.overrideSiteLogo &&
+          data.logo?.logoMode === 'simple',
       },
     },
     {
@@ -53,7 +77,10 @@ const logo: Field = {
           relationTo: 'media',
           label: 'Light Mode Logo',
           admin: {
-            condition: (data) => data.logo?.overrideSiteLogo && data.logo?.logoMode === 'lightDark',
+            condition: (data) =>
+              (data.logo?.logoSource ?? 'upload') === 'upload' &&
+              data.logo?.overrideSiteLogo &&
+              data.logo?.logoMode === 'lightDark',
             width: '50%',
           },
         },
@@ -63,7 +90,10 @@ const logo: Field = {
           relationTo: 'media',
           label: 'Dark Mode Logo',
           admin: {
-            condition: (data) => data.logo?.overrideSiteLogo && data.logo?.logoMode === 'lightDark',
+            condition: (data) =>
+              (data.logo?.logoSource ?? 'upload') === 'upload' &&
+              data.logo?.overrideSiteLogo &&
+              data.logo?.logoMode === 'lightDark',
             width: '50%',
           },
         },

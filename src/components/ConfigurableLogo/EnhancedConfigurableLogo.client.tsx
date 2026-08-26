@@ -28,12 +28,17 @@ export const EnhancedConfigurableLogoClient: React.FC<EnhancedConfigurableLogoCl
     const contextData = context === 'header' ? headerData : footerData
     const logoSettings = contextData?.logo
 
-    // Check if we should use custom logo for this context
-    const useCustomLogo = logoSettings?.overrideSiteLogo
-
     // Get dimensions from context-specific settings or use defaults
     const height = logoSettings?.height || 40
     // Both header and footer now only control height and let width auto-adjust for proper aspect ratio
+
+    // Built-in vector brand mark (footer-only option) — relief comes from the className the caller passes in
+    if (logoSettings?.logoSource === 'default') {
+        return <Logo className={className} width={height} height={height} />
+    }
+
+    // Check if we should use custom logo for this context
+    const useCustomLogo = logoSettings?.overrideSiteLogo
 
     // Cascading fallback logic for logo selection with simplified structure
     const branding = siteSettings?.branding

@@ -40,63 +40,16 @@ export const TestimonialGrid: Block = {
         },
         {
             name: 'testimonials',
-            type: 'array',
+            type: 'relationship',
+            relationTo: 'testimonials',
+            hasMany: true,
             label: 'Testimonials',
             minRows: 1,
             maxRows: 6,
             required: true,
             admin: {
-                description: 'Add 3-6 testimonials for optimal grid layout',
+                description: 'Select 3-6 testimonials for optimal grid layout',
             },
-            fields: [
-                {
-                    name: 'quote',
-                    label: 'Quote',
-                    type: 'textarea',
-                    required: true,
-                    localized: true,
-                    admin: {
-                        description: 'The testimonial quote text',
-                    },
-                },
-                {
-                    name: 'authorName',
-                    label: 'Name',
-                    type: 'text',
-                    required: true,
-                    localized: true,
-                    admin: {
-                        description: 'Author full name',
-                    },
-                },
-                {
-                    name: 'authorRole',
-                    label: 'Role / Title',
-                    type: 'text',
-                    localized: true,
-                    admin: {
-                        description: 'Job title or role (optional)',
-                    },
-                },
-                {
-                    name: 'authorCompany',
-                    label: 'Company',
-                    type: 'text',
-                    localized: true,
-                    admin: {
-                        description: 'Company or organization name (optional)',
-                    },
-                },
-                {
-                    name: 'authorImage',
-                    label: 'Avatar',
-                    type: 'upload',
-                    relationTo: 'media',
-                    admin: {
-                        description: 'Author profile picture (optional)',
-                    },
-                },
-            ],
         },
         {
             type: 'collapsible',

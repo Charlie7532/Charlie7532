@@ -12,7 +12,7 @@ export const Technologies: CollectionConfig<'technologies'> = {
     },
     admin: {
         group: 'Portfolio',
-        defaultColumns: ['logo', 'name', 'category', 'featured', 'updatedAt'],
+        defaultColumns: ['logo', 'name', 'techCategories', 'featured', 'updatedAt'],
         useAsTitle: 'name',
     },
     fields: [
@@ -51,39 +51,15 @@ export const Technologies: CollectionConfig<'technologies'> = {
             admin: { placeholder: 'https://' },
         },
         {
-            name: 'category',
-            type: 'select',
-            label: 'Category',
-            options: [
-                // Software
-                { label: 'Frontend Framework', value: 'frontend-framework' },
-                { label: 'Backend / Runtime', value: 'backend-runtime' },
-                { label: 'Programming Language', value: 'language' },
-                { label: 'Database', value: 'database' },
-                { label: 'Cloud & Infrastructure', value: 'cloud' },
-                { label: 'Web Services & CDN', value: 'web-services' },
-                { label: 'IDE & Dev Tools', value: 'dev-tools' },
-                { label: 'Scripting & Automation', value: 'scripting' },
-                // Design
-                { label: 'UI/UX Design', value: 'ui-ux' },
-                { label: 'Graphic Design', value: 'graphic-design' },
-                { label: 'CAD / 3D Modeling', value: 'cad' },
-                // Electronics & Embedded
-                { label: 'Microcontroller', value: 'microcontroller' },
-                { label: 'Single-Board Computer', value: 'sbc' },
-                { label: 'Embedded Development', value: 'embedded' },
-                { label: 'Electronics Design (PCB)', value: 'electronics-design' },
-                { label: 'IoT Platform', value: 'iot' },
-                { label: 'Communication Protocol', value: 'protocol' },
-                { label: 'Wireless Communication', value: 'wireless' },
-                // Manufacturing
-                { label: '3D Printing', value: '3d-printing' },
-                { label: 'CNC & Machining', value: 'cnc' },
-                { label: 'Manufacturing Process', value: 'manufacturing' },
-                { label: 'Material', value: 'material' },
-                // Other
-                { label: 'Other', value: 'other' },
-            ],
+            name: 'techCategories',
+            type: 'relationship',
+            relationTo: 'tech-categories',
+            hasMany: true,
+            label: 'Tech Categories',
+            admin: {
+                description:
+                    'Assign one or more categories. On the landing page, the tech will appear under each selected category.',
+            },
         },
         {
             name: 'featured',

@@ -47,16 +47,21 @@ const authorVariants = {
 }
 
 export const Testimonial1Client: React.FC<Props> = ({
-    quote,
-    authorName,
-    authorRole,
-    authorCompany,
-    authorImage,
+    testimonial,
     spacingPreset = 'medium',
     backgroundTheme = 'default',
     contentAlignment = 'center',
     className,
 }) => {
+    // Relationship returns populated doc
+    const t = testimonial as unknown as {
+        quote: string
+        authorName: string
+        authorRole?: string | null
+        authorCompany?: string | null
+        authorImage?: any
+    } | null
+    if (!t) return null
     // Spacing classes
     const spacingClasses = {
         none: 'py-0',
@@ -107,7 +112,7 @@ export const Testimonial1Client: React.FC<Props> = ({
                             className="break-words text-2xl font-medium leading-tight tracking-tight text-foreground sm:text-3xl"
                         >
                             <span className="text-primary">&ldquo;</span>
-                            {quote}
+                            {t.quote}
                             <span className="text-primary">&rdquo;</span>
                         </motion.blockquote>
 
@@ -119,10 +124,10 @@ export const Testimonial1Client: React.FC<Props> = ({
                                 'justify-end': contentAlignment === 'end',
                             })}
                         >
-                            {authorImage && typeof authorImage === 'object' && (
+                            {t.authorImage && typeof t.authorImage === 'object' && (
                                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full">
                                     <Media
-                                        resource={authorImage}
+                                        resource={t.authorImage}
                                         imgClassName="object-cover"
                                         fill
                                     />
@@ -135,10 +140,10 @@ export const Testimonial1Client: React.FC<Props> = ({
                                     'items-end': contentAlignment === 'end',
                                 })}
                             >
-                                <p className="text-sm font-semibold text-foreground">{authorName}</p>
-                                {(authorRole || authorCompany) && (
+                                <p className="text-sm font-semibold text-foreground">{t.authorName}</p>
+                                {(t.authorRole || t.authorCompany) && (
                                     <p className="text-sm text-muted-foreground">
-                                        {[authorRole, authorCompany].filter(Boolean).join(', ')}
+                                        {[t.authorRole, t.authorCompany].filter(Boolean).join(', ')}
                                     </p>
                                 )}
                             </div>

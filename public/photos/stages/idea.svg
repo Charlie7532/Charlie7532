@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" width="640" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#20303c"/>
+      <stop offset="1" stop-color="#141e26"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b82a6" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#3b82a6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="800" fill="url(#bg)"/>
+
+  <!-- scattered sketch strokes -->
+  <g stroke="#41586b" stroke-width="2" fill="none" opacity="0.6">
+    <path d="M80 120 q60 -30 120 0 t120 0"/>
+    <path d="M420 170 q40 40 -10 80"/>
+    <path d="M100 640 q80 30 160 -10"/>
+    <circle cx="500" cy="620" r="36" stroke-dasharray="6 8"/>
+    <rect x="90" y="480" width="110" height="70" rx="10" stroke-dasharray="5 7"/>
+  </g>
+
+  <!-- lightbulb -->
+  <g transform="translate(320 360)">
+    <circle r="150" fill="url(#glow)"/>
+    <circle r="86" fill="none" stroke="#7fb2cc" stroke-width="4"/>
+    <path d="M-34 60 q0 -50 -26 -74 a70 70 0 1 1 120 0 q-26 24 -26 74 z"
+      transform="translate(0 -28) scale(0.9)"
+      fill="#101820" stroke="#8fc3dc" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="-24" y="38" width="48" height="12" rx="6" fill="#8fc3dc"/>
+    <rect x="-18" y="56" width="36" height="10" rx="5" fill="#6f9db4"/>
+    <!-- idea rays -->
+    <g stroke="#8fc3dc" stroke-width="5" stroke-linecap="round">
+      <line x1="0" y1="-128" x2="0" y2="-100"/>
+      <line x1="92" y1="-92" x2="72" y2="-72"/>
+      <line x1="-92" y1="-92" x2="-72" y2="-72"/>
+      <line x1="120" y1="0" x2="94" y2="0"/>
+      <line x1="-120" y1="0" x2="-94" y2="0"/>
+    </g>
+  </g>
+
+  <!-- annotation marks -->
+  <g font-family="ui-monospace, monospace" font-size="20" fill="#5b7a8e" opacity="0.8">
+    <text x="88" y="200" fill="#5b7a8e">? problem</text>
+    <text x="410" y="560" fill="#5b7a8e">~ hypothesis</text>
+    <text x="120" y="720" fill="#5b7a8e">✎ sketch v0</text>
+  </g>
+</svg>

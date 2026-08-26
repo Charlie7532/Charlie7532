@@ -1,36 +1,10 @@
 import type { File, Payload, PayloadRequest } from 'payload'
 
-// Maps JSON category labels → our select values
-const CATEGORY_MAP: Record<string, string> = {
-    'Frontend Framework': 'frontend-framework',
-    'Programming Language': 'language',
-    'Database Management System': 'database',
-    'Web Services': 'web-services',
-    'Integrated Development Environment': 'dev-tools',
-    'Scripting Language': 'scripting',
-    'Cloud Service Provider': 'cloud',
-    Microcontroller: 'microcontroller',
-    'Single-Board Computer': 'sbc',
-    'Development Platform': 'embedded',
-    Firmware: 'embedded',
-    'Electronics Design': 'electronics-design',
-    'Computer-Aided Design (CAD)': 'cad',
-    'Graphic Design': 'graphic-design',
-    'UI/UX Design': 'ui-ux',
-    '3D Printing': '3d-printing',
-    'CNC Control': 'cnc',
-    Manufacturing: 'manufacturing',
-    Material: 'material',
-    'Internet of Things (IoT)': 'iot',
-    'Communication Protocol': 'protocol',
-    'IoT Automation': 'iot',
-    'Wireless Communication': 'wireless',
-}
-
 type TechEntry = {
     id: string
     name: string
     logo: string
+    /** Legacy label, kept for readability only — no longer written to the collection */
     category: string
 }
 
@@ -177,7 +151,6 @@ export async function seedTechnologies(payload: Payload, req: PayloadRequest): P
                 collection: 'technologies' as any,
                 data: {
                     name: tech.name,
-                    category: CATEGORY_MAP[tech.category] ?? 'other',
                     featured: false,
                     ...(logoId ? { logo: logoId } : {}),
                 },

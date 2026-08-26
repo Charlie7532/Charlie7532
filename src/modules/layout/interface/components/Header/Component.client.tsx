@@ -12,6 +12,7 @@ import { MobileMenuDrawer } from './MobileMenuDrawer'
 import { DefaultHeader } from './styles/DefaultHeader'
 import { ModernHeader } from './styles/ModernHeader'
 import { MinimalHeader } from './styles/MinimalHeader'
+import { NeumorphicHeader } from './styles/NeumorphicHeader'
 
 interface HeaderClientProps {
   data: Header
@@ -112,10 +113,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, siteSettings }
     // Set high z-index for header
     style.zIndex = 99999
 
-    // For modern style, the pill handles its own background — keep the wrapper transparent
-    if (headerStyle === 'modern') {
+    // For modern/neumorphic styles, the pill handles its own background — keep the wrapper transparent
+    if (headerStyle === 'modern' || headerStyle === 'neumorphic') {
       return {
-        className: `w-full header-with-admin-bar bg-transparent ${textClasses} ${stickyClasses}`,
+        className: `w-full header-with-admin-bar bg-transparent ${headerStyle === 'neumorphic' ? 'text-foreground' : textClasses} ${stickyClasses}`,
         style: { zIndex: 99999 }
       }
     }
@@ -141,6 +142,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, siteSettings }
         return <ModernHeader {...commonProps} />
       case 'minimal':
         return <MinimalHeader {...commonProps} />
+      case 'neumorphic':
+        return <NeumorphicHeader {...commonProps} />
       case 'default':
       default:
         return <DefaultHeader {...commonProps} />

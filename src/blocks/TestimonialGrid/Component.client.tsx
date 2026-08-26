@@ -118,39 +118,49 @@ export const TestimonialGridClient: React.FC<Props> = ({
                         viewport={{ once: true, amount: 0.1 }}
                         variants={containerVariants}
                     >
-                        {testimonials.map((testimonial, index) => (
+                        {testimonials.map((testimonial, index) => {
+                            // Relationship returns populated doc — fields are the same names
+                            const t = testimonial as unknown as {
+                                id: string
+                                quote: string
+                                authorName: string
+                                authorRole?: string | null
+                                authorCompany?: string | null
+                                authorImage?: any
+                            }
+                            return (
                             <motion.article
-                                key={testimonial.id ?? index}
-                                className="flex h-full flex-col rounded-lg border border-border bg-card p-6 shadow-sm transition-shadow duration-200 hover:shadow-md"
+                                key={t.id ?? index}
+                                className="neu-raised flex h-full flex-col rounded-2xl p-6"
                                 variants={cardVariants}
                             >
                                 {/* Quote */}
                                 <div className="mb-6 flex-1">
                                     <svg
-                                        className="mb-3 h-8 w-8 text-primary/20"
+                                        className="mb-3 h-8 w-8 text-foreground/10"
                                         fill="currentColor"
                                         viewBox="0 0 32 32"
                                         aria-hidden="true"
                                     >
                                         <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
                                     </svg>
-                                    <p className="break-words text-base leading-7 text-foreground">{testimonial.quote}</p>
+                                    <p className="break-words text-base leading-7 text-foreground">{t.quote}</p>
                                 </div>
 
                                 {/* Author Info */}
                                 <div className="flex items-center gap-3 border-t border-border pt-4">
-                                    {testimonial.authorImage && typeof testimonial.authorImage === 'object' && (
+                                    {t.authorImage && typeof t.authorImage === 'object' && (
                                         <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
-                                            <Media resource={testimonial.authorImage} imgClassName="object-cover" fill />
+                                            <Media resource={t.authorImage} imgClassName="object-cover" fill />
                                         </div>
                                     )}
                                     <div className="flex-1 space-y-0.5">
                                         <p className="text-sm font-semibold text-foreground">
-                                            {testimonial.authorName}
+                                            {t.authorName}
                                         </p>
-                                        {(testimonial.authorRole || testimonial.authorCompany) && (
+                                        {(t.authorRole || t.authorCompany) && (
                                             <p className="text-xs text-muted-foreground">
-                                                {[testimonial.authorRole, testimonial.authorCompany]
+                                                {[t.authorRole, t.authorCompany]
                                                     .filter(Boolean)
                                                     .join(' • ')}
                                             </p>
@@ -158,7 +168,8 @@ export const TestimonialGridClient: React.FC<Props> = ({
                                     </div>
                                 </div>
                             </motion.article>
-                        ))}
+                            )
+                        })}
                     </motion.div>
                 )}
             </div>

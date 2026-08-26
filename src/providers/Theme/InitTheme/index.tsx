@@ -1,14 +1,17 @@
-import Script from 'next/script'
 import React from 'react'
 
 import { defaultTheme, themeLocalStorageKey } from '../ThemeSelector/types'
 
 export const InitTheme: React.FC = () => {
+  // The <script> is embedded as raw HTML inside a hidden wrapper so React never
+  // renders a script element itself (avoids the "Encountered a script tag while
+  // rendering React component" error in Next 16 / React 19). The browser still
+  // executes it while parsing the server-streamed HTML, before first paint.
   return (
-    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
-    <Script
+    <div
+      hidden
       dangerouslySetInnerHTML={{
-        __html: `
+        __html: `<script id="theme-script">
   (function () {
     function getImplicitPreference() {
       var mediaQuery = '(prefers-color-scheme: dark)'
@@ -41,10 +44,8 @@ export const InitTheme: React.FC = () => {
 
     document.documentElement.setAttribute('data-theme', themeToSet)
   })();
-  `,
+  </script>`,
       }}
-      id="theme-script"
-      strategy="beforeInteractive"
     />
   )
 }

@@ -76,7 +76,9 @@ export interface Config {
     categories: Category;
     clients: Client;
     institutes: Institute;
+    'tech-categories': TechCategory;
     technologies: Technology;
+    testimonials: Testimonial;
     users: User;
     'user-avatar': UserAvatar;
     redirects: Redirect;
@@ -100,7 +102,9 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     clients: ClientsSelect<false> | ClientsSelect<true>;
     institutes: InstitutesSelect<false> | InstitutesSelect<true>;
+    'tech-categories': TechCategoriesSelect<false> | TechCategoriesSelect<true>;
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'user-avatar': UserAvatarSelect<false> | UserAvatarSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -987,7 +991,6 @@ export interface Project {
     | {
         id?: string | null;
         name?: string | null;
-        category?: string | null;
       }[]
     | null;
   categories?: (number | Category)[] | null;
@@ -1052,37 +1055,51 @@ export interface Technology {
    */
   logoDark?: (number | null) | Media;
   website?: string | null;
-  category?:
-    | (
-        | 'frontend-framework'
-        | 'backend-runtime'
-        | 'language'
-        | 'database'
-        | 'cloud'
-        | 'web-services'
-        | 'dev-tools'
-        | 'scripting'
-        | 'ui-ux'
-        | 'graphic-design'
-        | 'cad'
-        | 'microcontroller'
-        | 'sbc'
-        | 'embedded'
-        | 'electronics-design'
-        | 'iot'
-        | 'protocol'
-        | 'wireless'
-        | '3d-printing'
-        | 'cnc'
-        | 'manufacturing'
-        | 'material'
-        | 'other'
-      )
-    | null;
+  /**
+   * Assign one or more categories. On the landing page, the tech will appear under each selected category.
+   */
+  techCategories?: (number | TechCategory)[] | null;
   /**
    * Include in featured tech stack carousels
    */
   featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tech-categories".
+ */
+export interface TechCategory {
+  id: number;
+  /**
+   * e.g. "Embedded & Hardware", "Design", "AI / Agents" — translated per locale
+   */
+  label: string;
+  /**
+   * URL-safe identifier (lowercase, dashes). e.g. "embedded-hardware". Not localized.
+   */
+  slug: string;
+  /**
+   * Optional short description for the category — translated per locale
+   */
+  description?: string | null;
+  /**
+   * Optional icon displayed next to the category label
+   */
+  icon?: (number | null) | Media;
+  /**
+   * Optional — makes this a subcategory. On the landing page, subcategories are grouped under their parent.
+   */
+  parent?: (number | null) | TechCategory;
+  /**
+   * Lower numbers appear first on the landing page (within the same parent)
+   */
+  order?: number | null;
+  /**
+   * Include this category group in the landing page Tech Stack section
+   */
+  showOnLanding?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -13180,22 +13197,9 @@ export interface FAQGridBlock {
  */
 export interface Testimonial1Block {
   /**
-   * The testimonial quote text
+   * Select a testimonial from the collection
    */
-  quote: string;
-  authorName: string;
-  /**
-   * Job title or role (optional)
-   */
-  authorRole?: string | null;
-  /**
-   * Company or organization name (optional)
-   */
-  authorCompany?: string | null;
-  /**
-   * Author profile picture (optional)
-   */
-  authorImage?: (number | null) | Media;
+  testimonial: number | Testimonial;
   /**
    * Vertical spacing around the section
    */
@@ -13211,6 +13215,39 @@ export interface Testimonial1Block {
   id?: string | null;
   blockName?: string | null;
   blockType: 'testimonial1';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  /**
+   * The testimonial quote text
+   */
+  quote: string;
+  /**
+   * Author full name
+   */
+  authorName: string;
+  /**
+   * Job title or role (optional)
+   */
+  authorRole?: string | null;
+  /**
+   * Company or organization name (optional)
+   */
+  authorCompany?: string | null;
+  /**
+   * Author profile picture (optional)
+   */
+  authorImage?: (number | null) | Media;
+  /**
+   * Star rating for the testimonial (used by Testimonial4 block)
+   */
+  rating?: ('5' | '4.5' | '4' | '3.5' | '3') | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -13252,31 +13289,9 @@ export interface Testimonial3Type {
     appearance?: ('default' | 'outline') | null;
   };
   /**
-   * Add testimonials that users can navigate through
+   * Select testimonials that users can navigate through
    */
-  testimonials: {
-    /**
-     * The testimonial quote text
-     */
-    quote: string;
-    /**
-     * Author full name
-     */
-    authorName: string;
-    /**
-     * Job title or role (optional)
-     */
-    authorRole?: string | null;
-    /**
-     * Company or organization name (optional)
-     */
-    authorCompany?: string | null;
-    /**
-     * Author profile picture (optional)
-     */
-    authorImage?: (number | null) | Media;
-    id?: string | null;
-  }[];
+  testimonials: (number | Testimonial)[];
   /**
    * Vertical spacing around the section
    */
@@ -13333,35 +13348,9 @@ export interface Testimonial4Type {
     appearance?: ('default' | 'outline') | null;
   };
   /**
-   * Add testimonial cards with ratings and author information
+   * Select testimonial cards with ratings and author information
    */
-  testimonials: {
-    /**
-     * The testimonial quote text
-     */
-    quote: string;
-    /**
-     * Author full name
-     */
-    authorName: string;
-    /**
-     * Job title or role (optional)
-     */
-    authorRole?: string | null;
-    /**
-     * Company or organization name (optional)
-     */
-    authorCompany?: string | null;
-    /**
-     * Author profile picture (optional)
-     */
-    authorImage?: (number | null) | Media;
-    /**
-     * Star rating for the testimonial
-     */
-    rating?: ('5' | '4.5' | '4' | '3.5' | '3') | null;
-    id?: string | null;
-  }[];
+  testimonials: (number | Testimonial)[];
   /**
    * Vertical spacing around the section
    */
@@ -13392,31 +13381,9 @@ export interface TestimonialGridBlock {
    */
   description?: string | null;
   /**
-   * Add 3-6 testimonials for optimal grid layout
+   * Select 3-6 testimonials for optimal grid layout
    */
-  testimonials: {
-    /**
-     * The testimonial quote text
-     */
-    quote: string;
-    /**
-     * Author full name
-     */
-    authorName: string;
-    /**
-     * Job title or role (optional)
-     */
-    authorRole?: string | null;
-    /**
-     * Company or organization name (optional)
-     */
-    authorCompany?: string | null;
-    /**
-     * Author profile picture (optional)
-     */
-    authorImage?: (number | null) | Media;
-    id?: string | null;
-  }[];
+  testimonials: (number | Testimonial)[];
   /**
    * Vertical spacing around the section
    */
@@ -14011,8 +13978,16 @@ export interface PayloadLockedDocument {
         value: number | Institute;
       } | null)
     | ({
+        relationTo: 'tech-categories';
+        value: number | TechCategory;
+      } | null)
+    | ({
         relationTo: 'technologies';
         value: number | Technology;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
       } | null)
     | ({
         relationTo: 'users';
@@ -14679,11 +14654,7 @@ export interface FAQGridBlockSelect<T extends boolean = true> {
  * via the `definition` "Testimonial1Block_select".
  */
 export interface Testimonial1BlockSelect<T extends boolean = true> {
-  quote?: T;
-  authorName?: T;
-  authorRole?: T;
-  authorCompany?: T;
-  authorImage?: T;
+  testimonial?: T;
   spacingPreset?: T;
   backgroundTheme?: T;
   contentAlignment?: T;
@@ -14708,16 +14679,7 @@ export interface Testimonial3TypeSelect<T extends boolean = true> {
         label?: T;
         appearance?: T;
       };
-  testimonials?:
-    | T
-    | {
-        quote?: T;
-        authorName?: T;
-        authorRole?: T;
-        authorCompany?: T;
-        authorImage?: T;
-        id?: T;
-      };
+  testimonials?: T;
   spacingPreset?: T;
   backgroundTheme?: T;
   contentAlignment?: T;
@@ -14742,17 +14704,7 @@ export interface Testimonial4TypeSelect<T extends boolean = true> {
         label?: T;
         appearance?: T;
       };
-  testimonials?:
-    | T
-    | {
-        quote?: T;
-        authorName?: T;
-        authorRole?: T;
-        authorCompany?: T;
-        authorImage?: T;
-        rating?: T;
-        id?: T;
-      };
+  testimonials?: T;
   spacingPreset?: T;
   backgroundTheme?: T;
   contentAlignment?: T;
@@ -14766,16 +14718,7 @@ export interface Testimonial4TypeSelect<T extends boolean = true> {
 export interface TestimonialGridBlockSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  testimonials?:
-    | T
-    | {
-        quote?: T;
-        authorName?: T;
-        authorRole?: T;
-        authorCompany?: T;
-        authorImage?: T;
-        id?: T;
-      };
+  testimonials?: T;
   spacingPreset?: T;
   backgroundTheme?: T;
   contentAlignment?: T;
@@ -14918,7 +14861,6 @@ export interface ProjectsSelect<T extends boolean = true> {
     | {
         id?: T;
         name?: T;
-        category?: T;
       };
   categories?: T;
   featured?: T;
@@ -15082,6 +15024,21 @@ export interface InstitutesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tech-categories_select".
+ */
+export interface TechCategoriesSelect<T extends boolean = true> {
+  label?: T;
+  slug?: T;
+  description?: T;
+  icon?: T;
+  parent?: T;
+  order?: T;
+  showOnLanding?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "technologies_select".
  */
 export interface TechnologiesSelect<T extends boolean = true> {
@@ -15090,8 +15047,22 @@ export interface TechnologiesSelect<T extends boolean = true> {
   logo?: T;
   logoDark?: T;
   website?: T;
-  category?: T;
+  techCategories?: T;
   featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  authorName?: T;
+  authorRole?: T;
+  authorCompany?: T;
+  authorImage?: T;
+  rating?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -15611,7 +15582,7 @@ export interface Header {
   /**
    * Choose the header layout and styling approach
    */
-  headerStyle?: ('default' | 'modern' | 'minimal' | 'fullWidth') | null;
+  headerStyle?: ('default' | 'modern' | 'minimal' | 'neumorphic' | 'fullWidth') | null;
   /**
    * Enable to make the header stick to the top when scrolling
    */
@@ -15629,7 +15600,7 @@ export interface Header {
    */
   backgroundColor?: string | null;
   /**
-   * Choose the text color scheme for the header navigation and content
+   * Choose the text color scheme for the header navigation and content. Not available for Neumorphic style (uses theme colors automatically).
    */
   textColor?: ('auto' | 'primary' | 'custom') | null;
   /**
@@ -15674,6 +15645,10 @@ export interface Footer {
       }[]
     | null;
   logo?: {
+    /**
+     * Use the built-in vector brand mark (rendered with a relief/emboss effect on the footer knob) or an uploaded logo image.
+     */
+    logoSource?: ('default' | 'upload') | null;
     /**
      * Check to use a different logo for the footer instead of the global site logo
      */
@@ -15876,6 +15851,7 @@ export interface FooterSelect<T extends boolean = true> {
   logo?:
     | T
     | {
+        logoSource?: T;
         overrideSiteLogo?: T;
         logoMode?: T;
         customLogo?: T;

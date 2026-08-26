@@ -12,66 +12,14 @@ export const Testimonial1: Block = {
     },
     fields: [
         {
-            type: 'collapsible',
-            label: 'Quote',
+            name: 'testimonial',
+            type: 'relationship',
+            relationTo: 'testimonials',
+            label: 'Testimonial',
+            required: true,
             admin: {
-                initCollapsed: false,
+                description: 'Select a testimonial from the collection',
             },
-            fields: [
-                {
-                    name: 'quote',
-                    label: 'Quote',
-                    type: 'textarea',
-                    required: true,
-                    localized: true,
-                    admin: {
-                        description: 'The testimonial quote text',
-                    },
-                },
-            ],
-        },
-        {
-            type: 'collapsible',
-            label: 'Author Information',
-            admin: {
-                initCollapsed: true,
-            },
-            fields: [
-                {
-                    name: 'authorName',
-                    label: 'Name',
-                    type: 'text',
-                    required: true,
-                    localized: true,
-                },
-                {
-                    name: 'authorRole',
-                    label: 'Role / Title',
-                    type: 'text',
-                    localized: true,
-                    admin: {
-                        description: 'Job title or role (optional)',
-                    },
-                },
-                {
-                    name: 'authorCompany',
-                    label: 'Company',
-                    type: 'text',
-                    localized: true,
-                    admin: {
-                        description: 'Company or organization name (optional)',
-                    },
-                },
-                {
-                    name: 'authorImage',
-                    label: 'Avatar',
-                    type: 'upload',
-                    relationTo: 'media',
-                    admin: {
-                        description: 'Author profile picture (optional)',
-                    },
-                },
-            ],
         },
         {
             type: 'collapsible',

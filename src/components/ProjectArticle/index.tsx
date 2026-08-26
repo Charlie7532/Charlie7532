@@ -4,6 +4,7 @@ import React from 'react'
 import RichText from '@/components/RichText'
 import TableOfContents from '@/components/TableOfContents'
 import { TechStackBlock } from '@/blocks/TechStack/Component'
+import { NeuButton, NeuDivider } from '@/components/ui/neu'
 import { ExternalLink, Github } from 'lucide-react'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { cn } from '@/utilities/ui'
@@ -21,9 +22,9 @@ const difficultyLabel: Record<string, string> = {
 }
 
 export function ProjectArticle({ project }: ProjectArticleProps) {
-    const { content, liveUrl, repoUrl, startDate, duration, difficulty, role } = project
+    const { content, liveUrl, repoUrl, startDate, duration, difficulty } = project
 
-    const hasDetails = startDate || duration || difficulty || role
+    const hasDetails = startDate || duration || difficulty
     const hasSidebar = content || hasDetails  // show sidebar whenever there's content to navigate
 
     return (
@@ -33,26 +34,25 @@ export function ProjectArticle({ project }: ProjectArticleProps) {
                 {(liveUrl || repoUrl) && (
                     <div className={cn('flex gap-4 mb-10', hasSidebar ? 'max-w-[64rem] mx-auto' : 'max-w-[48rem] mx-auto')}>
                         {liveUrl && (
-                            <a
+                            <NeuButton
+                                variant="accent"
+                                size="sm"
                                 href={liveUrl}
                                 target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-sm font-medium border border-current rounded-full px-4 py-1.5 hover:opacity-70 transition-opacity"
                             >
                                 <ExternalLink className="w-4 h-4" />
                                 Live site
-                            </a>
+                            </NeuButton>
                         )}
                         {repoUrl && (
-                            <a
+                            <NeuButton
+                                size="sm"
                                 href={repoUrl}
                                 target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-sm font-medium border border-current rounded-full px-4 py-1.5 hover:opacity-70 transition-opacity"
                             >
                                 <Github className="w-4 h-4" />
                                 View repo
-                            </a>
+                            </NeuButton>
                         )}
                     </div>
                 )}
@@ -97,10 +97,11 @@ export function ProjectArticle({ project }: ProjectArticleProps) {
                             {content && <TableOfContents position="right" />}
 
                             {(startDate || duration || difficulty) && (
-                                <div className="rounded-xl border border-border p-5 flex flex-col gap-3">
+                                <div className="neu-raised rounded-2xl p-5 flex flex-col gap-3">
                                     <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                                         Details
                                     </p>
+                                    <NeuDivider />
                                     <div className="flex flex-col gap-2 text-sm">
                                         {startDate && (
                                             <div className="flex justify-between gap-4">
@@ -125,15 +126,6 @@ export function ProjectArticle({ project }: ProjectArticleProps) {
                                             </div>
                                         )}
                                     </div>
-                                </div>
-                            )}
-
-                            {role && (
-                                <div className="rounded-xl border border-border p-5 flex flex-col gap-3">
-                                    <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                                        My Role
-                                    </p>
-                                    <p className="text-sm leading-relaxed">{role}</p>
                                 </div>
                             )}
                         </aside>
@@ -143,10 +135,11 @@ export function ProjectArticle({ project }: ProjectArticleProps) {
                     {hasDetails && (
                         <div className="lg:hidden flex flex-col gap-4">
                             {(startDate || duration || difficulty) && (
-                                <div className="rounded-xl border border-border p-5 flex flex-col gap-3">
+                                <div className="neu-raised rounded-2xl p-5 flex flex-col gap-3">
                                     <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                                         Details
                                     </p>
+                                    <NeuDivider />
                                     <div className="flex flex-col gap-2 text-sm">
                                         {startDate && (
                                             <div className="flex justify-between gap-4">
@@ -171,15 +164,6 @@ export function ProjectArticle({ project }: ProjectArticleProps) {
                                             </div>
                                         )}
                                     </div>
-                                </div>
-                            )}
-
-                            {role && (
-                                <div className="rounded-xl border border-border p-5 flex flex-col gap-3">
-                                    <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                                        My Role
-                                    </p>
-                                    <p className="text-sm leading-relaxed">{role}</p>
                                 </div>
                             )}
                         </div>

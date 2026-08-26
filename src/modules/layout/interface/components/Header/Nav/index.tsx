@@ -44,11 +44,23 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data }) => {
 
   // Get text color styling to ensure consistency with header
   const getTextColorStyles = () => {
-    const textColor = (data as any)?.textColor || 'auto'
+    const headerStyle = (data as any)?.headerStyle || 'default'
     let textClasses = ''
     let linkClasses = ''
     const style: React.CSSProperties = {}
     const linkStyle: React.CSSProperties = {}
+
+    // Neumorphic style always uses theme-aware foreground color
+    if (headerStyle === 'neumorphic') {
+      return {
+        textClasses: 'text-foreground',
+        linkClasses: 'hover:opacity-70',
+        style,
+        linkStyle,
+      }
+    }
+
+    const textColor = (data as any)?.textColor || 'auto'
 
     switch (textColor) {
       case 'primary':

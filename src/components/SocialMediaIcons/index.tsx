@@ -87,12 +87,14 @@ interface SocialMediaLinksProps {
     }>
     className?: string
     iconClassName?: string
+    linkClassName?: string
 }
 
 export const SocialMediaLinks: React.FC<SocialMediaLinksProps> = ({
     socialMediaItems,
     className = "flex space-x-4",
-    iconClassName = "w-4 h-4 transition-all duration-500 group-hover:text-secondary-500"
+    iconClassName = "w-4 h-4 transition-all duration-500 group-hover:text-secondary-500",
+    linkClassName = "group w-9 h-9 rounded-full border border-current flex justify-center items-center transition-all duration-500 hover:opacity-70"
 }) => {
     return (
         <div className={className}>
@@ -102,7 +104,7 @@ export const SocialMediaLinks: React.FC<SocialMediaLinksProps> = ({
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group w-9 h-9 rounded-full border border-current flex justify-center items-center transition-all duration-500 hover:opacity-70"
+                    className={linkClassName}
                     aria-label={`Follow us on ${item.platform}`}
                 >
                     <SocialMediaIcon platform={item.platform} className={iconClassName} />

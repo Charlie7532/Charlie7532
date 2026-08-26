@@ -116,14 +116,14 @@ export const IconGridBlock: React.FC<Props> = ({
                 {items?.map((item, index) => {
                     const IconComponent = iconMap[item.icon as string]
                     return (
-                        <div key={index} className="flex flex-col gap-3">
+                        <div key={index} className="neu-raised rounded-2xl flex flex-col gap-3 p-5">
                             {IconComponent && (
                                 style === 'boxed' ? (
-                                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shrink-0">
-                                        <IconComponent className="w-6 h-6 text-primary-foreground" />
+                                    <div className="neu-inset w-11 h-11 rounded-xl flex items-center justify-center shrink-0">
+                                        <IconComponent className="w-5 h-5 text-foreground/70" />
                                     </div>
                                 ) : (
-                                    <IconComponent className="w-8 h-8 text-primary" />
+                                    <IconComponent className="w-7 h-7 text-foreground/60" />
                                 )
                             )}
                             {item.title && (

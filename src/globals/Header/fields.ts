@@ -20,6 +20,10 @@ const headerStyle: Field = {
       value: 'minimal',
     },
     {
+      label: 'Neumorphic - Soft UI Pill',
+      value: 'neumorphic',
+    },
+    {
       label: 'Full Width - Stretched to Edges',
       value: 'fullWidth',
     },
@@ -309,6 +313,7 @@ const settingsFields: Field[] = [
     ],
     admin: {
       description: 'Choose the header background transparency level',
+      condition: (data) => data.headerStyle !== 'neumorphic',
     },
   },
   {
@@ -362,7 +367,7 @@ const settingsFields: Field[] = [
     admin: {
       description: 'Color used for solid and semi-transparent backgrounds.',
       placeholder: '#ffffff',
-      condition: (data) => data.backgroundType !== 'transparent',
+      condition: (data) => data.headerStyle !== 'neumorphic' && data.backgroundType !== 'transparent',
       components: {
         Field: {
           path: '@/components/fields/ColorPicker',
@@ -390,7 +395,8 @@ const settingsFields: Field[] = [
       },
     ],
     admin: {
-      description: 'Choose the text color scheme for the header navigation and content',
+      description: 'Choose the text color scheme for the header navigation and content. Not available for Neumorphic style (uses theme colors automatically).',
+      condition: (data) => data.headerStyle !== 'neumorphic',
     },
   },
   {
@@ -400,7 +406,7 @@ const settingsFields: Field[] = [
     admin: {
       description: 'Enter a hex color code (e.g., #FF0000) for custom text color',
       placeholder: '#000000',
-      condition: (data) => data.textColor === 'custom',
+      condition: (data) => data.headerStyle !== 'neumorphic' && data.textColor === 'custom',
       components: {
         Field: {
           path: '@/components/fields/ColorPicker',
