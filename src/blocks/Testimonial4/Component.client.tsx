@@ -141,7 +141,14 @@ export const Testimonial4Client: React.FC<Props> = ({
                     className="-mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                 >
                     {testimonials.map((testimonial, index) => {
-                        const hasImage = testimonial.authorImage && typeof testimonial.authorImage === 'object'
+                        // `testimonials` is typed as `(number | Testimonial)[]`, so it can be either
+                        // a populated object or just an ID. Guard against the numeric variant before
+                        // accessing any fields.
+                        if (!testimonial || typeof testimonial === 'number') return null
+
+                        const hasImage =
+                            testimonial.authorImage &&
+                            typeof testimonial.authorImage === 'object'
 
                         return (
                             <article
@@ -153,10 +160,10 @@ export const Testimonial4Client: React.FC<Props> = ({
                                     <div className="grid grid-cols-1 lg:grid-cols-2">
                                         <div className="relative aspect-4/3 overflow-hidden lg:aspect-auto">
                                             <Media
-                                                resource={
-                                                    testimonial.authorImage as Testimonial4Type['testimonials'][number]['authorImage'] &
-                                                    object
-                                                }
+                                                // `authorImage` is typed as `(number | null) | Media`, which
+                                                // matches the `resource` prop on `Media`, so it can be passed
+                                                // directly without additional casting.
+                                                resource={testimonial.authorImage ?? undefined}
                                                 imgClassName="object-cover"
                                                 fill
                                             />

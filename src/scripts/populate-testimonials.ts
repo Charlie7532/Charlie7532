@@ -14,14 +14,14 @@ async function populate() {
       authorName: "Jorge Andrés Barrera",
       authorRole: "CTO",
       authorCompany: null,
-      rating: "5",
+      rating: "5" as const,
     },
     {
       quote: "Juan Carlos is a very attentive, dedicated, and highly initiative-driven person. He has a great passion for engineering and the ability to learn quickly. He has a positive attitude and is capable of solving problems easily when they arise. He possesses skills in computer programming and is a pleasant individual with good energy.",
       authorName: "Veronica Botero",
       authorRole: "MBA Fashion Designer",
       authorCompany: null,
-      rating: "5",
+      rating: "5" as const,
     },
   ]
 
