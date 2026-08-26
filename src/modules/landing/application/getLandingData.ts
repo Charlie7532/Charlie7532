@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import type { FeaturedProjectItem } from '@/modules/landing/interface/components/FeaturedProjects.client'
 import type { LatestPostItem } from '@/modules/landing/interface/components/LatestPosts.client'
+import type { TestimonialItem } from '@/modules/landing/interface/components/Testimonials.client'
 import type { TechCategory, Technology } from '@/payload-types'
 
 /**
@@ -121,6 +122,22 @@ export async function getLandingTechGroups(): Promise<TechCategoryGroup[]> {
 
         // Filter out empty groups
         return groups.filter((g) => g.technologies.length > 0)
+    } catch {
+        return []
+    }
+}
+
+export async function getTestimonials(): Promise<TestimonialItem[]> {
+    try {
+        const payload = await getPayload({ config: configPromise })
+        const result = await payload.find({
+            collection: 'testimonials',
+            depth: 1,
+            limit: 10,
+            overrideAccess: false,
+            sort: 'createdAt',
+        })
+        return result.docs as TestimonialItem[]
     } catch {
         return []
     }
