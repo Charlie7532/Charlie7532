@@ -13763,6 +13763,20 @@ export interface PayloadMcpApiKey {
      */
     update?: boolean | null;
   };
+  testimonials?: {
+    /**
+     * Allow clients to find testimonials.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create testimonials.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update testimonials.
+     */
+    update?: boolean | null;
+  };
   'payload-mcp-tool'?: {
     /**
      * Download an image from a public URL and upload it to the Payload media library. Returns the new media record ID and URL. Use this to import images from external sources (e.g. WordPress blogs) without needing a local file or multipart upload.
@@ -13823,6 +13837,12 @@ export interface PayloadMcpPublicApiKey {
   posts?: {
     /**
      * Allow clients to find posts.
+     */
+    find?: boolean | null;
+  };
+  testimonials?: {
+    /**
+     * Allow clients to find testimonials.
      */
     find?: boolean | null;
   };
@@ -15392,6 +15412,13 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
         create?: T;
         update?: T;
       };
+  testimonials?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
   'payload-mcp-tool'?:
     | T
     | {
@@ -15432,6 +15459,11 @@ export interface PayloadMcpPublicApiKeysSelect<T extends boolean = true> {
         find?: T;
       };
   posts?:
+    | T
+    | {
+        find?: T;
+      };
+  testimonials?:
     | T
     | {
         find?: T;

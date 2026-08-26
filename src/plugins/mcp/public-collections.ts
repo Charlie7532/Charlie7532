@@ -41,4 +41,10 @@ export const publicMcpCollections: NonNullable<MCPPluginConfig['collections']> =
             'Blog posts covering engineering decisions, project write-ups, and technical topics. ' +
             'Useful for understanding how Juan thinks and communicates technically.',
     },
+    testimonials: {
+        enabled: { find: true },
+        description:
+            'Testimonial records with quote, author name, role, company, avatar, and star rating. ' +
+            'Useful for answering questions about client feedback and professional reputation.',
+    },
 }

@@ -45,4 +45,9 @@ export const mcpCollections: NonNullable<MCPPluginConfig['collections']> = {
         enabled: { find: true, create: true, update: true },
         description: 'Media library records (images, files). Read-only — uploads must go through the admin UI.',
     },
+    testimonials: {
+        enabled: { find: true, create: true, update: true },
+        description:
+            'Testimonial records with quote, author name, role, company, avatar, and star rating. Used by testimonial blocks across the site.',
+    },
 }
