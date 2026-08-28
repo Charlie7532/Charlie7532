@@ -8,7 +8,9 @@ import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
 import { Clients } from './collections/Clients'
+import { CVs } from './collections/CVs'
 import { Institutes } from './collections/Institutes'
+import { JobApplications } from './collections/JobApplications'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -82,7 +84,7 @@ export default buildConfig({
     fallback: true,
   },
   db: vercelPostgresAdapter({ pool: { connectionString: process.env.DATABASE_URL || '', }, }),
-  collections: [Pages, Posts, Projects, Media, Categories, Clients, Institutes, TechCategories, Technologies, Testimonials, Users, UserAvatar],
+  collections: [CVs, JobApplications, Pages, Posts, Projects, Media, Categories, Clients, Institutes, TechCategories, Technologies, Testimonials, Users, UserAvatar],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SiteSettings],
   plugins,
