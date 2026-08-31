@@ -69,6 +69,8 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    cvs: Cv;
+    'job-applications': JobApplication;
     pages: Page;
     posts: Post;
     projects: Project;
@@ -95,6 +97,8 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    cvs: CvsSelect<false> | CvsSelect<true>;
+    'job-applications': JobApplicationsSelect<false> | JobApplicationsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
@@ -211,6 +215,305 @@ export interface PayloadMcpPublicApiKeyAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cvs".
+ */
+export interface Cv {
+  id: number;
+  /**
+   * e.g. "Main CV — Full Stack Developer"
+   */
+  title: string;
+  /**
+   * Short headline or professional summary that appears at the top of the CV
+   */
+  summary?: string | null;
+  /**
+   * Each position / role you want on this CV
+   */
+  experiences?:
+    | {
+        title: string;
+        company: string;
+        location?: string | null;
+        startDate: string;
+        /**
+         * Leave empty if this is your current role
+         */
+        endDate?: string | null;
+        employmentType?: ('full-time' | 'contract' | 'freelance' | 'internship') | null;
+        /**
+         * Your own description of this role — the source of truth used when tailoring CVs
+         */
+        description?: string | null;
+        highlights?:
+          | {
+              highlight?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        technologies?: (number | Technology)[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Mark this CV as the source of truth for new job applications
+   */
+  isDefault?: boolean | null;
+  /**
+   * Used for QR tracking URLs — e.g. /cv/{slug}
+   */
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies".
+ */
+export interface Technology {
+  id: number;
+  name: string;
+  /**
+   * Brief intro shown on the technology page and search results
+   */
+  description?: string | null;
+  logo?: (number | null) | Media;
+  /**
+   * Optional alternate logo for dark backgrounds
+   */
+  logoDark?: (number | null) | Media;
+  website?: string | null;
+  /**
+   * Assign one or more categories. On the landing page, the tech will appear under each selected category.
+   */
+  techCategories?: (number | TechCategory)[] | null;
+  /**
+   * Include in featured tech stack carousels
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  caption?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    square?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    small?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    medium?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    large?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    xlarge?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tech-categories".
+ */
+export interface TechCategory {
+  id: number;
+  /**
+   * e.g. "Embedded & Hardware", "Design", "AI / Agents" — translated per locale
+   */
+  label: string;
+  /**
+   * URL-safe identifier (lowercase, dashes). e.g. "embedded-hardware". Not localized.
+   */
+  slug: string;
+  /**
+   * Optional short description for the category — translated per locale
+   */
+  description?: string | null;
+  /**
+   * Optional icon displayed next to the category label
+   */
+  icon?: (number | null) | Media;
+  /**
+   * Optional — makes this a subcategory. On the landing page, subcategories are grouped under their parent.
+   */
+  parent?: (number | null) | TechCategory;
+  /**
+   * Lower numbers appear first on the landing page (within the same parent)
+   */
+  order?: number | null;
+  /**
+   * Include this category group in the landing page Tech Stack section
+   */
+  showOnLanding?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications".
+ */
+export interface JobApplication {
+  id: number;
+  jobTitle: string;
+  company: string;
+  jobUrl?: string | null;
+  source?: ('manual' | 'linkedin_url' | 'other') | null;
+  /**
+   * Full job posting text (pasted or auto-extracted)
+   */
+  rawJobDescription?: string | null;
+  /**
+   * Which CV was used as the source of truth for this tailored version
+   */
+  parentCv?: (number | null) | Cv;
+  /**
+   * Key requirements extracted from the job posting
+   */
+  extractedRequirements?:
+    | {
+        requirement?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Key responsibilities extracted from the job posting
+   */
+  extractedResponsibilities?:
+    | {
+        responsibility?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  extractedNiceToHave?:
+    | {
+        skill?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Which experiences from the base CV were selected for this tailored version (store the experience array IDs)
+   */
+  selectedExperiences?:
+    | {
+        experienceId?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Professional summary rewritten for this specific job
+   */
+  tailoredSummary?: string | null;
+  /**
+   * Structured CV content tailored to this job — can hold sections, rewritten descriptions, etc. Easier to export to PDF than rich text.
+   */
+  tailoredDescription?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  tailoredHighlights?:
+    | {
+        highlight?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  status?: ('draft' | 'ready' | 'submitted') | null;
+  /**
+   * Your personal notes about this application
+   */
+  notes?: string | null;
+  /**
+   * Auto-generated from job title — used for tracking (e.g. /apply/{slug})
+   */
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -436,99 +739,6 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  caption?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  prefix?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    square?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    small?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    medium?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    large?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    xlarge?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    og?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -589,7 +799,6 @@ export interface UserAvatar {
   id: number;
   alt?: string | null;
   user: number | User;
-  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1035,71 +1244,6 @@ export interface Client {
    * Include this client in the featured clients carousel block
    */
   featured?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "technologies".
- */
-export interface Technology {
-  id: number;
-  name: string;
-  /**
-   * Brief intro shown on the technology page and search results
-   */
-  description?: string | null;
-  logo?: (number | null) | Media;
-  /**
-   * Optional alternate logo for dark backgrounds
-   */
-  logoDark?: (number | null) | Media;
-  website?: string | null;
-  /**
-   * Assign one or more categories. On the landing page, the tech will appear under each selected category.
-   */
-  techCategories?: (number | TechCategory)[] | null;
-  /**
-   * Include in featured tech stack carousels
-   */
-  featured?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tech-categories".
- */
-export interface TechCategory {
-  id: number;
-  /**
-   * e.g. "Embedded & Hardware", "Design", "AI / Agents" — translated per locale
-   */
-  label: string;
-  /**
-   * URL-safe identifier (lowercase, dashes). e.g. "embedded-hardware". Not localized.
-   */
-  slug: string;
-  /**
-   * Optional short description for the category — translated per locale
-   */
-  description?: string | null;
-  /**
-   * Optional icon displayed next to the category label
-   */
-  icon?: (number | null) | Media;
-  /**
-   * Optional — makes this a subcategory. On the landing page, subcategories are grouped under their parent.
-   */
-  parent?: (number | null) | TechCategory;
-  /**
-   * Lower numbers appear first on the landing page (within the same parent)
-   */
-  order?: number | null;
-  /**
-   * Include this category group in the landing page Tech Stack section
-   */
-  showOnLanding?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -7120,8 +7264,7 @@ export interface PricingCard {
     | 'ZoomOutIcon'
     | 'createLucideIcon'
     | 'default'
-    | 'icons'
-    | 'module.exports';
+    | 'icons';
   price: number;
   title: string;
   subtitle?: string | null;
@@ -12903,7 +13046,6 @@ export interface SectionHeroWithBadge {
           | 'createLucideIcon'
           | 'default'
           | 'icons'
-          | 'module.exports'
         )
       | null;
   };
@@ -13970,6 +14112,14 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'cvs';
+        value: number | Cv;
+      } | null)
+    | ({
+        relationTo: 'job-applications';
+        value: number | JobApplication;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: number | Page;
       } | null)
@@ -14100,6 +14250,90 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cvs_select".
+ */
+export interface CvsSelect<T extends boolean = true> {
+  title?: T;
+  summary?: T;
+  experiences?:
+    | T
+    | {
+        title?: T;
+        company?: T;
+        location?: T;
+        startDate?: T;
+        endDate?: T;
+        employmentType?: T;
+        description?: T;
+        highlights?:
+          | T
+          | {
+              highlight?: T;
+              id?: T;
+            };
+        technologies?: T;
+        id?: T;
+      };
+  isDefault?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications_select".
+ */
+export interface JobApplicationsSelect<T extends boolean = true> {
+  jobTitle?: T;
+  company?: T;
+  jobUrl?: T;
+  source?: T;
+  rawJobDescription?: T;
+  parentCv?: T;
+  extractedRequirements?:
+    | T
+    | {
+        requirement?: T;
+        id?: T;
+      };
+  extractedResponsibilities?:
+    | T
+    | {
+        responsibility?: T;
+        id?: T;
+      };
+  extractedNiceToHave?:
+    | T
+    | {
+        skill?: T;
+        id?: T;
+      };
+  selectedExperiences?:
+    | T
+    | {
+        experienceId?: T;
+        id?: T;
+      };
+  tailoredSummary?: T;
+  tailoredDescription?: T;
+  tailoredHighlights?:
+    | T
+    | {
+        highlight?: T;
+        id?: T;
+      };
+  status?: T;
+  notes?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -14905,7 +15139,6 @@ export interface ProjectsSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
-  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -15118,7 +15351,6 @@ export interface UsersSelect<T extends boolean = true> {
 export interface UserAvatarSelect<T extends boolean = true> {
   alt?: T;
   user?: T;
-  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -16075,6 +16307,14 @@ export interface TaskSchedulePublish {
     locale?: string | null;
     doc?:
       | ({
+          relationTo: 'cvs';
+          value: number | Cv;
+        } | null)
+      | ({
+          relationTo: 'job-applications';
+          value: number | JobApplication;
+        } | null)
+      | ({
           relationTo: 'pages';
           value: number | Page;
         } | null)
@@ -16126,30 +16366,6 @@ export interface CodeBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ImageGalleryBlock".
- */
-export interface ImageGalleryBlock {
-  /**
-   * Add a subtle border around each image cell to emphasise the mosaic grid structure.
-   */
-  showBorder?: boolean | null;
-  /**
-   * Add images for this mosaic group. Use multiple Image Gallery blocks for separate visual sections.
-   */
-  images: {
-    image: number | Media;
-    /**
-     * Optional caption shown in the lightbox
-     */
-    caption?: string | null;
-    id?: string | null;
-  }[];
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'imageGallery';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -16232,6 +16448,30 @@ export interface IconGridBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'iconGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageGalleryBlock".
+ */
+export interface ImageGalleryBlock {
+  /**
+   * Add a subtle border around each image cell to emphasise the mosaic grid structure.
+   */
+  showBorder?: boolean | null;
+  /**
+   * Add images for this mosaic group. Use multiple Image Gallery blocks for separate visual sections.
+   */
+  images: {
+    image: number | Media;
+    /**
+     * Optional caption shown in the lightbox
+     */
+    caption?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageGallery';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
