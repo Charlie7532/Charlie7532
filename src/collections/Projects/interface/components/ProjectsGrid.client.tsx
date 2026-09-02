@@ -9,7 +9,6 @@ import { NeuButton, NeuDivider } from '@/components/ui/neu'
 import { Reveal } from '@/components/ui/reveal'
 import { fetchProjectsArchivePage } from '../../application/useCases/fetchProjectsArchivePage'
 import { GRID_OFFSET, type ProjectArchiveItem } from '../../domain/models/archive'
-import { StatusPill } from './StatusPill'
 
 type Props = {
     /** Grid items from the server render (page 1 minus the hero docs). */
@@ -47,7 +46,6 @@ const ProjectTile: React.FC<{ project: ProjectArchiveItem; index: number }> = ({
                     className="neu-raised group flex h-full flex-col overflow-hidden rounded-3xl p-4"
                 >
                     <div className="neu-inset relative aspect-[16/10] overflow-hidden rounded-2xl">
-                        <StatusPill completedAt={project.completedAt} />
                         {image ? (
                             <Media
                                 resource={image}
@@ -114,13 +112,13 @@ export const ProjectsGrid: React.FC<Props> = ({
     totalDocs,
 }) => {
     const [items, setItems] = useState<ProjectArchiveItem[]>(initialItems)
-    const [hasMore, setHasMore] = useState(startPage < totalPages)
+    const [hasMore, setHasMore] = useState(startPage <= totalPages)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [total, setTotal] = useState(totalDocs)
 
     const pageRef = useRef(startPage)
-    const hasMoreRef = useRef(startPage < totalPages)
+    const hasMoreRef = useRef(startPage <= totalPages)
     const loadingRef = useRef(false)
     const sentinelRef = useRef<HTMLDivElement>(null)
 

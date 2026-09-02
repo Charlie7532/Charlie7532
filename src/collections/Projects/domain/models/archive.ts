@@ -7,7 +7,7 @@ import type { Project } from '@/payload-types'
  */
 
 /** Docs per page in the archive stream (server + REST). */
-export const ARCHIVE_PAGE_SIZE = 14
+export const ARCHIVE_PAGE_SIZE = 20
 /** Docs at the top of page 1 that power the hero row instead of the grid. */
 export const GRID_OFFSET = 2
 

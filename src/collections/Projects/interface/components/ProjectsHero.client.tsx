@@ -7,7 +7,6 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Media } from '@/components/Media'
 import { Reveal } from '@/components/ui/reveal'
 import type { ProjectArchiveItem } from '../../domain/models/archive'
-import { StatusPill } from './StatusPill'
 
 type Props = {
     projects: ProjectArchiveItem[]
@@ -40,7 +39,6 @@ const HeroTile: React.FC<{ project: ProjectArchiveItem; index: number }> = ({
                     className="neu-raised group flex h-full flex-col overflow-hidden rounded-3xl p-4"
                 >
                     <div className="neu-inset relative aspect-[16/10] overflow-hidden rounded-2xl">
-                        <StatusPill completedAt={project.completedAt} />
                         {image ? (
                             <Media
                                 resource={image}

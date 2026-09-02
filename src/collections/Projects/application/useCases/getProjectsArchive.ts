@@ -11,7 +11,7 @@ import {
  * Application layer — server-side projects archive use cases (Local API).
  *
  * The archive is a single paginated stream of published projects sorted by
- * recency (`-completedAt`). The first `GRID_OFFSET` docs of page 1 are
+ * start date (most recent first). The first `GRID_OFFSET` docs of page 1 are
  * reserved for the "Latest" hero row; every other doc flows through the
  * infinite-scroll grid. All pages use the same page size, so page numbering
  * stays consistent between the server render and client-side fetching.
@@ -30,9 +30,9 @@ async function findArchiveProjects(page: number, limit: number) {
         overrideAccess: false,
         where: { _status: { equals: 'published' } },
         // Secondary key keeps pagination stable: projects sharing a
-        // completedAt (or without one) must not shuffle between requests,
+        // startDate (or without one) must not shuffle between requests,
         // otherwise pages can overlap and skip docs.
-        sort: '-completedAt,-createdAt',
+        sort: '-startDate,-createdAt',
         select: {
             title: true,
             slug: true,
