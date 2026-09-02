@@ -4,7 +4,6 @@ import React from 'react'
 import { ProjectsArchive } from '@/collections/Projects/interface/ProjectsArchive'
 import PageClient from './page.client'
 
-export const dynamic = 'force-static'
 export const revalidate = 600
 
 export const metadata: Metadata = {

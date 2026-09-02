@@ -24,7 +24,7 @@ export async function fetchProjectsArchivePage(page: number): Promise<ArchivePag
         depth: '1',
         limit: String(ARCHIVE_PAGE_SIZE),
         page: String(page),
-        sort: '-completedAt',
+        sort: '-completedAt,-createdAt',
         'where[_status][equals]': 'published',
     })
     for (const field of ARCHIVE_SELECT_FIELDS) {

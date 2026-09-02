@@ -29,7 +29,10 @@ async function findArchiveProjects(page: number, limit: number) {
         limit,
         overrideAccess: false,
         where: { _status: { equals: 'published' } },
-        sort: '-completedAt',
+        // Secondary key keeps pagination stable: projects sharing a
+        // completedAt (or without one) must not shuffle between requests,
+        // otherwise pages can overlap and skip docs.
+        sort: '-completedAt,-createdAt',
         select: {
             title: true,
             slug: true,

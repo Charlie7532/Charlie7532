@@ -8,6 +8,7 @@ import { Media } from '@/components/Media'
 import { NeuButton, NeuDivider } from '@/components/ui/neu'
 import { Reveal } from '@/components/ui/reveal'
 import { fetchProjectsArchivePage } from '../../application/useCases/fetchProjectsArchivePage'
+import { GRID_OFFSET, type ProjectArchiveItem } from '../../domain/models/archive'
 import type { ProjectArchiveItem } from '../../domain/models/archive'
 import { StatusPill } from './StatusPill'
 
@@ -17,6 +18,7 @@ type Props = {
     /** Next page number to fetch (1-based, ARCHIVE_PAGE_SIZE stream). */
     startPage: number
     totalPages: number
+    totalDocs: number
 }
 
 const ProjectTile: React.FC<{ project: ProjectArchiveItem; index: number }> = ({
@@ -106,11 +108,17 @@ const SkeletonTile: React.FC = () => (
     </li>
 )
 
-export const ProjectsGrid: React.FC<Props> = ({ initialItems, startPage, totalPages }) => {
+export const ProjectsGrid: React.FC<Props> = ({
+    initialItems,
+    startPage,
+    totalPages,
+    totalDocs,
+}) => {
     const [items, setItems] = useState<ProjectArchiveItem[]>(initialItems)
     const [hasMore, setHasMore] = useState(startPage < totalPages)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [total, setTotal] = useState(totalDocs)
 
     const pageRef = useRef(startPage)
     const hasMoreRef = useRef(startPage < totalPages)
@@ -125,10 +133,15 @@ export const ProjectsGrid: React.FC<Props> = ({ initialItems, startPage, totalPa
 
         try {
             const data = await fetchProjectsArchivePage(pageRef.current)
-            setItems((prev) => [...prev, ...data.items])
+            setItems((prev) => {
+                // Guard against pagination overlap when sort keys tie.
+                const seen = new Set(prev.map((item) => item.id))
+                return [...prev, ...data.items.filter((item) => !seen.has(item.id))]
+            })
             pageRef.current = data.page + 1
             hasMoreRef.current = data.page < data.totalPages
             setHasMore(hasMoreRef.current)
+            setTotal(data.totalDocs)
         } catch (err) {
             // Stop auto-retrying while the sentinel stays in view; the
             // error state offers a manual retry instead.
@@ -159,7 +172,7 @@ export const ProjectsGrid: React.FC<Props> = ({ initialItems, startPage, totalPa
         )
         observer.observe(el)
         return () => observer.disconnect()
-    }, [loadMore])
+    }, [loadMore, items.length])
 
     if (!items.length) return null
 
@@ -193,7 +206,7 @@ export const ProjectsGrid: React.FC<Props> = ({ initialItems, startPage, totalPa
                 <Reveal className="mt-20 flex flex-col items-center gap-4">
                     <NeuDivider className="w-24" />
                     <p className="font-mono text-[11px] uppercase tracking-widest text-muted">
-                        End of the archive
+                        End of the archive · {items.length + GRID_OFFSET} of {total} projects
                     </p>
                 </Reveal>
             )}

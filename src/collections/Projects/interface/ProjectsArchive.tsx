@@ -53,6 +53,7 @@ export const ProjectsArchive: React.FC = async () => {
                                 initialItems={initialGridItems}
                                 startPage={2}
                                 totalPages={firstPage.totalPages}
+                                totalDocs={firstPage.totalDocs}
                             />
                         </div>
                     )
