@@ -9,7 +9,6 @@ import { NeuButton, NeuDivider } from '@/components/ui/neu'
 import { Reveal } from '@/components/ui/reveal'
 import { fetchProjectsArchivePage } from '../../application/useCases/fetchProjectsArchivePage'
 import { GRID_OFFSET, type ProjectArchiveItem } from '../../domain/models/archive'
-import type { ProjectArchiveItem } from '../../domain/models/archive'
 import { StatusPill } from './StatusPill'
 
 type Props = {
