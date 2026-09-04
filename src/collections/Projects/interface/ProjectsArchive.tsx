@@ -2,7 +2,7 @@ import React from 'react'
 
 import { NeuChip, NeuDivider } from '@/components/ui/neu'
 import { Reveal } from '@/components/ui/reveal'
-import { getLatestProjects, getProjectsArchivePage } from '../application/useCases/getProjectsArchive'
+import { getProjectsArchive } from '../application/useCases/getProjectsArchive'
 import { GRID_OFFSET } from '../domain/models/archive'
 import { ProjectsHero } from './components/ProjectsHero.client'
 import { ProjectsGrid } from './components/ProjectsGrid.client'
@@ -10,18 +10,15 @@ import { ProjectsGrid } from './components/ProjectsGrid.client'
 /**
  * Projects archive composition (server component).
  *
- * The two most recent projects get a side-by-side hero row; everything else
- * flows through an infinite-scroll grid. The grid starts from page 2 of the
- * archive stream — page 1 powers the hero row and the initial grid batch.
+ * The application layer orders every published project (most recently
+ * started first, unranked ones last). The two most recent projects get a
+ * side-by-side hero row; the rest flows through the grid.
  */
 export const ProjectsArchive: React.FC = async () => {
-    const [latest, firstPage] = await Promise.all([
-        getLatestProjects(),
-        getProjectsArchivePage(1),
-    ])
+    const projects = await getProjectsArchive()
 
-    const initialGridItems = firstPage.items.slice(GRID_OFFSET)
-    const hasAnyProjects = firstPage.items.length > 0
+    const heroProjects = projects.slice(0, GRID_OFFSET)
+    const gridItems = projects.slice(GRID_OFFSET)
 
     return (
         <div className="pt-24 pb-24">
@@ -37,31 +34,24 @@ export const ProjectsArchive: React.FC = async () => {
                     <NeuDivider className="mx-auto mt-8 w-24" />
                 </Reveal>
 
-                <ProjectsHero projects={latest} />
+                <ProjectsHero projects={heroProjects} />
 
-                {hasAnyProjects ? (
-                    initialGridItems.length > 0 && (
-                        <div className="mt-24">
-                            <Reveal className="mb-12 flex items-center justify-center gap-4">
-                                <NeuDivider className="w-16" />
-                                <NeuChip mono>
-                                    More work
-                                </NeuChip>
-                                <NeuDivider className="w-16" />
-                            </Reveal>
-                            <ProjectsGrid
-                                initialItems={initialGridItems}
-                                startPage={2}
-                                totalPages={firstPage.totalPages}
-                                totalDocs={firstPage.totalDocs}
-                            />
-                        </div>
-                    )
-                ) : (
+                {gridItems.length > 0 ? (
+                    <div className="mt-24">
+                        <Reveal className="mb-12 flex items-center justify-center gap-4">
+                            <NeuDivider className="w-16" />
+                            <NeuChip mono>
+                                More work
+                            </NeuChip>
+                            <NeuDivider className="w-16" />
+                        </Reveal>
+                        <ProjectsGrid items={gridItems} />
+                    </div>
+                ) : projects.length === 0 ? (
                     <div className="neu-inset mx-auto max-w-xl rounded-3xl p-12 text-center">
                         <p className="font-mono text-sm text-muted">No projects published yet.</p>
                     </div>
-                )}
+                ) : null}
             </div>
         </div>
     )

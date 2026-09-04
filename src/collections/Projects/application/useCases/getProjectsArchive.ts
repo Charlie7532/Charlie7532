@@ -2,71 +2,49 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
 import {
-    ARCHIVE_PAGE_SIZE,
-    type ArchivePage,
     type ProjectArchiveItem,
 } from '../../domain/models/archive'
+import { orderProjectsForArchive } from '../../domain/rules/projectOrderRules'
 
 /**
- * Application layer — server-side projects archive use cases (Local API).
+ * Application layer — server-side projects archive use case (Local API).
  *
- * The archive is a single paginated stream of published projects sorted by
- * start date (most recent first). The first `GRID_OFFSET` docs of page 1 are
- * reserved for the "Latest" hero row; every other doc flows through the
- * infinite-scroll grid. All pages use the same page size, so page numbering
- * stays consistent between the server render and client-side fetching.
+ * Fetches every published project once and lets the domain rule own the
+ * ordering: most recently started first, projects without a start date
+ * sinking to the end.
  *
- * Server-only — imports the Payload config. Client components must use
- * `fetchProjectsArchivePage` (REST) instead.
+ * In-memory ordering is required because Postgres sorts NULLs first on
+ * `DESC` and Payload's sort syntax has no `NULLS LAST` — a per-page SQL
+ * sort would float unranked projects to the top of every page instead of
+ * the end of the archive.
+ *
+ * Server-only — imports the Payload config.
  */
 
-async function findArchiveProjects(page: number, limit: number) {
-    const payload = await getPayload({ config: configPromise })
-    return payload.find({
-        collection: 'projects',
-        depth: 1,
-        page,
-        limit,
-        overrideAccess: false,
-        where: { _status: { equals: 'published' } },
-        // Secondary key keeps pagination stable: projects sharing a
-        // startDate (or without one) must not shuffle between requests,
-        // otherwise pages can overlap and skip docs.
-        sort: '-startDate,-createdAt',
-        select: {
-            title: true,
-            slug: true,
-            summary: true,
-            meta: true,
-            heroImage: true,
-            completedAt: true,
-            populatedClients: true,
-            populatedTechnologies: true,
-        },
-    })
-}
-
-/** The most recent projects — rendered side by side at the top of the archive. */
-export async function getLatestProjects(limit = 2): Promise<ProjectArchiveItem[]> {
+export async function getProjectsArchive(): Promise<ProjectArchiveItem[]> {
     try {
-        const result = await findArchiveProjects(1, limit)
-        return result.docs as ProjectArchiveItem[]
+        const payload = await getPayload({ config: configPromise })
+        const result = await payload.find({
+            collection: 'projects',
+            depth: 1,
+            pagination: false,
+            overrideAccess: false,
+            where: { _status: { equals: 'published' } },
+            select: {
+                title: true,
+                slug: true,
+                summary: true,
+                meta: true,
+                heroImage: true,
+                startDate: true,
+                createdAt: true,
+                completedAt: true,
+                populatedClients: true,
+                populatedTechnologies: true,
+            },
+        })
+        return orderProjectsForArchive(result.docs as ProjectArchiveItem[])
     } catch {
         return []
-    }
-}
-
-/** One page of the archive stream — server side, for the initial render. */
-export async function getProjectsArchivePage(page = 1): Promise<ArchivePage> {
-    try {
-        const result = await findArchiveProjects(page, ARCHIVE_PAGE_SIZE)
-        return {
-            items: result.docs as ProjectArchiveItem[],
-            page: result.page ?? page,
-            totalPages: result.totalPages ?? 1,
-            totalDocs: result.totalDocs ?? 0,
-        }
-    } catch {
-        return { items: [], page, totalPages: 1, totalDocs: 0 }
     }
 }
