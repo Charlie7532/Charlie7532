@@ -13,6 +13,8 @@ import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { Content } from '../../blocks/Content/config'
 import { EmbedCode } from '../../blocks/EmbedCode/config'
+import { FeatureCardsBlock } from '../../blocks/FeatureCards/config'
+import { FeatureHighlightsBlock } from '../../blocks/FeatureHighlights/config'
 import { IconGridBlock } from '../../blocks/IconGrid/config'
 import { ImageContentBlock } from '../../blocks/ImageContent/config'
 import { ImageGalleryBlock } from '../../blocks/ImageGallery/config'
@@ -66,7 +68,7 @@ export const projectsFields: Field[] = [
                             features: ({ rootFeatures }) => [
                                 ...rootFeatures,
                                 HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                                BlocksFeature({ blocks: [Banner, Code, Content, EmbedCode, ImageContentBlock, ImageGalleryBlock, MediaBlock, IconGridBlock, TechStackBlock, TextSection, TwoColumnTextImageBlock] }),
+                                BlocksFeature({ blocks: [Banner, Code, Content, EmbedCode, FeatureCardsBlock, FeatureHighlightsBlock, IconGridBlock, ImageContentBlock, ImageGalleryBlock, MediaBlock, TechStackBlock, TextSection, TwoColumnTextImageBlock] }),
                                 FixedToolbarFeature(),
                                 InlineToolbarFeature(),
                                 HorizontalRuleFeature(),

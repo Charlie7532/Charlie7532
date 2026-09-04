@@ -14,6 +14,9 @@ public/sitemap*.xml
 .env*.local
 *.test
 
+# Hermes
+.hermes/
+
 # Playwright
 /test-results/
 /playwright-report/
