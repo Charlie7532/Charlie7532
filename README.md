@@ -1,10 +1,7 @@
 <div align="center">
 
 <!-- Header Banner -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Hi,%20I'm%20Juan%20👋&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32" width="100%" />
-
-<!-- Typing Animation -->
-<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=6C63FF&center=true&vCenter=true&random=false&width=600&lines=Full+Stack+Developer;Tireless+Seeker+of+Knowledge;Dream+Hunter+%26+Builder;Quality+in+Every+Detail" alt="Typing SVG" /></a>
+<img src="https://capsule-render.vercel.app/api?type=soft&color=0:0D1117,100:6C63FF&height=180&section=header&text=Hi,%20I'm%20Juan%20👋&fontSize=42&fontColor=fff&animation=fadeIn&fontAlignY=38&desc=Full%20Stack%20Developer&descAlignY=58&descSize=20" width="100%" />
 
 </div>
 
