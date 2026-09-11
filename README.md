@@ -148,6 +148,6 @@ A passionate engineer who seeks **quality in the smallest details**.
 
 <div align="center">
 
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=Charlie7532&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0D1117&title_color=6C63FF&icon_color=6C63FF&cache_seconds=3600" alt="Charlie's GitHub Stats" />
+<img height="165" src="https://github-readme-stats-fast.vercel.app/api?username=Charlie7532&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0D1117&title_color=6C63FF&icon_color=6C63FF&cache_seconds=3600&count_private=true&include_all_commits=true" alt="Charlie's GitHub Stats" />
 
 </div>
