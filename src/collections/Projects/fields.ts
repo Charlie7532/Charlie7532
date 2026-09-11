@@ -22,6 +22,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { TechStackBlock } from '../../blocks/TechStack/config'
 import { TextSection } from '../../blocks/TextSection/config'
 import { TwoColumnTextImageBlock } from '../../blocks/TwoColumnTextImage/config'
+import { VideoEmbedWithHeading } from '../../blocks/VideoEmbedWithHeading/config'
 
 import {
     MetaDescriptionField,
@@ -68,7 +69,7 @@ export const projectsFields: Field[] = [
                             features: ({ rootFeatures }) => [
                                 ...rootFeatures,
                                 HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                                BlocksFeature({ blocks: [Banner, Code, Content, EmbedCode, FeatureCardsBlock, FeatureHighlightsBlock, IconGridBlock, ImageContentBlock, ImageGalleryBlock, MediaBlock, TechStackBlock, TextSection, TwoColumnTextImageBlock] }),
+                                BlocksFeature({ blocks: [Banner, Code, Content, EmbedCode, FeatureCardsBlock, FeatureHighlightsBlock, IconGridBlock, ImageContentBlock, ImageGalleryBlock, MediaBlock, TechStackBlock, TextSection, TwoColumnTextImageBlock, VideoEmbedWithHeading] }),
                                 FixedToolbarFeature(),
                                 InlineToolbarFeature(),
                                 HorizontalRuleFeature(),
