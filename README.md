@@ -27,20 +27,20 @@ A passionate engineer who seeks **quality in the smallest details**.
     <img src="https://skillicons.dev/icons?i=cpp" alt="C++" width="40" height="40" />
   </a>
   &nbsp;
-  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" title="JavaScript - Dynamic web development">
-    <img src="https://skillicons.dev/icons?i=js" alt="JavaScript" width="40" height="40" />
-  </a>
-  &nbsp;
-  <a href="https://www.typescriptlang.org" title="TypeScript - Type-safe JavaScript">
-    <img src="https://skillicons.dev/icons?i=ts" alt="TypeScript" width="40" height="40" />
+  <a href="https://www.php.net" title="PHP - Server-side scripting">
+    <img src="https://skillicons.dev/icons?i=php" alt="PHP" width="40" height="40" />
   </a>
   &nbsp;
   <a href="https://www.python.org" title="Python - Automation & data science">
     <img src="https://skillicons.dev/icons?i=python" alt="Python" width="40" height="40" />
   </a>
   &nbsp;
-  <a href="https://www.php.net" title="PHP - Server-side scripting">
-    <img src="https://skillicons.dev/icons?i=php" alt="PHP" width="40" height="40" />
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" title="JavaScript - Dynamic web development">
+    <img src="https://skillicons.dev/icons?i=js" alt="JavaScript" width="40" height="40" />
+  </a>
+  &nbsp;
+  <a href="https://www.typescriptlang.org" title="TypeScript - Type-safe JavaScript">
+    <img src="https://skillicons.dev/icons?i=ts" alt="TypeScript" width="40" height="40" />
   </a>
 </p>
 
